@@ -1,0 +1,59 @@
+---------------------------------------------------------------------------------
+  Changelog for "Rainbeau's Faction Control"
+---------------------------------------------------------------------------------
+
+- 12/15/2017
+	- Initial release (spun off from "Configurable Maps").
+	- The "total number of factions" slider now has a minimum setting of 0 rather
+	  than 3. So, yes, you can create a world with no faction bases at all.
+	- Added a "faction base density" slider to allow you to set how densely the
+	  world is populated with faction bases.
+	- The number of factions which start out hostile to the player now scales
+	  upward with the total number of factions on the map.
+	- Vanilla factions now have wider ranges of "starting goodwill" options, so
+	  their initial feelings about the player faction (and other factions, too)
+	  will vary more.
+	- If you create a world with no hostile factions on the map, mechanoids will
+	  be able to show up as raiders from the very beginning of the game. (Even if
+	  you have disallowed mechanoids, this still applies, as mechanoids will
+	  always be available for raids in the absence of other hostile factions.)
+
+- 12/17/2017
+	- There should no longer be any chance of faction bases being stacked on top
+	  of each other on tile 0 (at the very middle of the world map).
+	- If you choose to group faction bases geographically, pirate factions will
+	  now be more diffuse, with bases overlapping territory otherwise held by the
+	  more "nationalistic" factions, since pirate factions are less interested in
+	  holding territory than in raiding it.
+	- The mod now works with the "Mod Sync Ninja" updater.
+
+- 12/22/2017
+	- The mod now dynamically creates settings options for any factions added by
+	  mods, so you have the same control over those factions that you have over
+	  vanilla factions.
+	- A "nation building" slider has replaced the "group factions" toggle, so you
+	  can decide just how geographically constrained the various faction groups'
+	  bases should be.
+	- If all factions are disabled, you'll simply have a planet with no faction
+	  bases, even if the "minimum faction count" is set higher than 0. No more
+	  defaulting to a planet full of pirates.
+	- Further refined the base placement logic.
+
+- 12/23/2017
+	- Added Japanese language translation files provided by Proxyer.
+
+- 12/24/2017
+	- Fixed the faction base density slider so it works as it's supposed to. (The
+	  density was accidentally being influenced by faction count, meaning that in
+	  games with a lot of faction mods, far more bases were being generated than
+	  should have been.)
+	- For the benefit of those who liked the insanely overpopulated worlds that
+	  the mod was generating, I added an "insane" setting to the faction density
+	  slider.
+
+- 12/31/2017
+	- Added a "young warrior" pawn kind with a weaker combat strength, in order
+	  to allow tribal factions to be usable for early (35 point) raids. Without
+	  them, in games using only tribal factions, early raids simply weren't
+	  being generated.
+	- Updated the Japanese translation files.

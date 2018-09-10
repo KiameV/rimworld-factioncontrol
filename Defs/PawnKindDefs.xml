@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<PawnKindDef ParentName="TribalBase">
+		<defName>YoungTribalWarrior</defName>
+		<label>young warrior</label>
+		<combatPower>30</combatPower>
+		<maxGenerationAge>30</maxGenerationAge>
+		<gearHealthRange>
+			<min>0.2</min>
+			<max>0.9</max>
+		</gearHealthRange>
+		<apparelMoney>
+			<min>90</min>
+			<max>180</max>
+		</apparelMoney>
+		<apparelTags>
+			<li>Tribal</li>
+		</apparelTags>
+		<weaponMoney>
+			<min>60</min>
+			<max>200</max>
+		</weaponMoney>
+		<weaponTags>
+			<li>NeolithicMeleeBasic</li>
+		</weaponTags>
+	</PawnKindDef>
+
+</Defs>

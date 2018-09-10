@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+
+	<name>Faction Control - B19</name>
+	<author>Rainbeau Flambe (original) &amp; Kiame Vivacity</author>
+	<url>https://ludeon.com/forums/index.php?board=15.0</url>
+	<targetVersion>0.19.0</targetVersion>
+	<description>
+
+"Faction Control" provides you with a number of configuration options that you can use to tailor which and how many faction groups and faction bases show up on your map. Simply visit "Mod Settings" from the game's "Options" menu.
+
+You can define the total number of faction groups which should appear on your world map (anywhere from 0 to 30), as well as individually adjust the minimum number of groups from each faction which should be present, even removing some factions entirely if you prefer. So you could, for example, play on a planet without any tribal groups, or without any outlanders, or on a planet with no pirates, or perhaps on a planet on which the only faction groups are pirate bands.
+
+The mod also gives you the same level of control over individual factions added by mods (up to 42 total) that it provides for vanilla factions. So, for example, if you're playing with a mod that adds several related factions, only some of which you actually want to have present on your world, well, you'll be able to tailor the planet accordingly. (This also gives you the ability to pick and choose which modded factions you want to use in any particular game without having to disable or uninstall the mods that add them.)
+
+As you increase the total number of faction groups on your world, the number of groups which are hostile to you will scale upward, as well. So unlike most mods which increase faction counts, this one won't allow you to create a world with 30 faction groups of which only three are hostile.
+
+You can also adjust your world map's faction base density, so you can create planets on which each faction group has only a few bases, or heavily populated planets with settlements everywhere.
+
+The mod also gives you the option to organize bases geographically, with each faction group's bases in close proximity to each other, so that the planet looks like it's populated by actual nations, rather than just having bases scattered all over the map randomly.
+
+- Rainbeau Flambe (dburgdorf)
+
+=====
+
+Compatibility:
+
+Since "Faction Control" does nothing but alter initial world generation, adding it to or removing it from a game in progress will have no impact. It should be compatible with any other mods, though it should (and most likely will) override any other mods that alter faction generation.
+
+=====
+
+Credits:
+
+The mod utilizes Pardeike's "Harmony Patch Library." (No additional download is required, as the library is included with the mod.)
+
+Japanese language translation files were provided by Proxyer.
+
+=====
+
+License:
+
+If you're a modpack maker and want to include "Faction Control" in your pack, or if you're a modder and want to use it as the basis of a derivative mod, please feel free to do so. I ask only that you let me know about it. 
+
+=====
+
+If you have any (helpful) suggestions for improvement, please let me know!
+
+	</description>
+
+</ModMetaData>
