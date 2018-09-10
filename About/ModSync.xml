@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModSyncNinjaData>
   <ModName>Faction Control</ModName>
-  <Version>171231.1</Version>
+  <Version>0.19.0.1</Version>
   <SaveBreaking>False</SaveBreaking>
+  <Host name="Github">
+    <Owner>KiameV</Owner>
+    <Project>rimworld-factioncontrol</Project>
+    <AboutDir>About</AboutDir>
+    <DownloadFrom>ModSyncReleases</DownloadFrom>
+    <Branch>master</Branch>
+  </Host>
 </ModSyncNinjaData>
