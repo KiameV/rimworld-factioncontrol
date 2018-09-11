@@ -2,20 +2,19 @@
 <LanguageData>
 
 	<RFC.FactionControl>Faction Control - Main Options</RFC.FactionControl>
-
-	<RFC.FactionControl1>Faction Control - Modded Factions 1</RFC.FactionControl1>
-	<RFC.FactionControl2>Faction Control - Modded Factions 2</RFC.FactionControl2>
-	<RFC.FactionControl3>Faction Control - Modded Factions 3</RFC.FactionControl3>
-	<RFC.FactionControl4>Faction Control - Modded Factions 4</RFC.FactionControl4>
-	<RFC.FactionControl5>Faction Control - Modded Factions 5</RFC.FactionControl5>
-	<RFC.FactionControl6>Faction Control - Modded Factions 6</RFC.FactionControl6>
-	<RFC.FactionControl7>Faction Control - Modded Factions 7</RFC.FactionControl7>
+	<RFC.FactionControlFactionOptions>Faction Control - Faction Options</RFC.FactionControlFactionOptions>
+	<RFC.CustomFactionControl>Faction Control - Modded Factions</RFC.CustomFactionControl>
 	
 	<RFC.factionCount>Total Number of Faction Groups to Appear on the World Map:</RFC.factionCount>
 	<RFC.factionNotes>Vanilla value is 5. Note that this number is a minimum, as the total of the counts defined below may exceed the count defined above. (For example, if you define the total number of faction groups as 3, but define 2 each as the minimum number of "Outlander union," "Tribe" and "Pirate band" faction groups, you'll always have at least 6 faction groups on your map.)</RFC.factionNotes>
-	<RFC.outlanderMin>Minimum number of "Outlander union" faction groups to appear on the map (setting to "0" disables the faction):</RFC.outlanderMin>
-	<RFC.tribalMin>Minimum number of "Tribe" faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalMin>
+	
+	<RFC.outlanderCivilMin>Minimum number of civil Outlander Union faction groups to appear on the map (setting to "0" disables the faction):</RFC.outlanderCivilMin>
+	<RFC.outlanderRoughMin>Minimum number of rough Outlander Union faction groups to appear on the map (setting to "0" disables the faction):</RFC.outlanderRoughMin>
+	<RFC.tribalCivilMin>Minimum number of civil Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalCivilMin>
+	<RFC.tribalRoughMin>Minimum number of rough Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalRoughMin>
 	<RFC.pirateMin>Minimum number of "Pirate band" faction groups to appear on the map (setting to "0" disables the faction):</RFC.pirateMin>
+
+	<RFC.SelectAFaction>Select a Faction</RFC.SelectAFaction>
 	
 	<RFC.factionGrouping>"Nation Building":</RFC.factionGrouping>
 	<RFC.factionGroupingNone>None. (Vanilla behavior.) Faction group bases will be scattered throughout the world randomly.</RFC.factionGroupingNone>
@@ -24,7 +23,7 @@
 	<RFC.factionGroupingVeryTight>Very tight. Except for pirate band faction groups, each faction group's bases will be very closely clumped. There won't be much overlap at all, but there may be large "open" spaces of unoccupied territory between them.</RFC.factionGroupingVeryTight>
 
 	<RFC.AllowMechanoids>Allow the hidden "Mechanoid hive" faction?</RFC.AllowMechanoids>
-	<RFC.AllowMechanoidsTip>If you uncheck this option, mechanoids will (mostly) be removed from the game. You won't be raided by them, unless there's literally no other faction group left that's hostile to you. And you won't have to deal with poison or psychic ship part crashes. However, you may still find mechanoids in ancient danger chambers, and you might still find sleeping mechanoids guarding quest objectives.</RFC.AllowMechanoidsTip>
+	<RFC.AllowMechanoidsTip>If you uncheck this option, mechanoids will (mostly) be removed from the game. You won't be raided by them, unless there's literally no other faction group left that's Rough to you. And you won't have to deal with poison or psychic ship part crashes. However, you may still find mechanoids in ancient danger chambers, and you might still find sleeping mechanoids guarding quest objectives.</RFC.AllowMechanoidsTip>
 
 	<RFC.factionDensity>Faction Base Density:</RFC.factionDensity>
 	<RFC.factionDensityVeryLow>Very low. Very few bases per faction group.</RFC.factionDensityVeryLow>

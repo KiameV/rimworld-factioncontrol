@@ -3,16 +3,11 @@
 
   <RFC.FactionControl>Rainbeau's Faction Control</RFC.FactionControl>
 
-  <RFC.FactionControl1>Rainbeau's Faction Control - Mod派閥 1</RFC.FactionControl1>
-  <RFC.FactionControl2>Rainbeau's Faction Control - Mod派閥 2</RFC.FactionControl2>
-  <RFC.FactionControl3>Rainbeau's Faction Control - Mod派閥 3</RFC.FactionControl3>
-  <RFC.FactionControl4>Rainbeau's Faction Control - Mod派閥 4</RFC.FactionControl4>
-  <RFC.FactionControl5>Rainbeau's Faction Control - Mod派閥 5</RFC.FactionControl5>
-  <RFC.FactionControl6>Rainbeau's Faction Control - Mod派閥 6</RFC.FactionControl6>
-  <RFC.FactionControl7>Rainbeau's Faction Control - Mod派閥 7</RFC.FactionControl7>
+  <RFC.CustomFactionControl>Rainbeau's Faction Control - Mod派閥</RFC.CustomFactionControl>
 
   <RFC.factionCount>ワールドマップ上の派閥総数:</RFC.factionCount>
   <RFC.factionNotes>バニラの値は5です。以下で定義された「最小」派閥数の合計が上記で定義した数を超える場合、「最小」派閥数の合計が優先されることに注意してください。（例えば、派閥の総数を3と設定して、異邦人、部族、宙賊の「最小」派閥数をそれぞれ2つ定義すると、マップには少なくとも6つの派閥が存在します。）また、より多くの派閥を持つ世界では、マップ上で派閥拠点の「人口密度」が高くなることにも注意してください。（拠点は互いに近くにできる傾向があります。）最後に、あなたが「可愛らしい世界」を作ろうと、最小値を0（派閥全てを事実上働かなくする意図）ですべての派閥を設定したとしても、派閥のない世界にはなりません。その結果、あなたは海賊派閥と同居するだけの殺伐な世界になるでしょう。これはあなたへの警告です！</RFC.factionNotes>
+
   <RFC.outlanderMin>世界地図上の「異邦人」派閥の最小数（0に設定すると異邦人派閥は消滅）:</RFC.outlanderMin>
   <RFC.tribalMin>世界地図上の「部族」派閥の最小数（0に設定すると部族派閥は消滅）:</RFC.tribalMin>
   <RFC.pirateMin>世界地図上の「宙賊」派閥の最小数（0に設定すると宙賊派閥は消滅）:</RFC.pirateMin>

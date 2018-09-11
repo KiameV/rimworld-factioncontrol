@@ -14,101 +14,87 @@ namespace FactionControl
     [StaticConstructorOnStartup]
     internal static class Main
     {
-        public static List<string> factionsModdedNames = new List<string>();
-        public static List<string> factionsModdedLabels = new List<string>();
-        public static List<float> factionsModdedFreq = new List<float>();
-        public static List<bool> factionsModdedTreatAsPirate = new List<bool>();
-        public static List<bool> factionsModdedUseHidden = new List<bool>();
-        private static bool initialized = false;
+        public static List<CustomFaction> CustomFactions = new List<CustomFaction>();
 
         static Main()
         {
             HarmonyInstance harmony = HarmonyInstance.Create("com.rimworld.mod.factioncontrol");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            //LongEventHandler.QueueLongEvent(new Action(RFC_Initializer.Setup), "LibraryStartup", false, null);
+            LongEventHandler.QueueLongEvent(new Action(Init), "LibraryStartup", false, null);
         }
-        public static void Setup()
+        private static void Init()
         {
-            if (initialized)
-                return;
-
-            initialized = true;
-            foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
+            List<CustomFaction> loaded = new List<CustomFaction>();
+            foreach (FactionDef def in DefDatabase<FactionDef>.AllDefs)
             {
-                bool alreadyListed = false;
-                for (int i = 0; i < factionsModdedNames.Count; i++)
+                if (def.isPlayer)
+                    continue;
+
+                switch (def.defName)
                 {
-                    if (allDef.defName == factionsModdedNames[i])
-                    {
-                        alreadyListed = true;
+                    case "Ancients":
+                    case "AncientsHostile":
+                    case "Mechanoid":
+                    case "Insect":
+                    case "OutlanderCivil":
+                    case "OutlanderRough":
+                    case "TribeCivil":
+                    case "TribeRough":
+                    case "Pirate":
+                        continue;
+                    default:
+                        CustomFaction cf = new CustomFaction
+                        {
+                            FactionDef = def
+                        };
+                        if (def.hidden.Equals(true))
+                        {
+                            cf.Frequency = 50;
+                            cf.TreatAsPirate = false;
+                            cf.UseHidden = true;
+                        }
+                        else
+                        {
+                            if (!def.canMakeRandomly)
+                            {
+                                cf.Frequency = 60;
+                                cf.UseHidden = true;
+                            }
+                            else
+                            {
+                                cf.Frequency = def.requiredCountAtGameStart;
+                                cf.UseHidden = false;
+                            }
+
+                            if (def.maxCountAtGameStart < 50)
+                            {
+                                cf.TreatAsPirate = true;
+                            }
+                            else
+                            {
+                                cf.TreatAsPirate = false;
+                            }
+                        }
+
+                        if (!CustomFactions.Contains(cf))
+                            CustomFactions.Add(cf);
+
+                        loaded.Add(cf);
                         break;
-                    }
-                }
-                if (alreadyListed.Equals(false))
-                {
-                    if (allDef.hidden.Equals(true))
-                    {
-                        if (allDef.defName == "Spacer" || allDef.defName == "SpacerHostile" || allDef.defName == "Mechanoid" || allDef.defName == "Insect")
-                        {
-                            continue;
-                        }
-                        factionsModdedFreq.Add(50);
-                        factionsModdedUseHidden.Add(true);
-                        factionsModdedTreatAsPirate.Add(false);
-                        factionsModdedNames.Add(allDef.defName);
-                        factionsModdedLabels.Add(allDef.label);
-                    }
-                    else
-                    {
-                        if (allDef.defName == "Outlander" || allDef.defName == "Tribe" || allDef.defName == "Pirate" || allDef.isPlayer.Equals(true))
-                        {
-                            continue;
-                        }
-                        if (allDef.canMakeRandomly.Equals(false))
-                        {
-                            factionsModdedFreq.Add(60);
-                            factionsModdedUseHidden.Add(true);
-                        }
-                        else
-                        {
-                            factionsModdedFreq.Add(allDef.requiredCountAtGameStart);
-                            factionsModdedUseHidden.Add(false);
-                        }
-                        if (allDef.maxCountAtGameStart < 50)
-                        {
-                            factionsModdedTreatAsPirate.Add(true);
-                        }
-                        else
-                        {
-                            factionsModdedTreatAsPirate.Add(false);
-                        }
-                        factionsModdedNames.Add(allDef.defName);
-                        factionsModdedLabels.Add(allDef.label);
-                    }
                 }
             }
-            for (int i = 0; i < factionsModdedNames.Count; i++)
+
+            for (int i = CustomFactions.Count - 1; i >= 0; --i)
             {
-                bool activeFaction = false;
-                foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
+                if (!loaded.Contains(CustomFactions[i]))
                 {
-                    if (allDef.defName == factionsModdedNames[i])
-                    {
-                        activeFaction = true;
-                        break;
-                    }
-                }
-                if (activeFaction.Equals(false))
-                {
-                    factionsModdedNames.RemoveAt(i);
-                    factionsModdedLabels.RemoveAt(i);
-                    factionsModdedFreq.RemoveAt(i);
-                    factionsModdedTreatAsPirate.RemoveAt(i);
-                    factionsModdedUseHidden.RemoveAt(i);
-                    i--;
+                    CustomFactions.RemoveAt(i);
                 }
             }
             SetIncidents.SetIncidentLevels();
+
+            loaded.Clear();
+            loaded = null;
         }
     }
 
@@ -185,83 +171,61 @@ namespace FactionControl
     {
         public static bool Prefix()
         {
-            Main.Setup();
             int num = 0;
             int actualFactionCount = 0;
             Controller.factionCenters.Clear();
-            foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
+
+            foreach (CustomFaction cf in Main.CustomFactions)
             {
-                if (allDef.defName == "Outlander")
+                if (cf.FactionDef.defName.Equals(cf.FactionDef.defName))
                 {
-                    allDef.requiredCountAtGameStart = (int)Controller.Settings.outlanderMin;
-                    if (allDef.requiredCountAtGameStart < 1)
+                    int requiredCount = (int)cf.Frequency;
+                    if (requiredCount > 45)
                     {
-                        allDef.maxCountAtGameStart = 0;
-                    }
-                    else
-                    {
-                        allDef.maxCountAtGameStart = 100;
-                    }
-                }
-                else if (allDef.defName == "Tribe")
-                {
-                    allDef.requiredCountAtGameStart = (int)Controller.Settings.tribalMin;
-                    if (allDef.requiredCountAtGameStart < 1)
-                    {
-                        allDef.maxCountAtGameStart = 0;
-                    }
-                    else
-                    {
-                        allDef.maxCountAtGameStart = 100;
-                    }
-                }
-                else if (allDef.defName == "Pirate")
-                {
-                    allDef.requiredCountAtGameStart = (int)Controller.Settings.pirateMin;
-                    allDef.maxCountAtGameStart = allDef.requiredCountAtGameStart * 2;
-                }
-                else if (allDef.defName == "Spacer" || allDef.defName == "SpacerHostile") { }
-                else if (allDef.defName == "Mechanoid" || allDef.defName == "Insect") { }
-                else if (allDef.isPlayer) { }
-                else
-                {
-                    int i = 0;
-                    for (i = 0; i < Main.factionsModdedNames.Count; i++)
-                    {
-                        if (allDef.defName == Main.factionsModdedNames[i])
+                        if (cf.UseHidden)
                         {
-                            break;
-                        }
-                    }
-                    if (Main.factionsModdedFreq[i] > 45)
-                    {
-                        if (Main.factionsModdedUseHidden[i].Equals(true))
-                        {
-                            allDef.requiredCountAtGameStart = 1;
+                            cf.FactionDef.requiredCountAtGameStart = 1;
                         }
                         else
                         {
-                            allDef.requiredCountAtGameStart = 0;
+                            cf.FactionDef.requiredCountAtGameStart = 0;
                         }
                     }
-                    else
+                    UpdateDef(cf.FactionDef, requiredCount);
+
+                    if (cf.TreatAsPirate)
                     {
-                        allDef.requiredCountAtGameStart = (int)Main.factionsModdedFreq[i];
-                    }
-                    if (allDef.requiredCountAtGameStart < 1)
-                    {
-                        allDef.maxCountAtGameStart = 0;
-                    }
-                    else
-                    {
-                        allDef.maxCountAtGameStart = 100;
-                    }
-                    if (Main.factionsModdedTreatAsPirate[i].Equals(true))
-                    {
-                        allDef.maxCountAtGameStart = allDef.requiredCountAtGameStart * 2;
+                        cf.FactionDef.maxCountAtGameStart = cf.FactionDef.requiredCountAtGameStart * 2;
                     }
                 }
-                actualFactionCount += allDef.requiredCountAtGameStart;
+            }
+
+            foreach (FactionDef def in DefDatabase<FactionDef>.AllDefs)
+            {
+                if (def.isPlayer)
+                    continue;
+
+                switch (def.defName)
+                {
+                    case "OutlanderCivil":
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.outlanderCivilMin);
+                        break;
+                    case "OutlanderRough":
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.outlanderHostileMin);
+                        break;
+                    case "TribeCivil":
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalCivilMin);
+                        break;
+                    case "TribeRough":
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalHostileMin);
+                        break;
+                    case "Pirate":
+                        def.requiredCountAtGameStart = (int)Controller_FactionOptions.Settings.pirateMin;
+                        def.maxCountAtGameStart = def.requiredCountAtGameStart * 2;
+                        break;
+                }
+
+                actualFactionCount += def.requiredCountAtGameStart;
                 Controller.minFactionSeparation = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2);
                 if (Controller.Settings.factionGrouping < 1)
                 {
@@ -279,16 +243,31 @@ namespace FactionControl
                 {
                     Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 3);
                 }
-                for (int i = 0; i < allDef.requiredCountAtGameStart; i++)
+                for (int i = 0; i < def.requiredCountAtGameStart; i++)
                 {
-                    Faction faction = FactionGenerator.NewGeneratedFaction(allDef);
+                    Faction faction = FactionGenerator.NewGeneratedFaction(def);
                     Find.FactionManager.Add(faction);
-                    if (!allDef.hidden)
+                    if (!def.hidden)
                     {
                         num++;
                     }
                 }
             }
+
+            if (Controller_FactionOptions.Settings.outlanderCivilMin == 0 &&
+                Controller_FactionOptions.Settings.outlanderHostileMin == 0 &&
+                Controller_FactionOptions.Settings.tribalCivilMin == 0 &&
+                Controller_FactionOptions.Settings.tribalHostileMin == 0 &&
+                Main.CustomFactions.Count == 0)
+            {
+                Log.Error("Faction Control: No factions were selected. To prevent the game from going into an infinite loop a tribe was added.");
+                FactionDef def = DefDatabase<FactionDef>.GetNamed("TribeCivil");
+                def.requiredCountAtGameStart = 1;
+                Controller.maxFactionSprawl = 1;
+                Faction faction = FactionGenerator.NewGeneratedFaction(def);
+                Find.FactionManager.Add(faction);
+            }
+
             while (num < (int)Controller.Settings.factionCount)
             {
                 FactionDef factionDef = (
@@ -333,7 +312,7 @@ namespace FactionControl
             int maxCount = 0;
             int count = GenMath.RoundRandom(tilesCount * factionBasesPer100kTiles.RandomInRange);
             count -= Find.WorldObjects.SettlementBases.Count;
-            for (int j = 0; j < count && maxCount < 200; j++)
+            for (int j = 0; j < count && maxCount < 250; j++)
             {
                 Faction faction2 = (
                   from x in Find.World.factionManager.AllFactionsListForReading
@@ -354,6 +333,19 @@ namespace FactionControl
                 ++maxCount;
             }
             return false;
+        }
+
+        private static void UpdateDef(FactionDef def, int requiredCount)
+        {
+            def.requiredCountAtGameStart = requiredCount;
+            if (def.requiredCountAtGameStart < 1)
+            {
+                def.maxCountAtGameStart = 0;
+            }
+            else
+            {
+                def.maxCountAtGameStart = 100;
+            }
         }
     }
 
