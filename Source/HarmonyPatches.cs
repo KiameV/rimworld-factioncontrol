@@ -448,7 +448,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
+    /*[HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
         public static bool Prefix(Faction player)
@@ -503,6 +503,6 @@ namespace FactionControl
             }
             return false;
         }
-    }
+    }*/
 
 }

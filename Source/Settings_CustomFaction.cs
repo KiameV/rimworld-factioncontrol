@@ -51,23 +51,19 @@ namespace FactionControl
             }
             if (this.selected != null)
             {
+                list.Gap(24);
+                list.Label("RFC.factionBasic1".Translate() + this.selected.FactionDef.label + "RFC.factionBasic2".Translate() + "  " + (int)this.selected.Frequency);
+                this.selected.Frequency = list.Slider(this.selected.Frequency, 0, 10.99f);
+                list.CheckboxLabeled("RFC.factionPirate1".Translate() + this.selected.FactionDef.label + "RFC.factionPirate2".Translate(), ref this.selected.TreatAsPirate, "RFC.factionPirateTip".Translate());
                 if (this.selected.Frequency > 55)
                 {
                     list.Gap(24);
                     list.CheckboxLabeled("RFC.factionHidden3".Translate() + this.selected.FactionDef.label + "RFC.factionHidden2".Translate(), ref this.selected.UseHidden);
-                    list.CheckboxLabeled("RFC.factionPirate1".Translate() + this.selected.FactionDef.label + "RFC.factionPirate2".Translate(), ref this.selected.TreatAsPirate, "RFC.factionPirateTip".Translate());
                 }
                 else if (this.selected.Frequency > 45)
                 {
                     list.Gap(24);
                     list.CheckboxLabeled("RFC.factionHidden3".Translate() + this.selected.FactionDef.label + "RFC.factionHidden2".Translate(), ref this.selected.UseHidden);
-                }
-                else
-                {
-                    list.Gap(24);
-                    list.Label("RFC.factionBasic1".Translate() + this.selected.FactionDef.label + "RFC.factionBasic2".Translate() + "  " + (int)this.selected.Frequency);
-                    this.selected.Frequency = list.Slider(this.selected.Frequency, 0, 10.99f);
-                    list.CheckboxLabeled("RFC.factionPirate1".Translate() + this.selected.FactionDef.label + "RFC.factionPirate2".Translate(), ref this.selected.TreatAsPirate, "RFC.factionPirateTip".Translate());
                 }
             }
             list.End();
