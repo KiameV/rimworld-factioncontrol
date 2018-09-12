@@ -1,16 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
-  <RFC.FactionControl>Rainbeau's Faction Control</RFC.FactionControl>
-
-  <RFC.CustomFactionControl>Rainbeau's Faction Control - Mod派閥</RFC.CustomFactionControl>
+  <RFC.FactionControl>FactionControl－メイン設定</RFC.FactionControl>
+  <RFC.FactionControlFactionOptions>FactionControl－派閥設定</RFC.FactionControlFactionOptions>
+  <RFC.CustomFactionControl>FactionControl－Mod派閥</RFC.CustomFactionControl>
 
   <RFC.factionCount>ワールドマップ上の派閥総数:</RFC.factionCount>
-  <RFC.factionNotes>バニラの値は5です。以下で定義された「最小」派閥数の合計が上記で定義した数を超える場合、「最小」派閥数の合計が優先されることに注意してください。（例えば、派閥の総数を3と設定して、異邦人、部族、宙賊の「最小」派閥数をそれぞれ2つ定義すると、マップには少なくとも6つの派閥が存在します。）また、より多くの派閥を持つ世界では、マップ上で派閥拠点の「人口密度」が高くなることにも注意してください。（拠点は互いに近くにできる傾向があります。）最後に、あなたが「可愛らしい世界」を作ろうと、最小値を0（派閥全てを事実上働かなくする意図）ですべての派閥を設定したとしても、派閥のない世界にはなりません。その結果、あなたは海賊派閥と同居するだけの殺伐な世界になるでしょう。これはあなたへの警告です！</RFC.factionNotes>
+  <RFC.factionNotes>バニラの値は5です。以下で定義された「最小」派閥数の合計が上記で定義した数を超える場合、「最小」派閥数の合計が優先されることに注意してください。（例えば、派閥の総数を3と設定して、異邦人、部族、宙賊の「最小」派閥数をそれぞれ2つ定義すると、マップには少なくとも6つの派閥が存在します。）\nまた、より多くの派閥を持つ世界では、マップ上で派閥拠点の「人口密度」が高くなることにも注意してください。（拠点は互いに近くにできる傾向があります。）最後に、あなたが「可愛らしい世界」を作ろうと、最小値を0（派閥全てを事実上働かなくする意図）ですべての派閥を設定したとしても、派閥のない世界にはなりません。その結果、あなたは海賊派閥と同居するだけの殺伐な世界になるでしょう。これはあなたへの警告です！</RFC.factionNotes>
 
-  <RFC.outlanderMin>世界地図上の「異邦人」派閥の最小数（0に設定すると異邦人派閥は消滅）:</RFC.outlanderMin>
-  <RFC.tribalMin>世界地図上の「部族」派閥の最小数（0に設定すると部族派閥は消滅）:</RFC.tribalMin>
-  <RFC.pirateMin>世界地図上の「宙賊」派閥の最小数（0に設定すると宙賊派閥は消滅）:</RFC.pirateMin>
+  <RFC.outlanderCivilMin>世界地図上の「異邦人の民主連合」派閥の最小拠点数（0に設定すると「異邦人の民主連合」派閥は消滅）:</RFC.outlanderCivilMin>
+  <RFC.outlanderRoughMin>世界地図上の「異邦人の軍事連合」派閥の最小拠点数（0に設定すると「異邦人の軍事連合」派閥は消滅）:</RFC.outlanderRoughMin>
+  <RFC.tribalCivilMin>世界地図上の「温和な部族」派閥の最小拠点数（0に設定すると「温和な部族」派閥は消滅）:</RFC.tribalCivilMin>
+  <RFC.tribalRoughMin>世界地図上の「野蛮な部族」派閥の最小拠点数（0に設定すると「野蛮な部族」派閥は消滅）:</RFC.tribalRoughMin>
+  <RFC.pirateMin>世界地図上の「宙賊」の最小拠点数（0に設定すると「宙賊」派閥は消滅）:</RFC.pirateMin>
+
+  <RFC.SelectAFaction>派閥を選択</RFC.SelectAFaction>
 
   <RFC.factionGrouping>「国家の形成」:</RFC.factionGrouping>
   <RFC.factionGroupingNone>なし：（バニラの挙動です）派閥グループの拠点は世界中にランダムで配置されています。</RFC.factionGroupingNone>
@@ -19,7 +23,7 @@
   <RFC.factionGroupingVeryTight>密集：宙賊団の派閥グループを除いて、各派閥グループの拠点は非常に密接してまとまります。領域の重複はあまりなく、領域間に占領されていない中立領域が大きく広がっているでしょう。</RFC.factionGroupingVeryTight>
 
   <RFC.AllowMechanoids>メカノイドを許可</RFC.AllowMechanoids>
-  <RFC.AllowMechanoidsTip>このオプションをオフにすると、メカノイドが（ほとんど）ゲームから削除されます。文字通りあなたに敵対的な派閥が残っていない限り、彼らに襲われることはありません。そして、あなたは汚染された船やサイキック船の部品の破壊で発生するメカノイドに対処する必要はありません。しかし、あなたはまだ危険な古代の神殿で生きているメカノイドを見つけるかもしれません、また、あなたは偶然、クエストの目標を守っている休眠中のメカノイドを見つけるかもしれません。</RFC.AllowMechanoidsTip>
+  <RFC.AllowMechanoidsTip>このオプションをオフにすると、メカノイドが（ほとんど）ゲームから削除されます。文字通りあなたに敵対的な派閥が残っていない限り、彼らに襲われることはありません。そして、あなたは汚染された船やサイキック船の部品の破壊で発生するメカノイドに対処する必要はありません。しかし、あなたはまだ危険な古代の神殿で生きているメカノイドを見つけるかもしれません、しかし、あなたは偶然クエストの目標を守っている休眠中のメカノイドを発見するかもしれません。</RFC.AllowMechanoidsTip>
 
   <RFC.factionDensity>派閥拠点の密度:</RFC.factionDensity>
   <RFC.factionDensityVeryLow>とても低い：派閥は非常に少数の拠点しか持ちません。</RFC.factionDensityVeryLow>
@@ -29,15 +33,15 @@
   <RFC.factionDensityVeryHigh>とても高い：この世界上の人口密度は過密になります。</RFC.factionDensityVeryHigh>
   <RFC.factionDensityInsane>狂気：リムの世界ではこのような過密化された状態は想定されていません....</RFC.factionDensityInsane>
 
-  <RFC.factionBasic1>派閥の最小数：Modで追加される"</RFC.factionBasic1>
-  <RFC.factionBasic2>"の派閥に属してマップ表示されるグループの数（0にするとその派閥は消滅）:</RFC.factionBasic2>
+  <RFC.factionBasic1>派閥の最小数：Modで追加される「</RFC.factionBasic1>
+  <RFC.factionBasic2>」の派閥に属しているマップ上で表示される拠点の数（0にするとその派閥は消滅）:</RFC.factionBasic2>
 
-  <RFC.factionHidden1>隠された拠点を許可する "</RFC.factionHidden1>
-  <RFC.factionHidden2>"派閥ですか?</RFC.factionHidden2>
-  <RFC.factionHidden3>許可する"</RFC.factionHidden3>
+  <RFC.factionHidden1>隠された拠点を許可する「</RFC.factionHidden1>
+  <RFC.factionHidden2>」派閥ですか?</RFC.factionHidden2>
+  <RFC.factionHidden3>許可する「</RFC.factionHidden3>
 
-  <RFC.factionPirate1>     分散の設定:"</RFC.factionPirate1>
-  <RFC.factionPirate2>" の派閥グループを宙賊団の派閥のように拠点を設置しますか？</RFC.factionPirate2>
+  <RFC.factionPirate1>　　　分散の設定：「</RFC.factionPirate1>
+  <RFC.factionPirate2>」の派閥グループを宙賊団の派閥のように拠点を設置しますか？</RFC.factionPirate2>
 
   <RFC.factionPirateTip>このオプションをオフにすると、拠点がグループ化されて「国家」が形成されます。オンの場合、宙賊団の派閥拠点と同じように他の派閥グループの領土内に散在するようになります（もちろん、このオプションは派閥グループを国家として形成しない限り効果がありません）。</RFC.factionPirateTip>
 
