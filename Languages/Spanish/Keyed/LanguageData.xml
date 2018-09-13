@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+	<RFC.FactionControl>Faction Control - Opciones principales</RFC.FactionControl>
+	<RFC.FactionControlFactionOptions>Faction Control - Ajustes de facción</RFC.FactionControlFactionOptions>
+	<RFC.CustomFactionControl>Faction Control - Facciones de mods</RFC.CustomFactionControl>
+	
+	<RFC.factionCount>Número total de grupos que aparecerán en el mapa mundial:</RFC.factionCount>
+	<RFC.factionNotes>Por defecto en 5. Es importante tener en cuenta que este es el número mínimo general, ya que el número total podría exceder el definido aquí según los "Ajustes de facción". (Por ejemplo, si defines el mínimo general de grupos en 3, pero en "Ajustes de facción" defines 3 facciones en uso un mínimo de 2 grupos cada una, siempre tendrás al menos 6 grupos en tu mapa).</RFC.factionNotes>
+	
+	<RFC.outlanderCivilMin>Número mínimo de grupos de la facción "Unión civil de forasteros" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.outlanderCivilMin>
+	<RFC.outlanderRoughMin>Número mínimo de grupos de la facción "Síndicato de forasteros" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.outlanderRoughMin>
+	<RFC.tribalCivilMin>Número mínimo de grupos de la facción "Tribu gentil" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.tribalCivilMin>
+	<RFC.tribalRoughMin>Número mínimo de grupos de la facción "Tribu salvaje" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.tribalRoughMin>
+	<RFC.pirateMin>Número mínimo de grupos de la facción "Bandas piratas" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.pirateMin>
+
+	<RFC.SelectAFaction>Seleccionar una Facción</RFC.SelectAFaction>
+	
+	<RFC.factionGrouping>"Constructor de naciones":</RFC.factionGrouping>
+	<RFC.factionGroupingNone>Nada. (Comportamiento por defecto.) Las bases de los grupos se dispersarán por todo el mundo al azar.</RFC.factionGroupingNone>
+	<RFC.factionGroupingLoose>Sueltos. Las bases de los grupos tenderán a estar en la misma región del mundo, pero seguirá habiendo una amplia superposición entre los territorios ocupados por varios grupos.</RFC.factionGroupingLoose>
+	<RFC.factionGroupingTight>Apretujados. Las bases que pertenecen a cualquier grupo en particular estarán razonablemente cerca unas de otras, y a excepción de los grupos de bandas piratas, no habrá una gran cantidad de superposición. Habrá una clara sensación de que existen naciones reales en el mapa mundial, aunque con fronteras muy borrosas.</RFC.factionGroupingTight>
+	<RFC.factionGroupingVeryTight>Muy apretujados. Excepto en el caso de las bandas piratas, las bases de cada grupo estarán muy agrupadas. Habrá muy poca solapación, pero puede haber grandes espacios "abiertos" de territorio desocupado entre ellos.</RFC.factionGroupingVeryTight>
+
+	<RFC.AllowMechanoids>¿Permitir la facción oculta de la "colmena mecanoide"?</RFC.AllowMechanoids>
+	<RFC.AllowMechanoidsTip>Si desmarcas este ajuste, los mecanoides serán eliminados (mayoritariamente) del juego. No serás asaltado por ellos, a menos que literalmente no quede ningún otro grupo que sea una amenaza. Tampoco tendrás que lidiar con naves venenosas o con accidentes psíquicos. Sin embargo, es posible que todavía encuentres mecanoides en cámaras antiguas, también puedes encontrar mecanoides durmientes protegiendo los objetivos de una misión.</RFC.AllowMechanoidsTip>
+
+	<RFC.factionDensity>Densidad de las bases:</RFC.factionDensity>
+	<RFC.factionDensityVeryLow>Muy baja. Muy pocas bases por grupo,</RFC.factionDensityVeryLow>
+	<RFC.factionDensityLow>Baja.</RFC.factionDensityLow>
+	<RFC.factionDensityNormal>Normal. (Densidad por defecto.)</RFC.factionDensityNormal>
+	<RFC.factionDensityHigh>Alta.</RFC.factionDensityHigh>
+	<RFC.factionDensityVeryHigh>Muy alta. El mundo estará densamente poblado con bases.</RFC.factionDensityVeryHigh>
+	<RFC.factionDensityInsane>Demencialmente alta. Se supone que los Rimworlds no deben estar superpoblados de esta manera....</RFC.factionDensityInsane>
+	
+	<RFC.factionBasic1>Número mínimo de grupos de la facción "</RFC.factionBasic1>
+	<RFC.factionBasic2>" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.factionBasic2>
+	
+	<RFC.factionHidden1>Permitir la ocultación "</RFC.factionHidden1>
+	<RFC.factionHidden2>" facción?</RFC.factionHidden2>
+	<RFC.factionHidden3>Permitir el/la "</RFC.factionHidden3>
+
+	<RFC.factionPirate1>     Distribuir "</RFC.factionPirate1>
+	<RFC.factionPirate2>" bases de los grupos como las bases de bandas de bandas piratas?</RFC.factionPirate2>
+	
+	<RFC.factionPirateTip>Si esta opción está desmarcada, las bases se agruparán para formar una "nación". Sin embargo, si se marca, las bases se dispersarán por los territorios de otros grupos, como lo hacen las bases de las bandas de piratas. (Tenga en cuenta que, por supuesto, esta opción no tiene ningún efecto a menos que haya elegido organizar geográficamente las bases de los grupos).</RFC.factionPirateTip>
+	
+</LanguageData>
