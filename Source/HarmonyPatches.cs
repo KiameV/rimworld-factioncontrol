@@ -448,12 +448,42 @@ namespace FactionControl
         }
     }
 
-    /*[HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
+    [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
-        public static bool Prefix(Faction player)
+        public static void Postfix(Faction player)
         {
-            foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
+            foreach (Faction f in Find.FactionManager.AllFactions)
+            {
+                switch (f.def.defName)
+                {
+                    case "OutlanderCivil":
+                    case "OutlanderRough":
+                    case "TribeCivil":
+                    case "TribeRough":
+                        int change;
+                        if (f.HostileTo(Faction.OfPlayer))
+                            change = Rand.RangeInclusive(-55, 35);
+                        else
+                            change = Rand.RangeInclusive(-35, 55);
+
+                        FactionRelationKind orig = f.RelationKindWith(Faction.OfPlayer);
+                        f.TryAffectGoodwillWith(Faction.OfPlayer, change);
+
+                        if (orig != FactionRelationKind.Hostile && 
+                            f.GoodwillWith(Faction.OfPlayer) < -10)
+                        {
+                            f.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Hostile);
+                        }
+                        else if (orig == FactionRelationKind.Hostile && 
+                                 f.GoodwillWith(Faction.OfPlayer) >= 0)
+                        {
+                            f.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Neutral);
+                        }
+                        break;
+                }
+            }
+            /*foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
             {
                 if (!allDef.mustStartOneEnemy || !Find.World.factionManager.AllFactions.Any<Faction>((Faction f) => f.def == allDef) || Find.World.factionManager.AllFactions.Any<Faction>((Faction f) => (f.def != allDef ? false : f.HostileTo(player))))
                 {
@@ -501,8 +531,7 @@ namespace FactionControl
                 faction.TryAffectGoodwillWith(player, goodwillChange, false, false, null, null);
                 faction.TrySetRelationKind(player, FactionRelationKind.Hostile, false, null, null);
             }
-            return false;
+            return false;*/
         }
-    }*/
-
+    }
 }
