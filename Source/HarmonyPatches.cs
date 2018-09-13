@@ -191,7 +191,6 @@ namespace FactionControl
                             cf.FactionDef.requiredCountAtGameStart = 0;
                         }
                     }
-                    UpdateDef(cf.FactionDef, requiredCount);
 
                     if (cf.TreatAsPirate)
                     {
