@@ -26,17 +26,33 @@ namespace FactionControl
 
     class Settings_ModdedFactions : ModSettings
     {
-        private CustomFaction selected = null;
-
+        private Vector2 pos = new Vector2(0, 0);
         public void DoWindowContents(Rect inRect)
         {
-            Listing_Standard list = new Listing_Standard
-            {
-                ColumnWidth = inRect.width
-            };
-            list.Begin(inRect);
+            const float HEIGHT = 70;
+            float WIDTH = inRect.width - 16;
 
-            string label = (this.selected != null) ? this.selected.FactionDef.label : "RFC.SelectAFaction".Translate();
+            float x = inRect.x;
+            float y = inRect.y + 20;
+            Widgets.BeginScrollView(new Rect(x, y, WIDTH + 16, 500), ref pos, new Rect(inRect.x, inRect.y, WIDTH, HEIGHT * Main.CustomFactions.Count * 10));
+
+            foreach (CustomFaction f in Main.CustomFactions)
+            {
+                Widgets.Label(new Rect(x, y, WIDTH, 32), "RFC.factionBasic1".Translate() + f.FactionDef.label + "RFC.factionBasic2".Translate());
+                y += 30;
+                Widgets.Label(new Rect(x + 20, y, 40, 32), ((int)f.RequiredCount).ToString());
+                f.RequiredCount = Widgets.HorizontalSlider(new Rect(x + 80, y, 200, 32), f.RequiredCount, 0, (f.MaxCountAtStart < 6) ? f.MaxCountAtStart : 6);
+                if (Widgets.ButtonText(new Rect(x + 300, y - 2, 100, 28), "Reset".Translate()))
+                {
+                    f.RequiredCount = f.RequiredCountDefault;
+                }
+                y += 30;
+                Widgets.DrawLineHorizontal(x, y, WIDTH);
+                y += 10;
+            }
+            Widgets.EndScrollView();
+
+            /*string label = (this.selected != null) ? this.selected.FactionDef.label : "RFC.SelectAFaction".Translate();
             if (list.ButtonText(label))
             {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
@@ -65,8 +81,7 @@ namespace FactionControl
                     list.Gap(24);
                     list.CheckboxLabeled("RFC.factionHidden3".Translate() + this.selected.FactionDef.label + "RFC.factionHidden2".Translate(), ref this.selected.UseHidden);
                 }
-            }
-            list.End();
+            }*/
         }
 
         public override void ExposeData()
@@ -81,9 +96,11 @@ namespace FactionControl
 
     class CustomFaction : IExposable
     {
-        public float Frequency;
-        public bool TreatAsPirate;
-        public bool UseHidden;
+        public float RequiredCountDefault = -1;
+        public float RequiredCount = -1;
+        public float MaxCountAtStart = -1;
+        //public bool UseHiddenDefault;
+        //public bool UseHidden;
         private string factionDef;
 
         public CustomFaction()
@@ -94,9 +111,8 @@ namespace FactionControl
         public void ExposeData()
         {
             Scribe_Values.Look(ref factionDef, "faction");
-            Scribe_Values.Look(ref Frequency, "frequency");
-            Scribe_Values.Look(ref TreatAsPirate, "treatAsPirate");
-            Scribe_Values.Look(ref UseHidden, "useHidden");
+            Scribe_Values.Look(ref RequiredCount, "requiredCount");
+            //Scribe_Values.Look(ref UseHidden, "useHidden");
         }
 
         public FactionDef FactionDef

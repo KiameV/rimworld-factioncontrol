@@ -45,41 +45,28 @@ namespace FactionControl
                     default:
                         CustomFaction cf = new CustomFaction
                         {
-                            FactionDef = def
+                            FactionDef = def,
+                            RequiredCountDefault = def.requiredCountAtGameStart,
+                            RequiredCount = def.requiredCountAtGameStart,
+                            MaxCountAtStart = def.maxCountAtGameStart
                         };
-                        if (def.hidden.Equals(true))
-                        {
-                            cf.Frequency = 50;
-                            cf.TreatAsPirate = false;
-                            cf.UseHidden = true;
-                        }
-                        else
-                        {
-                            if (!def.canMakeRandomly)
-                            {
-                                cf.Frequency = 60;
-                                cf.UseHidden = true;
-                            }
-                            else
-                            {
-                                cf.Frequency = def.requiredCountAtGameStart;
-                                cf.UseHidden = false;
-                            }
 
-                            if (def.maxCountAtGameStart < 50)
+                        bool contains = false;
+                        foreach (CustomFaction f in Main.CustomFactions)
+                        {
+                            if (f.FactionDef == def)
                             {
-                                cf.TreatAsPirate = true;
-                            }
-                            else
-                            {
-                                cf.TreatAsPirate = false;
+                                f.MaxCountAtStart = def.maxCountAtGameStart;
+                                f.RequiredCountDefault = def.requiredCountAtGameStart;
+                                if (f.RequiredCount == -1)
+                                    f.RequiredCount = def.requiredCountAtGameStart;
+                                contains = true;
+                                break;
                             }
                         }
-
-                        if (!CustomFactions.Contains(cf))
-                            CustomFactions.Add(cf);
-
                         loaded.Add(cf);
+                        if (!contains)
+                            Main.CustomFactions.Add(cf);
                         break;
                 }
             }
@@ -177,25 +164,14 @@ namespace FactionControl
 
             foreach (CustomFaction cf in Main.CustomFactions)
             {
-                if (cf.FactionDef.defName.Equals(cf.FactionDef.defName))
+                cf.FactionDef.requiredCountAtGameStart = (int)cf.RequiredCount;
+                if (cf.RequiredCount == 0)
                 {
-                    int requiredCount = (int)cf.Frequency;
-                    if (requiredCount > 45)
-                    {
-                        if (cf.UseHidden)
-                        {
-                            cf.FactionDef.requiredCountAtGameStart = 1;
-                        }
-                        else
-                        {
-                            cf.FactionDef.requiredCountAtGameStart = 0;
-                        }
-                    }
-
-                    if (cf.TreatAsPirate)
-                    {
-                        cf.FactionDef.maxCountAtGameStart = cf.FactionDef.requiredCountAtGameStart * 2;
-                    }
+                    cf.FactionDef.maxCountAtGameStart = 0;
+                }
+                else
+                {
+                    cf.FactionDef.maxCountAtGameStart = (int)cf.MaxCountAtStart;
                 }
             }
 
@@ -225,23 +201,6 @@ namespace FactionControl
                 }
 
                 actualFactionCount += def.requiredCountAtGameStart;
-                Controller.minFactionSeparation = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2);
-                if (Controller.Settings.factionGrouping < 1)
-                {
-                    Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount);
-                }
-                else if (Controller.Settings.factionGrouping < 2)
-                {
-                    Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 1.5);
-                }
-                else if (Controller.Settings.factionGrouping < 3)
-                {
-                    Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2.25);
-                }
-                else
-                {
-                    Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 3);
-                }
                 for (int i = 0; i < def.requiredCountAtGameStart; i++)
                 {
                     Faction faction = FactionGenerator.NewGeneratedFaction(def);
@@ -265,17 +224,34 @@ namespace FactionControl
                 Controller.maxFactionSprawl = 1;
                 Faction faction = FactionGenerator.NewGeneratedFaction(def);
                 Find.FactionManager.Add(faction);
+                actualFactionCount = 1;
+            }
+
+            Controller.minFactionSeparation = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2);
+            if (Controller.Settings.factionGrouping < 1)
+            {
+                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount);
+            }
+            else if (Controller.Settings.factionGrouping < 2)
+            {
+                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 1.5);
+            }
+            else if (Controller.Settings.factionGrouping < 3)
+            {
+                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2.25);
+            }
+            else
+            {
+                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 3);
             }
 
             while (num < (int)Controller.Settings.factionCount)
             {
-                FactionDef factionDef = (
-                  from fa in DefDatabase<FactionDef>.AllDefs
-                  where (!fa.canMakeRandomly ? false : Find.FactionManager.AllFactions.Count<Faction>((Faction f) => f.def == fa) < fa.maxCountAtGameStart)
-                  select fa).RandomElement<FactionDef>();
-                if (factionDef == null) { break; }
-                Faction faction1 = FactionGenerator.NewGeneratedFaction(factionDef);
-                Find.World.factionManager.Add(faction1);
+                FactionDef facDef = (from fa in DefDatabase<FactionDef>.AllDefs
+                                     where fa.canMakeRandomly && Find.FactionManager.AllFactions.Count((Faction f) => f.def == fa) < fa.maxCountAtGameStart
+                                     select fa).RandomElement<FactionDef>();
+                Faction faction2 = FactionGenerator.NewGeneratedFaction(facDef);
+                Find.World.factionManager.Add(faction2);
                 num++;
             }
             float tilesCount = (float)Find.WorldGrid.TilesCount / 100000f;
@@ -315,7 +291,7 @@ namespace FactionControl
             {
                 Faction faction2 = (
                   from x in Find.World.factionManager.AllFactionsListForReading
-                  where (x.def.isPlayer ? false : !x.def.hidden)
+                  where !x.def.isPlayer && !x.def.hidden
                   select x).RandomElementByWeight<Faction>((Faction x) => x.def.settlementGenerationWeight);
                 Settlement factionBase = (Settlement)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Settlement);
                 factionBase.SetFaction(faction2);
