@@ -426,7 +426,7 @@ namespace FactionControl
     [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
-        public static void Postfix(Faction player)
+        public static void Prefix(Faction player)
         {
             foreach (Faction f in Find.FactionManager.AllFactions)
             {
