@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
   <RFC.FactionControl>FactionControl－メイン設定</RFC.FactionControl>
@@ -24,6 +24,9 @@
 
   <RFC.AllowMechanoids>メカノイドを許可</RFC.AllowMechanoids>
   <RFC.AllowMechanoidsTip>このオプションをオフにすると、メカノイドが（ほとんど）ゲームから削除されます。文字通りあなたに敵対的な派閥が残っていない限り、彼らに襲われることはありません。そして、あなたは汚染された船やサイキック船の部品の破壊で発生するメカノイドに対処する必要はありません。しかし、あなたはまだ危険な古代の神殿で生きているメカノイドを見つけるかもしれません、しかし、あなたは偶然クエストの目標を守っている休眠中のメカノイドを発見するかもしれません。</RFC.AllowMechanoidsTip>
+
+  <RFC.EnableFactionRandomGoodwill>友好関係をランダム化</RFC.EnableFactionRandomGoodwill>
+  <RFC.EnableFactionRandomGoodwillToolTip>世界が生成されたときに派閥の友好関係がランダム化されるかどうかを設定するための設定を追加します。通常、穏健な派閥拠点は中立的で、攻撃的な派閥拠点は敵対的です。初期状態ではONになっています。</RFC.EnableFactionRandomGoodwillToolTip>
 
   <RFC.factionDensity>派閥拠点の密度:</RFC.factionDensity>
   <RFC.factionDensityVeryLow>とても低い：派閥は非常に少数の拠点しか持ちません。</RFC.factionDensityVeryLow>
