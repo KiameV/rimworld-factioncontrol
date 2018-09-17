@@ -25,6 +25,12 @@
 	<RFC.AllowMechanoids>Allow the hidden "Mechanoid hive" faction?</RFC.AllowMechanoids>
 	<RFC.AllowMechanoidsTip>If you uncheck this option, mechanoids will (mostly) be removed from the game. You won't be raided by them, unless there's literally no other faction group left that's Rough to you. And you won't have to deal with poison or psychic ship part crashes. However, you may still find mechanoids in ancient danger chambers, and you might still find sleeping mechanoids guarding quest objectives.</RFC.AllowMechanoidsTip>
 
+	<RFC.EnableFactionRandomGoodwill>Randomize Faction Goodwill</RFC.EnableFactionRandomGoodwill>
+	<RFC.EnableFactionRandomGoodwillToolTip>Gentle settlements will usually be neutral and rough settlements will usually by hostile still but adds some randomness.</RFC.EnableFactionRandomGoodwillToolTip>
+
+	<RFC.EnableFactionDynamicColors>Dynamic Faction Colors</RFC.EnableFactionDynamicColors>
+	<RFC.EnableFactionDynamicColorsTip>Hostile = Red. Friendly Tribal = Green. Friendly Outlander = Blue.</RFC.EnableFactionDynamicColorsTip>
+
 	<RFC.factionDensity>Faction Base Density:</RFC.factionDensity>
 	<RFC.factionDensityVeryLow>Very low. Very few bases per faction group.</RFC.factionDensityVeryLow>
 	<RFC.factionDensityLow>Low.</RFC.factionDensityLow>

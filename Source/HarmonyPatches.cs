@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 using Verse;
 
 namespace FactionControl
@@ -423,11 +424,58 @@ namespace FactionControl
         }
     }
 
+    [HarmonyPatch(typeof(Faction))]
+    [HarmonyPatch("Color", MethodType.Getter)]
+    public static class Patch_Faction_get_Color
+    {
+        public static bool Prefix(Faction __instance, ref Color __result)
+        {
+            if (!Controller.Settings.randomGoodwill || !Controller.Settings.dynamicColors)
+                return true;
+
+            float red = 0, green = 0, blue = 0;
+            float goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
+            if (__instance.HostileTo(Faction.OfPlayer))
+            {
+                red = 0.75f;
+                green = blue = goodwill;
+            }
+            else if (__instance.def.defName.StartsWith("Tribe"))
+            {
+                green = 1f;
+                red = blue = goodwill;
+            }
+            else
+            {
+                blue = 1f;
+                red = green = goodwill;
+            }
+            __result = new Color(red, green, blue);
+            return false;
+        }
+
+        private static float GoodWillToColor(int goodwill)
+        {
+            float v = Math.Abs(goodwill) * 0.01f;
+            //if (v > .65f)
+            //    v = .65f;
+            if (v > 1f)
+                v = 1f;
+            else if (v < 0.35f)
+                v = 0.35f;
+            v = 1 - v;
+            return v;
+        }
+    }
+
     [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
         public static void Prefix(Faction player)
         {
+            if (!Controller.Settings.randomGoodwill)
+                return;
+
             foreach (Faction f in Find.FactionManager.AllFactions)
             {
                 switch (f.def.defName)
@@ -438,9 +486,9 @@ namespace FactionControl
                     case "TribeRough":
                         int change;
                         if (f.HostileTo(Faction.OfPlayer))
-                            change = Rand.RangeInclusive(-55, 35);
+                            change = Rand.RangeInclusive(-55, 25);
                         else
-                            change = Rand.RangeInclusive(-35, 55);
+                            change = Rand.RangeInclusive(-25, 55);
 
                         FactionRelationKind orig = f.RelationKindWith(Faction.OfPlayer);
                         f.TryAffectGoodwillWith(Faction.OfPlayer, change);

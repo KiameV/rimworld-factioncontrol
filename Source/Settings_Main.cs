@@ -29,6 +29,9 @@ namespace FactionControl
         public float factionDensity = 2.5f;
         public float factionCount = 5.5f;
         public bool allowMechanoids = true;
+        public bool randomGoodwill = true;
+        public bool dynamicColors = true;
+
         public void DoWindowContents(Rect canvas)
         {
             Listing_Standard list = new Listing_Standard();
@@ -86,6 +89,13 @@ namespace FactionControl
             factionGrouping = list.Slider(factionGrouping, 0, 3.99f);
             list.Gap(24);
             list.CheckboxLabeled("RFC.AllowMechanoids".Translate(), ref allowMechanoids, "RFC.AllowMechanoidsTip".Translate());
+            list.Gap(24);
+            list.CheckboxLabeled("RFC.EnableFactionRandomGoodwill".Translate(), ref randomGoodwill, "RFC.EnableFactionRandomGoodwillToolTip".Translate());
+            if (randomGoodwill)
+            {
+                list.Gap(24);
+                list.CheckboxLabeled("RFC.EnableFactionDynamicColors".Translate(), ref dynamicColors, "RFC.EnableFactionDynamicColorsTip".Translate());
+            }
             list.End();
         }
 
@@ -96,6 +106,8 @@ namespace FactionControl
             Scribe_Values.Look(ref factionDensity, "factionDensity", 2.5f);
             Scribe_Values.Look(ref factionCount, "factionCount", 5.5f);
             Scribe_Values.Look(ref allowMechanoids, "allowMechanoids", true);
+            Scribe_Values.Look(ref randomGoodwill, "randomGoodwill", true);
+            Scribe_Values.Look(ref dynamicColors, "dynamicColors", true);
             SetIncidents.SetIncidentLevels();
         }
     }
