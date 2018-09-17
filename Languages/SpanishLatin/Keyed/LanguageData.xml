@@ -25,6 +25,12 @@
 	<RFC.AllowMechanoids>¿Permitir la facción oculta de la "colmena mecanoide"?</RFC.AllowMechanoids>
 	<RFC.AllowMechanoidsTip>Si desmarcas este ajuste, los mecanoides serán eliminados (mayoritariamente) del juego. No serás asaltado por ellos, a menos que literalmente no quede ningún otro grupo que sea una amenaza. Tampoco tendrás que lidiar con naves venenosas o con accidentes psíquicos. Sin embargo, es posible que todavía encuentres mecanoides en cámaras antiguas, también puedes encontrar mecanoides durmientes protegiendo los objetivos de una misión.</RFC.AllowMechanoidsTip>
 
+	<RFC.EnableFactionRandomGoodwill>Aleatorizar la buena voluntad de las facciones</RFC.EnableFactionRandomGoodwill>
+	<RFC.EnableFactionRandomGoodwillToolTip>Los asentamientos gentiles suelen ser neutrales y los asentamientos violentos suelen ser hostiles, pero se añade algo de aleatoriedad.</RFC.EnableFactionRandomGoodwillToolTip>
+
+	<RFC.EnableFactionDynamicColors>Colores de facción dinámicos</RFC.EnableFactionDynamicColors>
+	<RFC.EnableFactionDynamicColorsTip>Hostil = Rojo. Tribal Gentil = Verde. Forasteros Amistosos = Azul.</RFC.EnableFactionDynamicColorsTip>
+
 	<RFC.factionDensity>Densidad de las bases:</RFC.factionDensity>
 	<RFC.factionDensityVeryLow>Muy baja. Muy pocas bases por grupo,</RFC.factionDensityVeryLow>
 	<RFC.factionDensityLow>Baja.</RFC.factionDensityLow>
