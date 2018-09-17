@@ -28,6 +28,9 @@
   <RFC.EnableFactionRandomGoodwill>友好関係をランダム化</RFC.EnableFactionRandomGoodwill>
   <RFC.EnableFactionRandomGoodwillToolTip>世界が生成されたときに派閥の友好関係がランダム化されるかどうかを設定するための設定を追加します。通常、穏健な派閥拠点は中立的で、攻撃的な派閥拠点は敵対的です。初期状態ではONになっています。</RFC.EnableFactionRandomGoodwillToolTip>
 
+  <RFC.EnableFactionDynamicColors>派閥の色を変化させる</RFC.EnableFactionDynamicColors>
+  <RFC.EnableFactionDynamicColorsTip>敵対派閥：赤色\n友好的な部族：緑色\n友好的な異邦人：青色\n\n友好関係が高く、または低くなるほど色が濃くなります。</RFC.EnableFactionDynamicColorsTip>
+
   <RFC.factionDensity>派閥拠点の密度:</RFC.factionDensity>
   <RFC.factionDensityVeryLow>とても低い：派閥は非常に少数の拠点しか持ちません。</RFC.factionDensityVeryLow>
   <RFC.factionDensityLow>低い：派閥は少ない拠点しか持っていません。</RFC.factionDensityLow>
