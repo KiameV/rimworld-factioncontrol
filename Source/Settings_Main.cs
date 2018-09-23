@@ -25,9 +25,11 @@ namespace FactionControl
 
     public class Settings : ModSettings
     {
+        // TODO remove this in 1.0 release
+        public float factionCount = -1f;
+
         public float factionGrouping = 0.5f;
         public float factionDensity = 2.5f;
-        public float factionCount = 5.5f;
         public bool allowMechanoids = true;
         public bool randomGoodwill = true;
         public bool dynamicColors = true;
@@ -38,12 +40,6 @@ namespace FactionControl
             list.ColumnWidth = canvas.width;
             list.Begin(canvas);
             list.Gap();
-            list.Label("RFC.factionCount".Translate() + "  " + (int)factionCount);
-            factionCount = list.Slider(factionCount, 0, 30.99f);
-            Text.Font = GameFont.Tiny;
-            list.Label("RFC.factionNotes".Translate());
-            Text.Font = GameFont.Small;
-            list.Gap(24);
             if (factionDensity < 1)
             {
                 list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityVeryLow".Translate());
@@ -91,11 +87,8 @@ namespace FactionControl
             list.CheckboxLabeled("RFC.AllowMechanoids".Translate(), ref allowMechanoids, "RFC.AllowMechanoidsTip".Translate());
             list.Gap(24);
             list.CheckboxLabeled("RFC.EnableFactionRandomGoodwill".Translate(), ref randomGoodwill, "RFC.EnableFactionRandomGoodwillToolTip".Translate());
-            if (randomGoodwill)
-            {
-                list.Gap(24);
-                list.CheckboxLabeled("RFC.EnableFactionDynamicColors".Translate(), ref dynamicColors, "RFC.EnableFactionDynamicColorsTip".Translate());
-            }
+            list.Gap(24);
+            list.CheckboxLabeled("RFC.EnableFactionDynamicColors".Translate(), ref dynamicColors, "RFC.EnableFactionDynamicColorsTip".Translate());
             list.End();
         }
 
@@ -104,10 +97,21 @@ namespace FactionControl
             base.ExposeData();
             Scribe_Values.Look(ref factionGrouping, "factionGrouping", 0.5f);
             Scribe_Values.Look(ref factionDensity, "factionDensity", 2.5f);
-            Scribe_Values.Look(ref factionCount, "factionCount", 5.5f);
             Scribe_Values.Look(ref allowMechanoids, "allowMechanoids", true);
             Scribe_Values.Look(ref randomGoodwill, "randomGoodwill", true);
             Scribe_Values.Look(ref dynamicColors, "dynamicColors", true);
+
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                Scribe_Values.Look(ref factionCount, "factionCount", -1);
+                if (factionCount != -1 && 
+                    Controller_FactionOptions.Settings != null && 
+                    Controller_FactionOptions.Settings.factionCount == -1)
+                {
+                    Controller_FactionOptions.Settings.factionCount = factionCount;
+                }
+            }
+
             SetIncidents.SetIncidentLevels();
         }
     }

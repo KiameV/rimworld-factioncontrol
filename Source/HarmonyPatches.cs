@@ -110,7 +110,7 @@ namespace FactionControl
             {
                 if (def.defName == "PoisonShipPartCrash" || def.defName == "PsychicEmanatorShipPartCrash")
                 {
-                    if (Controller.Settings.allowMechanoids.Equals(true))
+                    if (Controller.Settings.allowMechanoids)
                     {
                         def.baseChance = 2.0f;
                     }
@@ -430,25 +430,41 @@ namespace FactionControl
     {
         public static bool Prefix(Faction __instance, ref Color __result)
         {
-            if (!Controller.Settings.randomGoodwill || !Controller.Settings.dynamicColors)
+            if (!Controller.Settings.dynamicColors)
                 return true;
 
-            float red = 0, green = 0, blue = 0;
-            float goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
+            float red = __result.r, 
+                  green = __result.g,
+                  blue = __result.b,
+                  goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
+
             if (__instance.HostileTo(Faction.OfPlayer))
             {
                 red = 0.75f;
                 green = blue = goodwill;
             }
-            else if (__instance.def.defName.StartsWith("Tribe"))
-            {
-                green = 1f;
-                red = blue = goodwill;
-            }
             else
             {
-                blue = 1f;
-                red = green = goodwill;
+                switch (__instance.def.defName)
+                {
+                    case "TribeCivil":
+                        red = green = 1f;
+                        blue = goodwill;
+                        break;
+                    case "TribeRough":
+                        green = 1f;
+                        red = blue = goodwill;
+                        break;
+                    case "OutlanderCivil":
+                        blue = 1f;
+                        red = green = goodwill;
+                        break;
+                    case "OutlanderRough":
+                        blue = 1f;
+                        red = 0.5f;
+                        green = goodwill;
+                        break;
+                }
             }
             __result = new Color(red, green, blue);
             return false;
