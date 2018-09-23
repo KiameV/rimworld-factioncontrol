@@ -433,9 +433,7 @@ namespace FactionControl
             if (!Controller.Settings.dynamicColors)
                 return true;
 
-            float red = __result.r, 
-                  green = __result.g,
-                  blue = __result.b,
+            float red = -1, green = -1, blue = -1,
                   goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
 
             if (__instance.HostileTo(Faction.OfPlayer))
@@ -466,6 +464,10 @@ namespace FactionControl
                         break;
                 }
             }
+
+            if (red == -1 || green == -1 || blue == -1)
+                return true;
+
             __result = new Color(red, green, blue);
             return false;
         }
