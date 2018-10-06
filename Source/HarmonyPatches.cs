@@ -430,8 +430,12 @@ namespace FactionControl
     {
         public static bool Prefix(Faction __instance, ref Color __result)
         {
-            if (!Controller.Settings.dynamicColors)
+            if (!Controller.Settings.dynamicColors ||
+                __instance.def == FactionDefOf.PlayerColony || 
+                __instance.def == FactionDefOf.PlayerTribe)
+            {
                 return true;
+            }
 
             float red = -1, green = -1, blue = -1,
                   goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
