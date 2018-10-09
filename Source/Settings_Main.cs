@@ -28,61 +28,28 @@ namespace FactionControl
         // TODO remove this in 1.0 release
         public float factionCount = -1f;
 
-        public float factionGrouping = 0.5f;
         public float factionDensity = 2.5f;
+        public float factionGrouping = 0.5f;
         public bool allowMechanoids = true;
         public bool randomGoodwill = true;
         public bool dynamicColors = true;
 
         public void DoWindowContents(Rect canvas)
         {
-            Listing_Standard list = new Listing_Standard();
-            list.ColumnWidth = canvas.width;
+            Listing_Standard list = new Listing_Standard
+            {
+                ColumnWidth = canvas.width
+            };
             list.Begin(canvas);
+
             list.Gap();
-            if (factionDensity < 1)
-            {
-                list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityVeryLow".Translate());
-            }
-            else if (factionDensity < 2)
-            {
-                list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityLow".Translate());
-            }
-            else if (factionDensity < 3)
-            {
-                list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityNormal".Translate());
-            }
-            else if (factionDensity < 4)
-            {
-                list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityHigh".Translate());
-            }
-            else if (factionDensity < 5)
-            {
-                list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityVeryHigh".Translate());
-            }
-            else
-            {
-                list.Label("RFC.factionDensity".Translate() + "  " + "RFC.factionDensityInsane".Translate());
-            }
-            factionDensity = list.Slider(factionDensity, 0, 5.99f);
+            list.Label("RFC.factionDensity".Translate() + " " + GetFactionDensityLabel(factionDensity));// + "(" + factionDensity.ToString("n2") + ")");
+            factionDensity = list.Slider(factionDensity, 0.01f, 24f);
+
             list.Gap(24);
-            if (factionGrouping < 1)
-            {
-                list.Label("RFC.factionGrouping".Translate() + "  " + "RFC.factionGroupingNone".Translate());
-            }
-            else if (factionGrouping < 2)
-            {
-                list.Label("RFC.factionGrouping".Translate() + "  " + "RFC.factionGroupingLoose".Translate());
-            }
-            else if (factionGrouping < 3)
-            {
-                list.Label("RFC.factionGrouping".Translate() + "  " + "RFC.factionGroupingTight".Translate());
-            }
-            else
-            {
-                list.Label("RFC.factionGrouping".Translate() + "  " + "RFC.factionGroupingVeryTight".Translate());
-            }
-            factionGrouping = list.Slider(factionGrouping, 0, 3.99f);
+            list.Label("RFC.factionGrouping".Translate() + "  " + GetFactionGroupingLabel(factionGrouping));// + "(" + factionGrouping.ToString("n2") + ")");
+            factionGrouping = list.Slider(factionGrouping, 0.5f, 5f);
+
             list.Gap(24);
             list.CheckboxLabeled("RFC.AllowMechanoids".Translate(), ref allowMechanoids, "RFC.AllowMechanoidsTip".Translate());
             list.Gap(24);
@@ -113,6 +80,48 @@ namespace FactionControl
             }
 
             SetIncidents.SetIncidentLevels();
+        }
+
+        private static string GetFactionDensityLabel(float factionDensity)
+        {
+            if (factionDensity < 2.5)
+            {
+                return "RFC.factionDensityVeryLow".Translate();
+            }
+            else if (factionDensity < 5)
+            {
+                return "RFC.factionDensityLow".Translate();
+            }
+            else if (factionDensity < 7.5)
+            {
+                return "RFC.factionDensityNormal".Translate();
+            }
+            else if (factionDensity < 11.5)
+            {
+                return "RFC.factionDensityHigh".Translate();
+            }
+            else if (factionDensity < 14)
+            {
+                return "RFC.factionDensityVeryHigh".Translate();
+            }
+            return "RFC.factionDensityInsane".Translate();
+        }
+
+        private static string GetFactionGroupingLabel(float factionGrouping)
+        {
+            if (factionGrouping < 1f)
+            {
+                return "RFC.factionGroupingNone".Translate();
+            }
+            else if (factionGrouping < 2f)
+            {
+                return "RFC.factionGroupingLoose".Translate();
+            }
+            else if (factionGrouping < 3.5f)
+            {
+                return "RFC.factionGroupingTight".Translate();
+            }
+            return "RFC.factionGroupingVeryTight".Translate();
         }
     }
 }

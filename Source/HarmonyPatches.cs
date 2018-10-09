@@ -229,22 +229,7 @@ namespace FactionControl
             }
 
             Controller.minFactionSeparation = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2);
-            if (Controller.Settings.factionGrouping < 1)
-            {
-                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount);
-            }
-            else if (Controller.Settings.factionGrouping < 2)
-            {
-                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 1.5);
-            }
-            else if (Controller.Settings.factionGrouping < 3)
-            {
-                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2.25);
-            }
-            else
-            {
-                Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 3);
-            }
+            Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * Controller.Settings.factionGrouping);
 
             while (num < (int)Controller.Settings.factionCount)
             {
@@ -256,34 +241,8 @@ namespace FactionControl
                 num++;
             }
             float tilesCount = (float)Find.WorldGrid.TilesCount / 100000f;
-            float minBP100K = 75f;
-            float maxBP100K = 85f;
-            if (Controller.Settings.factionDensity < 1)
-            {
-                minBP100K = minBP100K * 0.25f;
-                maxBP100K = maxBP100K * 0.25f;
-            }
-            else if (Controller.Settings.factionDensity < 2)
-            {
-                minBP100K = minBP100K * 0.5f;
-                maxBP100K = maxBP100K * 0.5f;
-            }
-            else if (Controller.Settings.factionDensity < 3) { }
-            else if (Controller.Settings.factionDensity < 4)
-            {
-                minBP100K = minBP100K * 2;
-                maxBP100K = maxBP100K * 2;
-            }
-            else if (Controller.Settings.factionDensity < 5)
-            {
-                minBP100K = minBP100K * 4;
-                maxBP100K = maxBP100K * 4;
-            }
-            else
-            {
-                minBP100K = minBP100K * 8;
-                maxBP100K = maxBP100K * 8;
-            }
+            float minBP100K = 75f * Controller.Settings.factionDensity;
+            float maxBP100K = 85f * Controller.Settings.factionDensity;
             FloatRange factionBasesPer100kTiles = new FloatRange(minBP100K, maxBP100K);
             int maxCount = 0;
             int count = GenMath.RoundRandom(tilesCount * factionBasesPer100kTiles.RandomInRange);
