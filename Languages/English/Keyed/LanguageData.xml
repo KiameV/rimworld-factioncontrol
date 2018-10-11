@@ -27,6 +27,7 @@
 
 	<RFC.EnableFactionRandomGoodwill>Randomize Faction Goodwill</RFC.EnableFactionRandomGoodwill>
 	<RFC.EnableFactionRandomGoodwillToolTip>Gentle settlements will usually be neutral and rough settlements will usually by hostile still but adds some randomness.</RFC.EnableFactionRandomGoodwillToolTip>
+	<RFC.SpreadPirates>Spread Pirates</RFC.SpreadPirates>
 
 	<RFC.EnableFactionDynamicColors>Dynamic Faction Colors</RFC.EnableFactionDynamicColors>
 	<RFC.EnableFactionDynamicColorsTip>Hostile = Red. Friendly Tribal = Green. Friendly Outlander = Blue.</RFC.EnableFactionDynamicColorsTip>

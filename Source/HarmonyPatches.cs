@@ -228,8 +228,14 @@ namespace FactionControl
                 actualFactionCount = 1;
             }
 
-            Controller.minFactionSeparation = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * 2);
-            Controller.maxFactionSprawl = Math.Sqrt(Find.WorldGrid.TilesCount) / (Math.Sqrt(actualFactionCount) * Controller.Settings.factionGrouping);
+            double sqrtTiles = Math.Sqrt(Find.WorldGrid.TilesCount);
+            double sqrtFactionCount = Math.Sqrt(actualFactionCount);
+
+            Controller.minFactionSeparation = sqrtTiles / (sqrtFactionCount * 2);
+            Controller.maxFactionSprawl = sqrtTiles / (sqrtFactionCount * Controller.Settings.factionGrouping);
+            Controller.pirateSprawl = Controller.maxFactionSprawl;
+            if (Controller.Settings.spreadPirates)
+                Controller.pirateSprawl = sqrtTiles / (sqrtFactionCount * 0.5f);
 
             while (num < (int)Controller.Settings.factionCount)
             {
@@ -320,10 +326,14 @@ namespace FactionControl
                         }
                         else if (Controller.factionCenters.ContainsKey(faction))
                         {
+                            double sprawl = Controller.maxFactionSprawl;
+                            if (faction.def.defName.Equals("Pirate"))
+                                sprawl = Controller.pirateSprawl;
+
                             float test = Find.WorldGrid.ApproxDistanceInTiles(Controller.factionCenters[faction], num);
                             if (faction.def.maxCountAtGameStart == (faction.def.requiredCountAtGameStart * 2))
                             {
-                                if (test < (Controller.maxFactionSprawl * 3))
+                                if (test < (sprawl * 3))
                                 {
                                     __result = num;
                                     return false;
@@ -331,7 +341,7 @@ namespace FactionControl
                             }
                             else
                             {
-                                if (test < Controller.maxFactionSprawl)
+                                if (test < sprawl)
                                 {
                                     __result = num;
                                     return false;

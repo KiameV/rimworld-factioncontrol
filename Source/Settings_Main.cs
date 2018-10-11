@@ -12,6 +12,7 @@ namespace FactionControl
         public static Settings Settings;
         public static double minFactionSeparation = 0;
         public static double maxFactionSprawl = 0;
+        public static double pirateSprawl = 0;
 
         public override string SettingsCategory() { return "RFC.FactionControl".Translate(); }
 
@@ -33,6 +34,7 @@ namespace FactionControl
         public bool allowMechanoids = true;
         public bool randomGoodwill = true;
         public bool dynamicColors = true;
+        public bool spreadPirates = true;
 
         public void DoWindowContents(Rect canvas)
         {
@@ -56,6 +58,8 @@ namespace FactionControl
             list.CheckboxLabeled("RFC.EnableFactionRandomGoodwill".Translate(), ref randomGoodwill, "RFC.EnableFactionRandomGoodwillToolTip".Translate());
             list.Gap(24);
             list.CheckboxLabeled("RFC.EnableFactionDynamicColors".Translate(), ref dynamicColors, "RFC.EnableFactionDynamicColorsTip".Translate());
+            list.Gap(24);
+            list.CheckboxLabeled("RFC.SpreadPirates".Translate(), ref spreadPirates);
             list.End();
         }
 
@@ -67,6 +71,7 @@ namespace FactionControl
             Scribe_Values.Look(ref allowMechanoids, "allowMechanoids", true);
             Scribe_Values.Look(ref randomGoodwill, "randomGoodwill", true);
             Scribe_Values.Look(ref dynamicColors, "dynamicColors", true);
+            Scribe_Values.Look(ref spreadPirates, "spreadPirates", true);
 
             if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
