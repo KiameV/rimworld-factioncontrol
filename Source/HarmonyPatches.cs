@@ -91,14 +91,13 @@ namespace FactionControl
     [HarmonyPatch(typeof(LoadedModManager), "GetSettingsFilename", null)]
     public static class LoadedModManager_GetSettingsFilename
     {
-        private static bool Prefix(string modIdentifier, string modHandleName, ref string __result)
+        private static void Prefix(string modIdentifier, string modHandleName, ref string __result)
         {
             if (modHandleName.Contains("Controller_ModdedFactions"))
             {
                 modHandleName = "Controller_ModdedFactions";
             }
             __result = Path.Combine(GenFilePaths.ConfigFolderPath, GenText.SanitizeFilename(string.Format("Mod_{0}_{1}.xml", modIdentifier, modHandleName)));
-            return false;
         }
     }
 
@@ -219,15 +218,16 @@ namespace FactionControl
                 Controller_FactionOptions.Settings.tribalHostileMin == 0 &&
                 Main.CustomFactions.Count == 0)
             {
-                Log.Error("Faction Control: No factions were selected. To prevent the game from going into an infinite loop a tribe was added.");
+                /*Log.Error("Faction Control: No factions were selected. To prevent the game from going into an infinite loop a tribe was added.");
                 FactionDef def = DefDatabase<FactionDef>.GetNamed("TribeCivil");
                 def.requiredCountAtGameStart = 1;
                 Controller.maxFactionSprawl = 1;
                 Faction faction = FactionGenerator.NewGeneratedFaction(def);
                 Find.FactionManager.Add(faction);
-                actualFactionCount = 1;
+                actualFactionCount = 1;*/
+                return false;
             }
-
+            
             double sqrtTiles = Math.Sqrt(Find.WorldGrid.TilesCount);
             double sqrtFactionCount = Math.Sqrt(actualFactionCount);
 

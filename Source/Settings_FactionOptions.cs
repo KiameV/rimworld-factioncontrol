@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Verse;
 
 namespace FactionControl
@@ -38,9 +39,7 @@ namespace FactionControl
             Text.Font = GameFont.Small;
             list.Gap();
             list.Label("RFC.factionCount".Translate() + "  " + (int)factionCount);
-            factionCount = list.Slider(factionCount, 1, 30f);
-            if (factionCount < (int)outlanderCivilMin + (int)outlanderHostileMin + (int)tribalCivilMin + (int)tribalHostileMin + pirateMin)
-                factionCount = (int)outlanderCivilMin + (int)outlanderHostileMin + (int)tribalCivilMin + (int)tribalHostileMin + (int)pirateMin;
+            factionCount = list.Slider(factionCount, 0, 30f);
             list.Gap(24);
             list.Label("RFC.outlanderCivilMin".Translate() + "  " + (int)outlanderCivilMin);
             outlanderCivilMin = list.Slider(outlanderCivilMin, 0, 10.99f);
