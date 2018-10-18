@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
 
-	<name>Faction Control - B19</name>
+	<name>[KV] Faction Control - 1.0</name>
 	<author>Rainbeau Flambe (original) &amp; Kiame Vivacity</author>
 	<url>https://ludeon.com/forums/index.php?board=15.0</url>
-	<targetVersion>0.19.0</targetVersion>
+	<targetVersion>1.0.0</targetVersion>
 	<description>
 
 "Faction Control" provides you with a number of configuration options that you can use to tailor which and how many faction groups and faction bases show up on your map. Simply visit "Mod Settings" from the game's "Options" menu.
