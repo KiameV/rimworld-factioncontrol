@@ -39,24 +39,24 @@ namespace FactionControl
             Text.Font = GameFont.Small;
             list.Gap();
             list.Label("RFC.factionCount".Translate() + "  " + (int)factionCount);
-            factionCount = list.Slider(factionCount, 0, 30f);
+            factionCount = list.Slider(factionCount, 0, 100f);
             list.Gap(24);
             list.Label("RFC.outlanderCivilMin".Translate() + "  " + (int)outlanderCivilMin);
-            outlanderCivilMin = list.Slider(outlanderCivilMin, 0, 10.99f);
+            outlanderCivilMin = list.Slider(outlanderCivilMin, 0, 20f);
             list.Gap();
             list.Label("RFC.outlanderRoughMin".Translate() + "  " + (int)outlanderHostileMin);
-            outlanderHostileMin = list.Slider(outlanderHostileMin, 0, 10.99f);
+            outlanderHostileMin = list.Slider(outlanderHostileMin, 0, 20f);
             list.Gap();
             list.Gap();
             list.Label("RFC.tribalCivilMin".Translate() + "  " + (int)tribalCivilMin);
-            tribalCivilMin = list.Slider(tribalCivilMin, 0, 10.99f);
+            tribalCivilMin = list.Slider(tribalCivilMin, 0, 20f);
             list.Gap();
             list.Label("RFC.tribalRoughMin".Translate() + "  " + (int)tribalHostileMin);
-            tribalHostileMin = list.Slider(tribalHostileMin, 0, 10.99f);
+            tribalHostileMin = list.Slider(tribalHostileMin, 0, 20f);
             list.Gap();
             list.Gap();
             list.Label("RFC.pirateMin".Translate() + "  " + (int)pirateMin);
-            pirateMin = list.Slider(pirateMin, 0, 5.99f);
+            pirateMin = list.Slider(pirateMin, 0, 20f);
             list.End();
         }
 
