@@ -156,56 +156,10 @@ namespace FactionControl
     [HarmonyPatch(typeof(FactionGenerator), "GenerateFactionsIntoWorld", null)]
     public static class FactionGenerator_GenerateFactionsIntoWorld
     {
-        struct Counts
-        {
-            public int TribalCivil, TribalRough, OutlanderCivil, OutlanderRough, Pirates, Alien;
-            public Counts(int i = 0) { TribalCivil = TribalRough = OutlanderCivil = OutlanderRough = Pirates = Alien = i; }
-            public int Sum { get { return this.TribalCivil + this.TribalRough + this.OutlanderCivil + this.OutlanderRough + this.Pirates + this.Alien; } }
-        }
-
-        private static Counts GetCounts()
-        {
-            if (Controller_FactionOptions.Settings.factionCount == 0)
-            {
-                return new Counts(0);
-            }
-
-            Counts c = new Counts
-            {
-                TribalCivil = (int)Controller_FactionOptions.Settings.tribalCivilMin,
-                TribalRough = (int)Controller_FactionOptions.Settings.tribalHostileMin,
-                OutlanderCivil = (int)Controller_FactionOptions.Settings.outlanderCivilMin,
-                OutlanderRough = (int)Controller_FactionOptions.Settings.outlanderHostileMin,
-            };
-
-            int remaining = (int)Controller_FactionOptions.Settings.factionCount - c.Sum;
-            
-            if (remaining > 0)
-            {
-                c.Pirates = (int)Controller_FactionOptions.Settings.pirateMin;
-            }
-
-            if (Main.CustomFactions != null)
-            {
-                int i = 0;
-                foreach (CustomFaction f in Main.CustomFactions)
-                {
-                    i += f.FactionDef.requiredCountAtGameStart;
-                }
-                c.Alien = i;
-            }
-
-            return c;
-        }
-
         public static bool Prefix()
         {
-            Counts c = GetCounts();
-
-            if (c.Sum == 0)
-                return false;
-
             int num = 0;
+            int actualFactionCount = 0;
             Controller.factionCenters.Clear();
 
             foreach (CustomFaction cf in Main.CustomFactions)
@@ -217,9 +171,7 @@ namespace FactionControl
                 }
                 else
                 {
-                    cf.FactionDef.requiredCountAtGameStart = (int)cf.MaxCountAtStart;
-                    if (cf.FactionDef.requiredCountAtGameStart > cf.FactionDef.maxCountAtGameStart)
-                        cf.FactionDef.requiredCountAtGameStart = cf.FactionDef.maxCountAtGameStart;
+                    cf.FactionDef.maxCountAtGameStart = (int)cf.MaxCountAtStart;
                 }
             }
 
@@ -231,23 +183,24 @@ namespace FactionControl
                 switch (def.defName)
                 {
                     case "OutlanderCivil":
-                        UpdateDef(def, c.OutlanderCivil);
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.outlanderCivilMin);
                         break;
                     case "OutlanderRough":
-                        UpdateDef(def, c.OutlanderRough);
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.outlanderHostileMin);
                         break;
                     case "TribeCivil":
-                        UpdateDef(def, c.TribalCivil);
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalCivilMin);
                         break;
                     case "TribeRough":
-                        UpdateDef(def, c.TribalRough);
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalHostileMin);
                         break;
                     case "Pirate":
                         def.requiredCountAtGameStart = (int)Controller_FactionOptions.Settings.pirateMin;
                         def.maxCountAtGameStart = def.requiredCountAtGameStart * 2;
                         break;
                 }
-                
+
+                actualFactionCount += def.requiredCountAtGameStart;
                 for (int i = 0; i < def.requiredCountAtGameStart; i++)
                 {
                     Faction faction = FactionGenerator.NewGeneratedFaction(def);
@@ -258,9 +211,25 @@ namespace FactionControl
                     }
                 }
             }
+
+            if (Controller_FactionOptions.Settings.outlanderCivilMin == 0 &&
+                Controller_FactionOptions.Settings.outlanderHostileMin == 0 &&
+                Controller_FactionOptions.Settings.tribalCivilMin == 0 &&
+                Controller_FactionOptions.Settings.tribalHostileMin == 0 &&
+                Main.CustomFactions.Count == 0)
+            {
+                /*Log.Error("Faction Control: No factions were selected. To prevent the game from going into an infinite loop a tribe was added.");
+                FactionDef def = DefDatabase<FactionDef>.GetNamed("TribeCivil");
+                def.requiredCountAtGameStart = 1;
+                Controller.maxFactionSprawl = 1;
+                Faction faction = FactionGenerator.NewGeneratedFaction(def);
+                Find.FactionManager.Add(faction);
+                actualFactionCount = 1;*/
+                return false;
+            }
             
             double sqrtTiles = Math.Sqrt(Find.WorldGrid.TilesCount);
-            double sqrtFactionCount = Math.Sqrt(c.Sum);
+            double sqrtFactionCount = Math.Sqrt(actualFactionCount);
 
             Controller.minFactionSeparation = sqrtTiles / (sqrtFactionCount * 2);
             Controller.maxFactionSprawl = sqrtTiles / (sqrtFactionCount * Controller.Settings.factionGrouping);
@@ -268,7 +237,7 @@ namespace FactionControl
             if (Controller.Settings.spreadPirates)
                 Controller.pirateSprawl = sqrtTiles / (sqrtFactionCount * 0.5f);
 
-            while (num < (int)Controller.Settings.factionCount)
+            while (num < (int)Controller_FactionOptions.Settings.factionCount)
             {
                 FactionDef facDef = (from fa in DefDatabase<FactionDef>.AllDefs
                                      where fa.canMakeRandomly && Find.FactionManager.AllFactions.Count((Faction f) => f.def == fa) < fa.maxCountAtGameStart
@@ -284,10 +253,7 @@ namespace FactionControl
             int maxCount = 0;
             int count = GenMath.RoundRandom(tilesCount * factionBasesPer100kTiles.RandomInRange);
             count -= Find.WorldObjects.SettlementBases.Count;
-            int MAX = 1500;
-            if (Controller_FactionOptions.Settings.isUnbounded)
-                MAX = 5000;
-            for (int j = 0; j < count && maxCount < MAX; j++)
+            for (int j = 0; j < count && maxCount < 2000; j++)
             {
                 Faction faction2 = (
                   from x in Find.World.factionManager.AllFactionsListForReading
@@ -319,7 +285,7 @@ namespace FactionControl
             }
             else
             {
-                def.maxCountAtGameStart = 1000;
+                def.maxCountAtGameStart = 100;
             }
         }
     }

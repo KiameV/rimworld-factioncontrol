@@ -26,7 +26,6 @@ namespace FactionControl
         public float tribalCivilMin = 1.5f;
         public float tribalHostileMin = 1.5f;
         public float pirateMin = 1.5f;
-        public bool isUnbounded = false;
 
         public void DoWindowContents(Rect canvas)
         {
@@ -34,65 +33,48 @@ namespace FactionControl
             {
                 ColumnWidth = canvas.width
             };
-
-            int maxCount = 50,
-                maxFaction = 10;
-            if (isUnbounded)
-            {
-                maxCount = 250;
-                maxFaction = 50;
-            }
-
             list.Begin(canvas);
             Text.Font = GameFont.Tiny;
             list.Label("RFC.factionNotes".Translate());
             Text.Font = GameFont.Small;
             list.Gap();
             list.Label("RFC.factionCount".Translate() + "  " + (int)factionCount);
-            factionCount = list.Slider(factionCount, 0, maxCount);
+            factionCount = list.Slider(factionCount, 0, 100f);
             list.Gap(24);
             list.Label("RFC.outlanderCivilMin".Translate() + "  " + (int)outlanderCivilMin);
-            outlanderCivilMin = list.Slider(outlanderCivilMin, 0, maxFaction);
+            outlanderCivilMin = list.Slider(outlanderCivilMin, 0, 20f);
             list.Gap();
             list.Label("RFC.outlanderRoughMin".Translate() + "  " + (int)outlanderHostileMin);
-            outlanderHostileMin = list.Slider(outlanderHostileMin, 0, maxFaction);
+            outlanderHostileMin = list.Slider(outlanderHostileMin, 0, 20f);
             list.Gap();
             list.Gap();
             list.Label("RFC.tribalCivilMin".Translate() + "  " + (int)tribalCivilMin);
-            tribalCivilMin = list.Slider(tribalCivilMin, 0, maxFaction);
+            tribalCivilMin = list.Slider(tribalCivilMin, 0, 20f);
             list.Gap();
             list.Label("RFC.tribalRoughMin".Translate() + "  " + (int)tribalHostileMin);
-            tribalHostileMin = list.Slider(tribalHostileMin, 0, maxFaction);
+            tribalHostileMin = list.Slider(tribalHostileMin, 0, 20f);
             list.Gap();
             list.Gap();
             list.Label("RFC.pirateMin".Translate() + "  " + (int)pirateMin);
-            pirateMin = list.Slider(pirateMin, 0, maxFaction);
-            list.Gap(40);
-            list.CheckboxLabeled("RFC.ExtremeMode".Translate(), ref isUnbounded);
+            pirateMin = list.Slider(pirateMin, 0, 20f);
             list.End();
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref factionCount, "factionCount", -1);
+            Scribe_Values.Look(ref factionCount, "factionCount", 5.5f);
             Scribe_Values.Look(ref outlanderCivilMin, "outlanderCivilMin", 1.5f);
             Scribe_Values.Look(ref outlanderHostileMin, "outlanderHostileMin", 1.5f);
             Scribe_Values.Look(ref tribalCivilMin, "tribalCivilMin", 1.5f);
             Scribe_Values.Look(ref tribalHostileMin, "tribalHostileMin", 1.5f);
             Scribe_Values.Look(ref pirateMin, "pirateMin", 1.5f);
-            Scribe_Values.Look(ref isUnbounded, "isUnbounded", false, false);
             SetIncidents.SetIncidentLevels();
 
             if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
-                if (factionCount == -1 &&
-                    Controller.Settings != null)
-                {
-                    factionCount = Controller.Settings.factionCount;
-                    if (factionCount == -1)
-                        factionCount = 5.5f;
-                }
+                if (factionCount < 0)
+                    factionCount = 5.5f;
             }
         }
     }
