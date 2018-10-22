@@ -35,6 +35,7 @@ namespace FactionControl
         public bool randomGoodwill = true;
         public bool dynamicColors = true;
         public bool spreadPirates = true;
+        public bool isUnbounded = false;
 
         public void DoWindowContents(Rect canvas)
         {
@@ -45,11 +46,13 @@ namespace FactionControl
             list.Begin(canvas);
 
             list.Gap();
-            list.Label("RFC.factionDensity".Translate() + " " + GetFactionDensityLabel(factionDensity));// + "(" + factionDensity.ToString("n2") + ")");
-            factionDensity = list.Slider(factionDensity, 0.01f, 24f);
+            list.Label("RFC.factionDensity".Translate());
+            list.CheckboxLabeled("RFC.ExtremeMode".Translate(), ref isUnbounded);
+            list.Label(GetFactionDensityLabel(factionDensity) + " [" + factionDensity.ToString("n2") + "]");
+            factionDensity = list.Slider(factionDensity, (isUnbounded) ? 1f : 0.01f, (isUnbounded) ? 25f : 8f);
 
             list.Gap(24);
-            list.Label("RFC.factionGrouping".Translate() + "  " + GetFactionGroupingLabel(factionGrouping));// + "(" + factionGrouping.ToString("n2") + ")");
+            list.Label("RFC.factionGrouping".Translate() + "  " + GetFactionGroupingLabel(factionGrouping));
             factionGrouping = list.Slider(factionGrouping, 0.5f, 5f);
 
             list.Gap(24);
@@ -89,23 +92,23 @@ namespace FactionControl
 
         private static string GetFactionDensityLabel(float factionDensity)
         {
-            if (factionDensity < 2.5)
+            if (factionDensity < 0.5)
             {
                 return "RFC.factionDensityVeryLow".Translate();
             }
-            else if (factionDensity < 5)
+            else if (factionDensity < 1)
             {
                 return "RFC.factionDensityLow".Translate();
             }
-            else if (factionDensity < 7.5)
+            else if (factionDensity < 2)
             {
                 return "RFC.factionDensityNormal".Translate();
             }
-            else if (factionDensity < 11.5)
+            else if (factionDensity < 4)
             {
                 return "RFC.factionDensityHigh".Translate();
             }
-            else if (factionDensity < 14)
+            else if (factionDensity < 6)
             {
                 return "RFC.factionDensityVeryHigh".Translate();
             }
