@@ -28,6 +28,7 @@
   <RFC.EnableFactionRandomGoodwill>友好関係をランダム化</RFC.EnableFactionRandomGoodwill>
   <RFC.EnableFactionRandomGoodwillToolTip>世界が生成されたときに派閥の友好関係がランダム化されるかどうかを設定するための設定を追加します。通常、穏健な派閥拠点は中立的で、攻撃的な派閥拠点は敵対的です。初期状態ではONになっています。</RFC.EnableFactionRandomGoodwillToolTip>
   <RFC.SpreadPirates>宙賊を分散させる</RFC.SpreadPirates>
+  <RFC.RelationChangesOverTime>時間の経過に伴う関係の変化</RFC.RelationChangesOverTime>
 
   <RFC.EnableFactionDynamicColors>派閥の色を変化させる</RFC.EnableFactionDynamicColors>
   <RFC.EnableFactionDynamicColorsTip>敵対派閥：赤色\n友好的な部族：緑色\n友好的な異邦人：青色\n\n友好関係が高く、または低くなるほど色が濃くなります。</RFC.EnableFactionDynamicColorsTip>
@@ -51,5 +52,7 @@
   <RFC.factionPirate2>」の派閥グループを宙賊団の派閥のように拠点を設置しますか？</RFC.factionPirate2>
 
   <RFC.factionPirateTip>このオプションをオフにすると、拠点がグループ化されて「国家」が形成されます。オンの場合、宙賊団の派閥拠点と同じように他の派閥グループの領土内に散在するようになります（もちろん、このオプションは派閥グループを国家として形成しない限り効果がありません）。</RFC.factionPirateTip>
+
+  <!--<RFC.ExtremeMode>最大値を有効にする</RFC.ExtremeMode>-->
 
 </LanguageData>
