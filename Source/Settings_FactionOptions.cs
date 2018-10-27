@@ -46,32 +46,32 @@ namespace FactionControl
             Text.Font = GameFont.Small;
             list.Gap();
 
-            this.DrawSlider(list, "RFC.factionCount", ref factionCount, ref strFacCnt, 0, 100);
+            DrawSlider(list, "RFC.factionCount".Translate(), ref factionCount, ref strFacCnt, 0, 100);
             list.Gap(24);
 
-            this.DrawSlider(list, "RFC.outlanderCivilMin", ref outlanderCivilMin, ref strOutCiv, 0, 20);
+            DrawSlider(list, "RFC.outlanderCivilMin".Translate(), ref outlanderCivilMin, ref strOutCiv, 0, 20);
             list.Gap();
 
-            this.DrawSlider(list, "RFC.outlanderRoughMin", ref outlanderHostileMin, ref strOutHos, 0, 20);
+            DrawSlider(list, "RFC.outlanderRoughMin".Translate(), ref outlanderHostileMin, ref strOutHos, 0, 20);
             list.Gap();
             list.Gap();
 
-            this.DrawSlider(list, "RFC.tribalCivilMin", ref tribalCivilMin, ref strTriCiv, 0, 20);
+            DrawSlider(list, "RFC.tribalCivilMin".Translate(), ref tribalCivilMin, ref strTriCiv, 0, 20);
             list.Gap();
 
-            this.DrawSlider(list, "RFC.tribalRoughMin", ref tribalHostileMin, ref strTriHos, 0, 20);
+            DrawSlider(list, "RFC.tribalRoughMin".Translate(), ref tribalHostileMin, ref strTriHos, 0, 20);
             list.Gap();
             list.Gap();
             
-            this.DrawSlider(list, "RFC.pirateMin", ref pirateMin, ref strPir, 0, 20);
+            DrawSlider(list, "RFC.pirateMin".Translate(), ref pirateMin, ref strPir, 0, 20);
             list.End();
         }
 
-        private void DrawSlider(Listing_Standard list, string label, ref float value, ref string buffer, float min, float max)
+        public static void DrawSlider(Listing_Standard list, string label, ref float value, ref string buffer, float min, float max)
         {
             float f;
             string s = buffer;
-            buffer = list.ModTextEntryLabeled(label.Translate(), buffer);
+            buffer = list.ModTextEntryLabeled(label, buffer);
             if (!s.Equals(buffer))
             {
                 if (float.TryParse(buffer, out f))
@@ -118,7 +118,7 @@ namespace FactionControl
         }
     }
 
-    static class LSUtil
+    public static class LSUtil
     {
         public static string ModTextEntryLabeled(this Listing_Standard ls, string label, string buffer, int lineCount = 1)
         {

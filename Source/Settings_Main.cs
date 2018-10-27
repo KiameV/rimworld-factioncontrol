@@ -32,6 +32,9 @@ namespace FactionControl
         public bool randomGoodwill = true;
         public bool dynamicColors = true;
         public bool spreadPirates = true;
+        public bool relationsChangeOverTime = true;
+
+        private string strFacDen = "";
 
         public void DoWindowContents(Rect canvas)
         {
@@ -42,8 +45,7 @@ namespace FactionControl
             list.Begin(canvas);
 
             list.Gap();
-            list.Label("RFC.factionDensity".Translate() + " " + GetFactionDensityLabel(factionDensity));// + "(" + factionDensity.ToString("n2") + ")");
-            factionDensity = list.Slider(factionDensity, 0.01f, 8f);
+            Settings_FactionOptions.DrawSlider(list, "RFC.factionDensity".Translate() + " " + GetFactionDensityLabel(factionDensity), ref factionDensity, ref strFacDen, 0.01f, 8f);
 
             list.Gap(24);
             list.Label("RFC.factionGrouping".Translate() + "  " + GetFactionGroupingLabel(factionGrouping));// + "(" + factionGrouping.ToString("n2") + ")");
@@ -57,6 +59,8 @@ namespace FactionControl
             list.CheckboxLabeled("RFC.EnableFactionDynamicColors".Translate(), ref dynamicColors, "RFC.EnableFactionDynamicColorsTip".Translate());
             list.Gap(24);
             list.CheckboxLabeled("RFC.SpreadPirates".Translate(), ref spreadPirates);
+            list.Gap(24);
+            list.CheckboxLabeled("RFC.RelationChangesOverTime".Translate(), ref relationsChangeOverTime);
             list.End();
 
 
@@ -71,11 +75,17 @@ namespace FactionControl
             Scribe_Values.Look(ref randomGoodwill, "randomGoodwill", true);
             Scribe_Values.Look(ref dynamicColors, "dynamicColors", true);
             Scribe_Values.Look(ref spreadPirates, "spreadPirates", true);
+            Scribe_Values.Look(ref relationsChangeOverTime, "relationsChangeOverTime", true);
 
             if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
                 float v = 0;
                 Scribe_Values.Look(ref v, "factionCount");
+            }
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                this.strFacDen = ((int)this.factionDensity).ToString();
             }
 
             SetIncidents.SetIncidentLevels();
