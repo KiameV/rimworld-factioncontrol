@@ -58,6 +58,8 @@ namespace FactionControl
             list.Gap(24);
             list.CheckboxLabeled("RFC.SpreadPirates".Translate(), ref spreadPirates);
             list.End();
+
+
         }
 
         public override void ExposeData()

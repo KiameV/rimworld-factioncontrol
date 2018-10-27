@@ -52,6 +52,6 @@
 	
 	<RFC.factionPirateTip>If this option is unchecked, bases will be grouped together to form a "nation." If it is checked, though, bases will be scattered throughout other faction groups' territories, just as pirate band bases are. (Note, of course, that this option has no affect unless you've elected to organize faction group bases geographically.)</RFC.factionPirateTip>
 	
-	<RFC.ExtremeMode>Enable Higher Maximum</RFC.ExtremeMode>
+	<!--<RFC.ExtremeMode>Enable Higher Maximum</RFC.ExtremeMode>-->
 
 </LanguageData>
