@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+	<RFC.FactionControl>派系控制 - 主要选项</RFC.FactionControl>
+	<RFC.FactionControlFactionOptions>派系控制 - 派系选择</RFC.FactionControlFactionOptions>
+	<RFC.CustomFactionControl>派系控制 - 改变派系</RFC.CustomFactionControl>
+	
+	<RFC.factionCount>在世界地图上出现的派系总数：</RFC.factionCount>
+	<RFC.factionNotes>默认值为 5。请注意，此数字是最小值，因为下面定义的计数总数可能超过上面定义的计数。 （例如，如果你将派系群的总数设置为 3，但设置“外来者联盟”，“部落”和“海盗”派系的每个最小数量为 2，那么世界地图将始终拥有至少 6 个阵营。）</RFC.factionNotes>
+	
+	<RFC.outlanderCivilMin>在地图上显示的外来者民主联盟派系群的最小数量（设置为“0”禁用派系）：</RFC.outlanderCivilMin>
+	<RFC.outlanderRoughMin>在地图上显示的外来者军事联盟派系群的最小数量（设置为“0”禁用派系）：</RFC.outlanderRoughMin>
+	<RFC.tribalCivilMin>在地图上显示的温和部落派系群的最小数量（设置为“0”禁用派系）：</RFC.tribalCivilMin>
+	<RFC.tribalRoughMin>在地图上显示的野蛮部落派系群的最小数量（设置为“0”禁用派系）：</RFC.tribalRoughMin>
+	<RFC.pirateMin>在地图上显示的海盗派系群的最小数量（设置为“0”禁用派系）：</RFC.pirateMin>
+
+	<RFC.SelectAFaction>选择一个派系</RFC.SelectAFaction>
+	
+	<RFC.factionGrouping>“国家构成”:</RFC.factionGrouping>
+	<RFC.factionGroupingNone>无：（默认选项）派系群基地将随机散布在世界各地。</RFC.factionGroupingNone>
+	<RFC.factionGroupingLoose>疏松：派系群的基地往往位于世界地图的同一区域，但各派系群所占领土之间仍然存在广泛的重叠区域。</RFC.factionGroupingLoose>
+	<RFC.factionGroupingTight>集中：属于任何特定派系群的基地将彼此合理地靠近，并且除了海盗派系群之外，不会有大量重叠。 世界地图上将存在明显的实际国家感，尽管边界非常粗糙。</RFC.factionGroupingTight>
+	<RFC.factionGroupingVeryTight>密集：除了海盗派系群外，每个派系群的基地将会非常紧密地聚集在一起。不会有太多重叠，但是它们之间可能有大片未被占据的“开放”空间。</RFC.factionGroupingVeryTight>
+
+	<RFC.AllowMechanoids>允许隐藏的“机械巢穴”派系？</RFC.AllowMechanoids>
+	<RFC.AllowMechanoidsTip>如果取消选中此选项，大部分机械族将从游戏中移除。 你不会被他们袭击，除非真的没有其他派系团体对你施暴。你不必处理毒药或精神飞船部件坠毁。然而，你可能仍然会在古代的危险密室中发现机械类，你可能仍然会发现睡眠中的机械类守卫着探险目标.</RFC.AllowMechanoidsTip>
+
+	<RFC.EnableFactionRandomGoodwill>随机化派系友谊</RFC.EnableFactionRandomGoodwill>
+	<RFC.EnableFactionRandomGoodwillToolTip>添加一个设置，以设置在生成世界时是否将随机化派系的友谊。 通常情况下，中等派系中心是中立的，而侵略性派系中心则是敌对的。 在初始状态下为“开启”。</RFC.EnableFactionRandomGoodwillToolTip>
+	<RFC.SpreadPirates>散布海盗</RFC.SpreadPirates>
+	<RFC.RelationChangesOverTime>关系随时间而变化</RFC.RelationChangesOverTime>
+
+	<RFC.EnableFactionDynamicColors>动态派系颜色</RFC.EnableFactionDynamicColors>
+	<RFC.EnableFactionDynamicColorsTip>敌对=红色；友好的部落=绿色； 友好的外来者=蓝色。\n\n友谊越高，颜色越深。</RFC.EnableFactionDynamicColorsTip>
+
+	<RFC.factionDensity>派系密度：</RFC.factionDensity>
+	<RFC.factionDensityVeryLow>非常低：派系的基地很少。</RFC.factionDensityVeryLow>
+	<RFC.factionDensityLow>低</RFC.factionDensityLow>
+	<RFC.factionDensityNormal>正常。（默认派系基地密度。）</RFC.factionDensityNormal>
+	<RFC.factionDensityHigh>高。</RFC.factionDensityHigh>
+	<RFC.factionDensityVeryHigh>很高。派系有很多基地。</RFC.factionDensityVeryHigh>
+	<RFC.factionDensityInsane>极高。Rimworld 不应该像这样人满为患······<RFC.factionDensityInsane>
+	
+	<RFC.factionBasic1>最小数量的“</RFC.factionBasic1>
+	<RFC.factionBasic2>”派系群出现在地图上（设置为”0“禁用派系）：</RFC.factionBasic2>
+	
+	<RFC.factionHidden1>允许隐藏“</RFC.factionHidden1>
+	<RFC.factionHidden2>”的派系？</RFC.factionHidden2>
+	<RFC.factionHidden3>允许“</RFC.factionHidden3>
+
+	<RFC.factionPirate1>　　　分配设置：“</RFC.factionPirate1>
+	<RFC.factionPirate2>”派系群作为海盗基地？</RFC.factionPirate2>
+	
+	<RFC.factionPirateTip>If this option is unchecked, bases will be grouped together to form a "nation." If it is checked, though, bases will be scattered throughout other faction groups' territories, just as pirate band bases are. (Note, of course, that this option has no affect unless you've elected to organize faction group bases geographically.)如果关闭此选项，则将派系群组合在一起以形成“国家”。 如果打开此选项，基地将分散在其他派系群的领土上，就像海盗的基地一样。 （当然，请注意，除非您选择按地理位置组织派系群，否则此选项无效。）</RFC.factionPirateTip>
+	
+	<!--<RFC.ExtremeMode>Enable Higher Maximum</RFC.ExtremeMode>-->
+
+</LanguageData>
