@@ -140,16 +140,19 @@ namespace FactionControl
         {
             foreach (IncidentDef def in DefDatabase<IncidentDef>.AllDefsListForReading)
             {
-                if (def.defName == "DefoliatorShipPartCrash" || def.defName == "PsychicEmanatorShipPartCrash")
+                switch (def.defName)
                 {
-                    if (Controller.Settings.allowMechanoids)
-                    {
-                        def.baseChance = 2.0f;
-                    }
-                    else
-                    {
-                        def.baseChance = 0.0f;
-                    }
+                    case "DefoliatorShipPartCrash":
+                    case "PsychicEmanatorShipPartCrash":
+                        if (Controller.Settings.allowMechanoids)
+                        {
+                            def.baseChance = 2.0f;
+                        }
+                        else
+                        {
+                            def.baseChance = 0.0f;
+                        }
+                        break;
                 }
             }
         }
@@ -227,9 +230,15 @@ namespace FactionControl
                     case "TribeRough":
                         UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalHostileMin);
                         break;
+                    case "TribeSavage":
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalSavageMin);
+                        break;
+                    case "Empire":
+                        UpdateDef(def, (int)Controller_FactionOptions.Settings.empireMin);
+                        break;
                     case "Pirate":
                         def.requiredCountAtGameStart = (int)Controller_FactionOptions.Settings.pirateMin;
-                        def.maxCountAtGameStart = def.requiredCountAtGameStart * 2;
+                        def.maxCountAtGameStart = (int)Controller_FactionOptions.Settings.factionCount - Controller_FactionOptions.Settings.MinFactionCount;
                         break;
                 }
 
@@ -245,11 +254,7 @@ namespace FactionControl
                 }
             }
 
-            if (Controller_FactionOptions.Settings.outlanderCivilMin == 0 &&
-                Controller_FactionOptions.Settings.outlanderHostileMin == 0 &&
-                Controller_FactionOptions.Settings.tribalCivilMin == 0 &&
-                Controller_FactionOptions.Settings.tribalHostileMin == 0 &&
-                Controller_FactionOptions.Settings.pirateMin == 0 &&
+            if (Controller_FactionOptions.Settings.MinFactionCount == 0 &&
                 Main.CustomFactions.Count == 0)
             {
                 /*Log.Error("Faction Control: No factions were selected. To prevent the game from going into an infinite loop a tribe was added.");
@@ -313,13 +318,13 @@ namespace FactionControl
         private static void UpdateDef(FactionDef def, int requiredCount)
         {
             def.requiredCountAtGameStart = requiredCount;
-            if (def.requiredCountAtGameStart < 1)
+            if (requiredCount < 1)
             {
                 def.maxCountAtGameStart = 0;
             }
             else
             {
-                def.maxCountAtGameStart = 100;
+                def.maxCountAtGameStart = requiredCount;
             }
         }
     }

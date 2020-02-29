@@ -25,6 +25,7 @@ namespace FactionControl
         public float outlanderHostileMin;
         public float tribalCivilMin;
         public float tribalHostileMin;
+        public float tribalSavageMin;
         public float pirateMin;
         public float empireMin;
 
@@ -33,13 +34,19 @@ namespace FactionControl
         public string strOutHos;
         public string strTriCiv;
         public string strTriHos;
+        public string strTriSav;
         public string strPir;
         public string strEmp;
+
+        private Vector2 scroll = new Vector2(0, 0);
+        private Rect viewRect = new Rect();
 
         public Settings_FactionOptions()
         {
             this.Reset();
         }
+
+        public int MinFactionCount => (int)(outlanderCivilMin + outlanderHostileMin + tribalCivilMin + tribalHostileMin + tribalSavageMin + ((ModsConfig.RoyaltyActive) ? empireMin : 0f) + pirateMin);
 
         private void Reset()
         {
@@ -51,6 +58,7 @@ namespace FactionControl
             outlanderHostileMin = 1f;
             tribalCivilMin = 1f;
             tribalHostileMin = 1f;
+            tribalSavageMin = 1f;
             pirateMin = 1f;
             empireMin = 1f;
 
@@ -59,6 +67,7 @@ namespace FactionControl
             strOutHos = "1";
             strTriCiv = "1";
             strTriHos = "1";
+            strTriSav = "1";
             strPir = "1";
             strEmp = "1";
         }
@@ -67,9 +76,12 @@ namespace FactionControl
         {
             Listing_Standard list = new Listing_Standard
             {
-                ColumnWidth = canvas.width,
+                ColumnWidth = canvas.width - 20,
             };
-            list.Begin(new Rect(canvas.x, canvas.y, canvas.width, canvas.height - 40));
+            list.BeginScrollView(
+                new Rect(canvas.x, canvas.y, canvas.width, canvas.height - 40), 
+                ref scroll,
+                ref viewRect);
             Text.Font = GameFont.Tiny;
             list.Label("RFC.factionNotes".Translate());
             Text.Font = GameFont.Small;
@@ -90,6 +102,9 @@ namespace FactionControl
 
             DrawSlider(list, "RFC.tribalRoughMin".Translate(), ref tribalHostileMin, ref strTriHos, 0, 20);
             list.Gap();
+
+            DrawSlider(list, "RFC.tribalSavageMin".Translate(), ref tribalSavageMin, ref strTriSav, 0, 20);
+            list.Gap();
             list.Gap();
             
             DrawSlider(list, "RFC.pirateMin".Translate(), ref pirateMin, ref strPir, 0, 20);
@@ -101,7 +116,7 @@ namespace FactionControl
 
                 DrawSlider(list, "RFC.empireMin".Translate(), ref empireMin, ref strEmp, 0, 20);
             }
-            list.End();
+            list.EndScrollView(ref viewRect);
             
             if (Widgets.ButtonText(new Rect(canvas.x, canvas.yMax - 30, 100, 30), "Default Values"))
             {
@@ -144,6 +159,7 @@ namespace FactionControl
             Scribe_Values.Look(ref outlanderHostileMin, "outlanderHostileMin", 1f);
             Scribe_Values.Look(ref tribalCivilMin, "tribalCivilMin", 1f);
             Scribe_Values.Look(ref tribalHostileMin, "tribalHostileMin", 1f);
+            Scribe_Values.Look(ref tribalSavageMin, "tribalSavageMin", 1f);
             Scribe_Values.Look(ref pirateMin, "pirateMin", 1f);
             Scribe_Values.Look(ref empireMin, "empireMin", 1f);
             SetIncidents.SetIncidentLevels();
@@ -166,6 +182,7 @@ namespace FactionControl
                 strOutHos = ((int)outlanderHostileMin).ToString();
                 strTriCiv = ((int)tribalCivilMin).ToString();
                 strTriHos = ((int)tribalHostileMin).ToString();
+                strTriSav = ((int)tribalSavageMin).ToString();
                 strPir = ((int)pirateMin).ToString();
                 strEmp = ((int)empireMin).ToString();
             }

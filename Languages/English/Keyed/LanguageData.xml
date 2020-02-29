@@ -12,6 +12,7 @@
 	<RFC.outlanderRoughMin>Minimum number of rough Outlander Union faction groups to appear on the map (setting to "0" disables the faction):</RFC.outlanderRoughMin>
 	<RFC.tribalCivilMin>Minimum number of civil Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalCivilMin>
 	<RFC.tribalRoughMin>Minimum number of rough Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalRoughMin>
+	<RFC.tribalSavageMin>Minimum number of savage Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalSavageMin>
 	<RFC.pirateMin>Minimum number of "Pirate band" faction groups to appear on the map (setting to "0" disables the faction):</RFC.pirateMin>
 	<RFC.empireMin>Minimum number of "Empire" faction groups to appear on the map (setting to "0" disables the faction):</RFC.empireMin>
 
