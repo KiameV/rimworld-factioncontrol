@@ -13,6 +13,7 @@
 	<RFC.tribalCivilMin>Minimum number of civil Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalCivilMin>
 	<RFC.tribalRoughMin>Minimum number of rough Tribe faction groups to appear on the map (setting to "0" disables the faction):</RFC.tribalRoughMin>
 	<RFC.pirateMin>Minimum number of "Pirate band" faction groups to appear on the map (setting to "0" disables the faction):</RFC.pirateMin>
+	<RFC.empireMin>Minimum number of "Empire" faction groups to appear on the map (setting to "0" disables the faction):</RFC.empireMin>
 
 	<RFC.SelectAFaction>Select a Faction</RFC.SelectAFaction>
 	

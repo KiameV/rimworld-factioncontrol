@@ -26,7 +26,7 @@ namespace FactionControl
 
     public class Settings : ModSettings
     {
-        public float factionDensity = 2.5f;
+        public float factionDensity = 1.25f;
         public float factionGrouping = 0.5f;
         public bool allowMechanoids = true;
         public bool randomGoodwill = true;
@@ -62,8 +62,6 @@ namespace FactionControl
             list.Gap(24);
             list.CheckboxLabeled("RFC.RelationChangesOverTime".Translate(), ref relationsChangeOverTime);
             list.End();
-
-
         }
 
         public override void ExposeData()

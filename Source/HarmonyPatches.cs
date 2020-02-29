@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using System;
@@ -19,10 +19,24 @@ namespace FactionControl
 
         static Main()
         {
-            HarmonyInstance harmony = HarmonyInstance.Create("com.rimworld.mod.factioncontrol");
+            var harmony = new Harmony("com.rimworld.mod.factioncontrol");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
             LongEventHandler.QueueLongEvent(new Action(Init), "LibraryStartup", false, null);
+
+            Log.Message(
+                "Faction Control Harmony Patches:" + Environment.NewLine +
+                "  Prefix:" + Environment.NewLine +
+                "    Page_SelectScenario.BeginScenarioConfiguration" + Environment.NewLine +
+                "    SavedGameLoaderNow.LoadGameFromSaveFileNow" + Environment.NewLine +
+                "    LoadedModManager.GetSettingsFilename" + Environment.NewLine +
+                "    IncidentWorker_RaidEnemy.FactionCanBeGroupSource" + Environment.NewLine +
+                "    FactionGenerator.GenerateFactionsIntoWorld" + Environment.NewLine +
+                "    TileFinder.RandomSettlementTileFor" + Environment.NewLine +
+                "    FactionGenerator.EnsureRequiredEnemies" + Environment.NewLine +
+                "    Faction.Color {get}" + Environment.NewLine +
+                "    Faction.CheckNaturalTendencyToReachGoodwillThreshold");
         }
+
         private static void Init()
         {
             List<CustomFaction> loaded = new List<CustomFaction>();
@@ -41,7 +55,9 @@ namespace FactionControl
                     case "OutlanderRough":
                     case "TribeCivil":
                     case "TribeRough":
+                    case "TribeSavage":
                     case "Pirate":
+                    case "Empire":
                         continue;
                     default:
                         CustomFaction cf = new CustomFaction
@@ -86,7 +102,24 @@ namespace FactionControl
         }
     }
 
-    
+
+    [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
+    static class Patch_Page_SelectScenario_BeginScenarioConfiguration
+    {
+        static void Prefix()
+        {
+            SetIncidents.SetIncidentLevels();
+        }
+    }
+
+    [HarmonyPatch(typeof(SavedGameLoaderNow), "LoadGameFromSaveFileNow")]
+    static class Patch_SavedGameLoaderNow_LoadGameFromSaveFileNow
+    {
+        static void Prefix()
+        {
+            SetIncidents.SetIncidentLevels();
+        }
+    }
 
     [HarmonyPatch(typeof(LoadedModManager), "GetSettingsFilename", null)]
     public static class LoadedModManager_GetSettingsFilename
@@ -107,7 +140,7 @@ namespace FactionControl
         {
             foreach (IncidentDef def in DefDatabase<IncidentDef>.AllDefsListForReading)
             {
-                if (def.defName == "PoisonShipPartCrash" || def.defName == "PsychicEmanatorShipPartCrash")
+                if (def.defName == "DefoliatorShipPartCrash" || def.defName == "PsychicEmanatorShipPartCrash")
                 {
                     if (Controller.Settings.allowMechanoids)
                     {
@@ -216,6 +249,7 @@ namespace FactionControl
                 Controller_FactionOptions.Settings.outlanderHostileMin == 0 &&
                 Controller_FactionOptions.Settings.tribalCivilMin == 0 &&
                 Controller_FactionOptions.Settings.tribalHostileMin == 0 &&
+                Controller_FactionOptions.Settings.pirateMin == 0 &&
                 Main.CustomFactions.Count == 0)
             {
                 /*Log.Error("Faction Control: No factions were selected. To prevent the game from going into an infinite loop a tribe was added.");

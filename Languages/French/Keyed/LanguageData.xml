@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+	<RFC.FactionControl>Faction Control - Options principales</RFC.FactionControl>
+	<RFC.FactionControlFactionOptions>Faction Control - Options de faction</RFC.FactionControlFactionOptions>
+	<RFC.CustomFactionControl>Faction Control - Factions modifiées</RFC.CustomFactionControl>
+	
+	<RFC.factionCount>Nombre total de groupes de factions à apparaître sur la carte du monde :</RFC.factionCount>
+	<RFC.factionNotes>Notez que ce nombre est un minimum, car le total des comptes définis ci-dessous peut dépasser le nombre défini ci-dessus. (Par exemple, si vous définissez le nombre total de groupes de factions à 3, mais que vous définissez 2 groupes chacun comme le nombre minimum de groupes de factions "communauté d'étrangers", "Tribu" et "bande de pirates", vous aurez toujours au moins 6 groupes sur votre carte.)</RFC.factionNotes>
+	<RFC.outlanderCivilMin>Nombre minimum de groupes de factions communauté d'étrangers pacifiques à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.outlanderCivilMin>
+	<RFC.outlanderRoughMin>Nombre minimum de groupes de factions communauté d'étrangers belliqueux à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.outlanderRoughMin>
+	<RFC.tribalCivilMin>Nombre minimum de groupes de factions tribu indigène pacifique à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.tribalCivilMin>
+	<RFC.tribalRoughMin>Nombre minimum de groupes de factions tribu indigène sauvage à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.tribalRoughMin>
+	<RFC.pirateMin>Nombre minimum de groupes de factions bande de pirates à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.pirateMin>
+
+	<RFC.SelectAFaction>Sélectionnez une faction</RFC.SelectAFaction>
+	
+	<RFC.factionGrouping>"Bâtir une nation" :</RFC.factionGrouping>
+	<RFC.factionGroupingNone>Aucune (Comportement vanille.). Les bases des groupes de factions seront dispersées dans le monde entier au hasard.</RFC.factionGroupingNone>
+	<RFC.factionGroupingLoose>Desserré. Les bases d'un groupe de factions auront tendance à se trouver dans la même région générale de la carte du monde, mais il y aura toujours un chevauchement important entre les territoires occupés par divers groupes.</RFC.factionGroupingLoose>
+	<RFC.factionGroupingTight>Serré. Les bases appartenant à un groupe de factions particulier seront relativement proches les unes des autres, et à l'exception des groupes de factions de pirates, il n'y aura pas beaucoup de chevauchement. Il y aura un sentiment distinct de nations réelles existant sur la carte du monde, bien qu'avec des frontières très approximatives.</RFC.factionGroupingTight>
+	<RFC.factionGroupingVeryTight>Très serré. À l'exception des groupes de factions de pirates, les bases de chaque groupe de factions seront regroupées de très près. Il n'y aura pas beaucoup de chevauchement, mais il peut y avoir de grands espaces "ouverts" de territoire inoccupé entre eux.</RFC.factionGroupingVeryTight>
+
+	<RFC.AllowMechanoids>Autoriser la faction cachée "ruche mécanoïde" ?</RFC.AllowMechanoids>
+	<RFC.AllowMechanoidsTip>Si vous décochez cette option, les méchanoïdes seront (pour la plupart) retirés du jeu. Ils ne vous attaqueront pas, à moins qu'il n'y ait littéralement plus aucun autre groupe de faction qui soit aussi coriace pour vous. Et vous n'aurez pas à faire face à des accidents de poison ou de parties de vaisseau psychique. Cependant, il se peut que vous trouviez encore des méchanoïdes dans d'anciennes chambres de danger et que vous trouviez des méchanoïdes endormis qui gardent les objectifs de la quête.</RFC.AllowMechanoidsTip>
+
+	<RFC.EnableFactionRandomGoodwill>Randomisation de relations des factions</RFC.EnableFactionRandomGoodwill>
+	<RFC.EnableFactionRandomGoodwillToolTip>Les colonies modérées seront généralement neutres et les colonies brutales le seront généralement encore hostiles mais avec quelques aléas en plus.</RFC.EnableFactionRandomGoodwillToolTip>
+	<RFC.SpreadPirates>Répandre les pirates</RFC.SpreadPirates>
+	<RFC.RelationChangesOverTime>Les relations changent au fil du temps</RFC.RelationChangesOverTime>
+
+	<RFC.EnableFactionDynamicColors>Couleurs dynamiques des factions</RFC.EnableFactionDynamicColors>
+	<RFC.EnableFactionDynamicColorsTip>Hostile = Rouge. Tribus amicales = Vert. Communauté d'étrangers amical = Bleu.</RFC.EnableFactionDynamicColorsTip>
+
+	<RFC.factionDensity>Densité en base de faction :</RFC.factionDensity>
+	<RFC.factionDensityVeryLow>Très faible. Très peu de bases par groupe de factions.</RFC.factionDensityVeryLow>
+	<RFC.factionDensityLow>Basse.</RFC.factionDensityLow>
+	<RFC.factionDensityNormal>Normale. (Densité vanille de base des groupes de factions).</RFC.factionDensityNormal>
+	<RFC.factionDensityHigh>Élevée.</RFC.factionDensityHigh>
+	<RFC.factionDensityVeryHigh>Très élevée. Le monde sera densément peuplé de groupes de factions.</RFC.factionDensityVeryHigh>
+	<RFC.factionDensityInsane>Follement élevée. Rimworlds n'est pas censé être surpeuplé comme ça......</RFC.factionDensityInsane>
+	
+	<RFC.factionBasic1>Nombre minimum de groupes de factions "</RFC.factionBasic1>
+	<RFC.factionBasic2>" à apparaître sur la carte (le réglage sur "0" désactive la faction) :</RFC.factionBasic2>
+	
+	<RFC.factionHidden1>Autoriser la faction cachée "</RFC.factionHidden1>
+	<RFC.factionHidden2>" ?</RFC.factionHidden2>
+	<RFC.factionHidden3>Autoriser les "</RFC.factionHidden3>
+
+	<RFC.factionPirate1>      Répartir les bases des factions"</RFC.factionPirate1>
+	<RFC.factionPirate2>" comme bases de groupes de pirates ?</RFC.factionPirate2>
+	
+	<RFC.factionPirateTip>Si cette option n'est pas cochée, les bases seront regroupées pour former une "nation". Si elle est cochée, par contre, les bases seront dispersées sur le territoire d'autres groupes de factions, tout comme le sont les bases de bandes pirates. (Notez, bien sûr, que cette option n'a aucun effet à moins que vous n'ayez choisi d'organiser géographiquement les bases de groupes de factions.)</RFC.factionPirateTip>
+	
+	<!--<RFC.ExtremeMode>Enable Higher Maximum</RFC.ExtremeMode>-->
+
+</LanguageData>

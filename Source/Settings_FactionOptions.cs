@@ -20,27 +20,56 @@ namespace FactionControl
 
     public class Settings_FactionOptions : ModSettings
     {
-        public float factionCount = 5.5f;
-        public float outlanderCivilMin = 1.5f;
-        public float outlanderHostileMin = 1.5f;
-        public float tribalCivilMin = 1.5f;
-        public float tribalHostileMin = 1.5f;
-        public float pirateMin = 1.5f;
+        public float factionCount;
+        public float outlanderCivilMin;
+        public float outlanderHostileMin;
+        public float tribalCivilMin;
+        public float tribalHostileMin;
+        public float pirateMin;
+        public float empireMin;
 
-        public string strFacCnt = "";
-        public string strOutCiv = "";
-        public string strOutHos = "";
-        public string strTriCiv = "";
-        public string strTriHos = "";
-        public string strPir = "";
+        public string strFacCnt;
+        public string strOutCiv;
+        public string strOutHos;
+        public string strTriCiv;
+        public string strTriHos;
+        public string strPir;
+        public string strEmp;
+
+        public Settings_FactionOptions()
+        {
+            this.Reset();
+        }
+
+        private void Reset()
+        {
+            if (ModsConfig.RoyaltyActive)
+                factionCount = 6f;
+            else
+                factionCount = 5f;
+            outlanderCivilMin = 1f;
+            outlanderHostileMin = 1f;
+            tribalCivilMin = 1f;
+            tribalHostileMin = 1f;
+            pirateMin = 1f;
+            empireMin = 1f;
+
+            strFacCnt = "6";
+            strOutCiv = "1";
+            strOutHos = "1";
+            strTriCiv = "1";
+            strTriHos = "1";
+            strPir = "1";
+            strEmp = "1";
+        }
 
         public void DoWindowContents(Rect canvas)
         {
             Listing_Standard list = new Listing_Standard
             {
-                ColumnWidth = canvas.width
+                ColumnWidth = canvas.width,
             };
-            list.Begin(canvas);
+            list.Begin(new Rect(canvas.x, canvas.y, canvas.width, canvas.height - 40));
             Text.Font = GameFont.Tiny;
             list.Label("RFC.factionNotes".Translate());
             Text.Font = GameFont.Small;
@@ -64,7 +93,25 @@ namespace FactionControl
             list.Gap();
             
             DrawSlider(list, "RFC.pirateMin".Translate(), ref pirateMin, ref strPir, 0, 20);
+
+            if (ModsConfig.RoyaltyActive)
+            {
+                list.Gap();
+                list.Gap();
+
+                DrawSlider(list, "RFC.empireMin".Translate(), ref empireMin, ref strEmp, 0, 20);
+            }
             list.End();
+            
+            if (Widgets.ButtonText(new Rect(canvas.x, canvas.yMax - 30, 100, 30), "Default Values"))
+            {
+                Find.WindowStack.Add(new Dialog_MessageBox(
+                    "Reset all values to default?", 
+                    "Yes", () => {
+                        this.Reset();
+                    }, 
+                    "No", () => {}));
+            }
         }
 
         public static void DrawSlider(Listing_Standard list, string label, ref float value, ref string buffer, float min, float max)
@@ -92,18 +139,24 @@ namespace FactionControl
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref factionCount, "factionCount", 5.5f);
-            Scribe_Values.Look(ref outlanderCivilMin, "outlanderCivilMin", 1.5f);
-            Scribe_Values.Look(ref outlanderHostileMin, "outlanderHostileMin", 1.5f);
-            Scribe_Values.Look(ref tribalCivilMin, "tribalCivilMin", 1.5f);
-            Scribe_Values.Look(ref tribalHostileMin, "tribalHostileMin", 1.5f);
-            Scribe_Values.Look(ref pirateMin, "pirateMin", 1.5f);
+            Scribe_Values.Look(ref factionCount, "factionCount", 6f);
+            Scribe_Values.Look(ref outlanderCivilMin, "outlanderCivilMin", 1f);
+            Scribe_Values.Look(ref outlanderHostileMin, "outlanderHostileMin", 1f);
+            Scribe_Values.Look(ref tribalCivilMin, "tribalCivilMin", 1f);
+            Scribe_Values.Look(ref tribalHostileMin, "tribalHostileMin", 1f);
+            Scribe_Values.Look(ref pirateMin, "pirateMin", 1f);
+            Scribe_Values.Look(ref empireMin, "empireMin", 1f);
             SetIncidents.SetIncidentLevels();
 
             if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
                 if (factionCount < 0)
-                    factionCount = 5.5f;
+                {
+                    if (ModsConfig.RoyaltyActive)
+                        factionCount = 6f;
+                    else
+                        factionCount = 5f;
+                }
             }
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -114,6 +167,7 @@ namespace FactionControl
                 strTriCiv = ((int)tribalCivilMin).ToString();
                 strTriHos = ((int)tribalHostileMin).ToString();
                 strPir = ((int)pirateMin).ToString();
+                strEmp = ((int)empireMin).ToString();
             }
         }
     }
