@@ -238,7 +238,7 @@ namespace FactionControl
                         break;
                     case "Pirate":
                         def.requiredCountAtGameStart = (int)Controller_FactionOptions.Settings.pirateMin;
-                        def.maxCountAtGameStart = (int)Controller_FactionOptions.Settings.factionCount - Controller_FactionOptions.Settings.MinFactionCount;
+                        def.maxCountAtGameStart = 100;
                         break;
                 }
 
