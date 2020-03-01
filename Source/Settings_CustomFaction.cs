@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -84,6 +85,24 @@ namespace FactionControl
             }*/
         }
 
+        internal static void VerifyCustomFactions()
+        {
+            Stack<CustomFaction> notDefined = new Stack<CustomFaction>();
+            foreach (var cf in Main.CustomFactions)
+            {
+                if (cf.FactionDef == null)
+                {
+                    Log.Warning($"FactionDef [{cf.FactionDefName}] is not defined in any loaded mods.");
+                    notDefined.Push(cf);
+                }
+            }
+
+            while (notDefined.Count > 0)
+            {
+                Main.CustomFactions.Remove(notDefined.Pop());
+            }
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();
@@ -101,7 +120,7 @@ namespace FactionControl
         public float MaxCountAtStart = -1;
         //public bool UseHiddenDefault;
         //public bool UseHidden;
-        private string factionDef;
+        private string factionDefName;
 
         public CustomFaction()
         {
@@ -110,7 +129,7 @@ namespace FactionControl
 
         public void ExposeData()
         {
-            Scribe_Values.Look(ref factionDef, "faction");
+            Scribe_Values.Look(ref factionDefName, "faction");
             Scribe_Values.Look(ref RequiredCount, "requiredCount");
             //Scribe_Values.Look(ref UseHidden, "useHidden");
         }
@@ -119,29 +138,26 @@ namespace FactionControl
         {
             get
             {
-                return DefDatabase<FactionDef>.GetNamed(this.factionDef);
+                return DefDatabase<FactionDef>.GetNamed(this.factionDefName, false);
             }
             set
             {
-                this.factionDef = value.defName;
+                this.factionDefName = value.defName;
             }
         }
 
+        public string FactionDefName => this.factionDefName;
+
         public override bool Equals(object obj)
         {
-            if (obj != null)
-            {
-                if (obj == this)
-                    return true;
-                if (obj is CustomFaction)
-                    return string.Equals(this.factionDef, ((CustomFaction)obj).factionDef);
-            }
-            return false;
+            return 
+                this == obj || 
+                (obj is CustomFaction cf && this.factionDefName == cf.factionDefName);
         }
 
         public override int GetHashCode()
         {
-            return this.factionDef.GetHashCode();
+            return this.factionDefName.GetHashCode();
         }
     }
 }

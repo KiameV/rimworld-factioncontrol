@@ -39,6 +39,8 @@ namespace FactionControl
 
         private static void Init()
         {
+            Settings_ModdedFactions.VerifyCustomFactions();
+
             List<CustomFaction> loaded = new List<CustomFaction>();
             foreach (FactionDef def in DefDatabase<FactionDef>.AllDefs)
             {
