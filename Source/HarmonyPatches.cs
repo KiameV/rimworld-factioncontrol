@@ -221,26 +221,25 @@ namespace FactionControl
                 switch (def.defName)
                 {
                     case "OutlanderCivil":
-                        UpdateDef(def, (int)Controller_FactionOptions.Settings.outlanderCivilMin);
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.outlanderCivilMin);
                         break;
                     case "OutlanderRough":
-                        UpdateDef(def, (int)Controller_FactionOptions.Settings.outlanderHostileMin);
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.outlanderHostileMin);
                         break;
                     case "TribeCivil":
-                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalCivilMin);
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.tribalCivilMin);
                         break;
                     case "TribeRough":
-                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalHostileMin);
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.tribalHostileMin);
                         break;
                     case "TribeSavage":
-                        UpdateDef(def, (int)Controller_FactionOptions.Settings.tribalSavageMin);
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.tribalSavageMin);
                         break;
                     case "Empire":
-                        UpdateDef(def, (int)Controller_FactionOptions.Settings.empireMin);
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.empireMin);
                         break;
                     case "Pirate":
-                        def.requiredCountAtGameStart = (int)Controller_FactionOptions.Settings.pirateMin;
-                        def.maxCountAtGameStart = 100;
+                        SetFactionCount(def, (int)Controller_FactionOptions.Settings.pirateMin);
                         break;
                 }
 
@@ -328,6 +327,15 @@ namespace FactionControl
             {
                 def.maxCountAtGameStart = requiredCount;
             }
+        }
+
+        private static void SetFactionCount(FactionDef def, int required)
+        {
+            def.requiredCountAtGameStart = required;
+            if (def.requiredCountAtGameStart == 0)
+                def.maxCountAtGameStart = 0;
+            else 
+                def.maxCountAtGameStart = 100;
         }
     }
 
