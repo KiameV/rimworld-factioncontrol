@@ -29,7 +29,7 @@ namespace FactionControl
                 "    Page_SelectScenario.BeginScenarioConfiguration" + Environment.NewLine +
                 "    SavedGameLoaderNow.LoadGameFromSaveFileNow" + Environment.NewLine +
                 "    LoadedModManager.GetSettingsFilename" + Environment.NewLine +
-                "    IncidentWorker_RaidEnemy.FactionCanBeGroupSource" + Environment.NewLine +
+                //"    IncidentWorker_RaidEnemy.FactionCanBeGroupSource" + Environment.NewLine +
                 "    FactionGenerator.GenerateFactionsIntoWorld" + Environment.NewLine +
                 "    TileFinder.RandomSettlementTileFor" + Environment.NewLine +
                 "    FactionGenerator.EnsureRequiredEnemies" + Environment.NewLine +
