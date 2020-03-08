@@ -181,7 +181,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(IncidentWorker_RaidEnemy), "FactionCanBeGroupSource", null)]
+    /*[HarmonyPatch(typeof(IncidentWorker_RaidEnemy), "FactionCanBeGroupSource", null)]
     public static class IncidentWorker_RaidEnemy_FactionCanBeGroupSource
     {
         public static bool Prefix(Faction f, ref bool __result)
@@ -210,7 +210,7 @@ namespace FactionControl
             }
             return true;
         }
-    }
+    }*/
 
     [HarmonyPatch(typeof(FactionGenerator), "GenerateFactionsIntoWorld", null)]
     public static class FactionGenerator_GenerateFactionsIntoWorld
@@ -474,8 +474,7 @@ namespace FactionControl
         public static bool Prefix(Faction __instance, ref Color __result)
         {
             if (!Controller.Settings.dynamicColors ||
-                __instance.def == FactionDefOf.PlayerColony || 
-                __instance.def == FactionDefOf.PlayerTribe)
+                __instance == Faction.OfPlayer)
             {
                 return true;
             }
@@ -511,6 +510,8 @@ namespace FactionControl
                         green = goodwill;
                         break;
                     case "Empire":
+                        red = green = 116 + goodwill;
+                        blue = 71 + goodwill;
                         break;
                 }
             }
@@ -536,46 +537,43 @@ namespace FactionControl
         }
     }
 
-    /*[HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
+    [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
+        [HarmonyPriority(Priority.First)]
         public static void Prefix(Faction player)
         {
-            if (!Controller.Settings.randomGoodwill)
-                return;
+            Dictionary<FactionDef, FactionSettings> d = new Dictionary<FactionDef, FactionSettings>();
+            foreach (var fs in Controller.Settings.FactionSettings)
+                d.Add(fs.FactionDef, fs);
 
-            foreach (Faction f in Find.FactionManager.AllFactions)
+            foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
             {
-                switch (f.def.defName)
+                if (d.TryGetValue(f.def, out FactionSettings fs) && fs.RandomGoodwill)
                 {
-                    case "OutlanderCivil":
-                    case "OutlanderRough":
-                    case "TribeCivil":
-                    case "TribeRough":
-                        int change;
-                        if (f.HostileTo(Faction.OfPlayer))
-                            change = Rand.RangeInclusive(-55, 25);
-                        else
-                            change = Rand.RangeInclusive(-25, 55);
+                    int change;
+                    if (f.HostileTo(player))
+                        change = Rand.RangeInclusive(-55, 25);
+                    else
+                        change = Rand.RangeInclusive(-25, 55);
 
-                        FactionRelationKind orig = f.RelationKindWith(Faction.OfPlayer);
-                        f.TryAffectGoodwillWith(Faction.OfPlayer, change);
+                    FactionRelationKind orig = f.RelationKindWith(player);
+                    f.TryAffectGoodwillWith(player, change);
 
-                        if (orig != FactionRelationKind.Hostile && 
-                            f.GoodwillWith(Faction.OfPlayer) < -10)
-                        {
-                            f.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Hostile);
-                        }
-                        else if (orig == FactionRelationKind.Hostile && 
-                                 f.GoodwillWith(Faction.OfPlayer) >= 0)
-                        {
-                            f.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Neutral);
-                        }
-                        break;
+                    if (orig != FactionRelationKind.Hostile &&
+                        f.GoodwillWith(player) < -10)
+                    {
+                        f.TrySetRelationKind(player, FactionRelationKind.Hostile);
+                    }
+                    else if (orig == FactionRelationKind.Hostile &&
+                                f.GoodwillWith(player) >= 0)
+                    {
+                        f.TrySetRelationKind(player, FactionRelationKind.Neutral);
+                    }
                 }
             }
         }
-    }*/
+    }
 
     [HarmonyPatch(typeof(Faction), "CheckNaturalTendencyToReachGoodwillThreshold", null)]
     public static class Patch_Faction_CheckNaturalTendencyToReachGoodwillThreshold
