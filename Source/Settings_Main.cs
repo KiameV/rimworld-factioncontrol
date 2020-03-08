@@ -5,26 +5,8 @@ using Verse;
 
 namespace FactionControl
 {
-    public class Controller : Mod
-    {
-        public static Dictionary<Faction, int> factionCenters = new Dictionary<Faction, int>();
-        public static Dictionary<Faction, int> failureCount = new Dictionary<Faction, int>();
-        public static Settings Settings;
-        public static double minFactionSeparation = 0;
-        public static double maxFactionSprawl = 0;
-        public static double pirateSprawl = 0;
 
-        public override string SettingsCategory() { return "RFC.FactionControl".Translate(); }
-
-        public override void DoSettingsWindowContents(Rect canvas) { Settings.DoWindowContents(canvas); }
-
-        public Controller(ModContentPack content) : base(content)
-        {
-            Settings = GetSettings<Settings>();
-        }
-    }
-
-    public class Settings : ModSettings
+   /* public class Settings : ModSettings
     {
         public float factionDensity = 1.25f;
         public float factionGrouping = 0.5f;
@@ -130,5 +112,5 @@ namespace FactionControl
             }
             return "RFC.factionGroupingVeryTight".Translate();
         }
-    }
+    }*/
 }

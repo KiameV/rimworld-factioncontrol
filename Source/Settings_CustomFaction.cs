@@ -6,7 +6,7 @@ using Verse;
 
 namespace FactionControl
 {
-    class Controller_CustomFactions : Mod
+    /*class Controller_CustomFactions : Mod
     {
         public static Settings_ModdedFactions Settings;
 
@@ -82,7 +82,7 @@ namespace FactionControl
                     list.Gap(24);
                     list.CheckboxLabeled("RFC.factionHidden3".Translate() + this.selected.FactionDef.label + "RFC.factionHidden2".Translate(), ref this.selected.UseHidden);
                 }
-            }*/
+            }* /
         }
 
         internal static void VerifyCustomFactions()
@@ -159,5 +159,5 @@ namespace FactionControl
         {
             return this.factionDefName.GetHashCode();
         }
-    }
+    }*/
 }

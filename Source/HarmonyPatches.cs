@@ -15,7 +15,7 @@ namespace FactionControl
     [StaticConstructorOnStartup]
     internal static class Main
     {
-        public static List<CustomFaction> CustomFactions = new List<CustomFaction>();
+        //public static List<CustomFaction> CustomFactions = new List<CustomFaction>();
 
         static Main()
         {
@@ -39,71 +39,92 @@ namespace FactionControl
 
         private static void Init()
         {
-            Settings_ModdedFactions.VerifyCustomFactions();
-
-            List<CustomFaction> loaded = new List<CustomFaction>();
-            foreach (FactionDef def in DefDatabase<FactionDef>.AllDefs)
-            {
-                if (def.isPlayer)
-                    continue;
-
-                switch (def.defName)
-                {
-                    case "Ancients":
-                    case "AncientsHostile":
-                    case "Mechanoid":
-                    case "Insect":
-                    case "OutlanderCivil":
-                    case "OutlanderRough":
-                    case "TribeCivil":
-                    case "TribeRough":
-                    case "TribeSavage":
-                    case "Pirate":
-                    case "Empire":
-                        continue;
-                    default:
-                        CustomFaction cf = new CustomFaction
-                        {
-                            FactionDef = def,
-                            RequiredCountDefault = def.requiredCountAtGameStart,
-                            RequiredCount = def.requiredCountAtGameStart,
-                            MaxCountAtStart = def.maxCountAtGameStart
-                        };
-
-                        bool contains = false;
-                        foreach (CustomFaction f in Main.CustomFactions)
-                        {
-                            if (f.FactionDef == def)
-                            {
-                                f.MaxCountAtStart = def.maxCountAtGameStart;
-                                f.RequiredCountDefault = def.requiredCountAtGameStart;
-                                if (f.RequiredCount == -1)
-                                    f.RequiredCount = def.requiredCountAtGameStart;
-                                contains = true;
-                                break;
-                            }
-                        }
-                        loaded.Add(cf);
-                        if (!contains)
-                            Main.CustomFactions.Add(cf);
-                        break;
-                }
-            }
-
-            for (int i = CustomFactions.Count - 1; i >= 0; --i)
-            {
-                if (!loaded.Contains(CustomFactions[i]))
-                {
-                    CustomFactions.RemoveAt(i);
-                }
-            }
-            SetIncidents.SetIncidentLevels();
-
-            loaded.Clear();
-            loaded = null;
+            Controller.Settings.ReloadFactions();
         }
     }
+    /*    Settings_ModdedFactions.VerifyCustomFactions();
 
+        List<CustomFaction> loaded = new List<CustomFaction>();
+        foreach (FactionDef def in DefDatabase<FactionDef>.AllDefs)
+        {
+            if (def.isPlayer)
+                continue;
+
+            switch (def.defName)
+            {
+                case "Ancients":
+                case "AncientsHostile":
+                case "Mechanoid":
+                case "Insect":
+                case "OutlanderCivil":
+                case "OutlanderRough":
+                case "TribeCivil":
+                case "TribeRough":
+                case "TribeSavage":
+                case "Pirate":
+                case "Empire":
+                    continue;
+                default:
+                    CustomFaction cf = new CustomFaction
+                    {
+                        FactionDef = def,
+                        RequiredCountDefault = def.requiredCountAtGameStart,
+                        RequiredCount = def.requiredCountAtGameStart,
+                        MaxCountAtStart = def.maxCountAtGameStart
+                    };
+
+                    bool contains = false;
+                    foreach (CustomFaction f in Main.CustomFactions)
+                    {
+                        if (f.FactionDef == def)
+                        {
+                            f.MaxCountAtStart = def.maxCountAtGameStart;
+                            f.RequiredCountDefault = def.requiredCountAtGameStart;
+                            if (f.RequiredCount == -1)
+                                f.RequiredCount = def.requiredCountAtGameStart;
+                            contains = true;
+                            break;
+                        }
+                    }
+                    loaded.Add(cf);
+                    if (!contains)
+                        Main.CustomFactions.Add(cf);
+                    break;
+            }
+        }
+
+        for (int i = CustomFactions.Count - 1; i >= 0; --i)
+        {
+            if (!loaded.Contains(CustomFactions[i]))
+            {
+                CustomFactions.RemoveAt(i);
+            }
+        }
+        SetIncidents.SetIncidentLevels();
+
+        loaded.Clear();
+        loaded = null;
+    }
+}*/
+
+    [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
+    static class Patch_Page_CreateWorldParams_DoWindowContents
+    {
+        static void Postfix(Rect rect)
+        {
+            float y = rect.y + rect.height - 78f;
+            Text.Font = GameFont.Small;
+            string label = "RFC.FactionControl".Translate();
+            if (Widgets.ButtonText(new Rect(0, y, 150, 32), label))
+            {
+                Find.WindowStack.TryRemove(typeof(EditWindow_Log));
+                if (!Find.WindowStack.TryRemove(typeof(ControllerWindow)))
+                {
+                    Find.WindowStack.Add(new ControllerWindow());
+                }
+            }
+        }
+    }
 
     [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
     static class Patch_Page_SelectScenario_BeginScenarioConfiguration
@@ -196,7 +217,11 @@ namespace FactionControl
     {
         public static bool Prefix()
         {
-            int num = 0;
+            Util.GenerateFactionsIntoWorld();
+            return false;
+        }
+    }       
+            /*int num = 0;
             int actualFactionCount = 0;
             Controller.factionCenters.Clear();
 
@@ -264,7 +289,7 @@ namespace FactionControl
                 Controller.maxFactionSprawl = 1;
                 Faction faction = FactionGenerator.NewGeneratedFaction(def);
                 Find.FactionManager.Add(faction);
-                actualFactionCount = 1;*/
+                actualFactionCount = 1;* /
                 return false;
             }
             
@@ -337,8 +362,8 @@ namespace FactionControl
             else 
                 def.maxCountAtGameStart = 100;
         }
-    }
-
+    }*/
+    /*
     [HarmonyPatch(typeof(TileFinder), "RandomSettlementTileFor", null)]
     public static class TileFinder_RandomFactionBaseTileFor
     {
@@ -441,7 +466,7 @@ namespace FactionControl
             return false;
         }
     }
-
+    */
     [HarmonyPatch(typeof(Faction))]
     [HarmonyPatch("Color", MethodType.Getter)]
     public static class Patch_Faction_get_Color
@@ -472,6 +497,7 @@ namespace FactionControl
                         blue = goodwill;
                         break;
                     case "TribeRough":
+                    case "TribeSavage":
                         green = 1f;
                         red = blue = goodwill;
                         break;
@@ -483,6 +509,8 @@ namespace FactionControl
                         blue = 1f;
                         red = 0.5f;
                         green = goodwill;
+                        break;
+                    case "Empire":
                         break;
                 }
             }
@@ -508,7 +536,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
+    /*[HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
         public static void Prefix(Faction player)
@@ -546,57 +574,8 @@ namespace FactionControl
                         break;
                 }
             }
-            /*foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
-            {
-                if (!allDef.mustStartOneEnemy || !Find.World.factionManager.AllFactions.Any<Faction>((Faction f) => f.def == allDef) || Find.World.factionManager.AllFactions.Any<Faction>((Faction f) => (f.def != allDef ? false : f.HostileTo(player))))
-                {
-                    continue;
-                }
-                Faction faction = (
-                from f in Find.World.factionManager.AllFactions
-                where f.def == allDef
-                select f).RandomElement<Faction>();
-                int num = -faction.GoodwillWith(player) + 100;
-                num = (int)(num * Rand.Range(0.51f, 0.99f));
-                int randomInRange = DiplomacyTuning.ForcedStartingEnemyGoodwillRange.RandomInRange;
-                int goodwillChange = randomInRange - num;
-                faction.TryAffectGoodwillWith(player, goodwillChange, false, false, null, null);
-                faction.TrySetRelationKind(player, FactionRelationKind.Hostile, false, null, null);
-            }
-            int hostileCount = 0;
-            int friendlyCount = 0;
-            List<Faction> allFactionsListForReading = Find.FactionManager.AllFactionsListForReading;
-            for (int i = 0; i < allFactionsListForReading.Count; i++)
-            {
-                if (allFactionsListForReading[i].def.hidden || allFactionsListForReading[i].def.isPlayer) { continue; }
-                if (allFactionsListForReading[i].GoodwillWith(player) > -80f) { allFactionsListForReading[i].TrySetNotHostileTo(player, false); }
-                if (allFactionsListForReading[i].HostileTo(player))
-                {
-                    hostileCount++;
-                }
-                else
-                {
-                    friendlyCount++;
-                }
-            }
-            int hostileTarget = (int)(Find.World.factionManager.AllFactions.Count() / 3) + Rand.Range(-1, 2);
-            if ((hostileTarget - hostileCount) > friendlyCount) { hostileTarget = friendlyCount + hostileCount; }
-            for (int i = hostileCount; i < hostileTarget; i++)
-            {
-                Faction faction = (
-                from f in Find.World.factionManager.AllFactions
-                where (f.HostileTo(player) ? false : f.def.isPlayer ? false : !f.def.hidden)
-                select f).RandomElement<Faction>();
-                int num = -faction.GoodwillWith(player) + 100;
-                num = (int)(num * Rand.Range(0.51f, 0.99f));
-                int randomInRange = DiplomacyTuning.ForcedStartingEnemyGoodwillRange.RandomInRange;
-                int goodwillChange = randomInRange - num;
-                faction.TryAffectGoodwillWith(player, goodwillChange, false, false, null, null);
-                faction.TrySetRelationKind(player, FactionRelationKind.Hostile, false, null, null);
-            }
-            return false;*/
         }
-    }
+    }*/
 
     [HarmonyPatch(typeof(Faction), "CheckNaturalTendencyToReachGoodwillThreshold", null)]
     public static class Patch_Faction_CheckNaturalTendencyToReachGoodwillThreshold

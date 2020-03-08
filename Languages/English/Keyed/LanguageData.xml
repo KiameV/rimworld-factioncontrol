@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 
-	<RFC.FactionControl>Faction Control - Main Options</RFC.FactionControl>
-	<RFC.FactionControlFactionOptions>Faction Control - Faction Options</RFC.FactionControlFactionOptions>
-	<RFC.CustomFactionControl>Faction Control - Modded Factions</RFC.CustomFactionControl>
+	<RFC.FactionControl>Faction Control</RFC.FactionControl>
+	
+	<RFC.FactionCountMinMax>Faction Count Min Max</RFC.FactionCountMinMax>
+	<RFC.CountMinMax>Count Min Max</RFC.CountMinMax>
+	<RFC.Density>Density</RFC.Density>
+	<RFC.Settlements>Settlements</RFC.Settlements>
 	
 	<RFC.factionCount>Total Number of Faction Groups to Appear on the World Map:</RFC.factionCount>
 	<RFC.factionNotes>Vanilla value is 5. Note that this number is a minimum, as the total of the counts defined below may exceed the count defined above. (For example, if you define the total number of faction groups as 3, but define 2 each as the minimum number of "Outlander union," "Tribe" and "Pirate band" faction groups, you'll always have at least 6 faction groups on your map.)</RFC.factionNotes>

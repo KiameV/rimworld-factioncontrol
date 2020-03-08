@@ -4,7 +4,7 @@ using Verse;
 
 namespace FactionControl
 {
-    public class Controller_FactionOptions : Mod
+    /*public class Controller_FactionOptions : Mod
     {
         public static Settings_FactionOptions Settings;
 
@@ -199,5 +199,5 @@ namespace FactionControl
             ls.Gap(ls.verticalSpacing);
             return result;
         }
-    }
+    }*/
 }
