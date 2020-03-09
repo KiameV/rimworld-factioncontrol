@@ -17,7 +17,7 @@
 	<RFC.Empire>Empire</RFC.Empire>
 	
 	<RFC.loose>Loose</RFC.loose>
-	<RFC.tight>Thigh</RFC.tight>
+	<RFC.tight>Tight</RFC.tight>
 	
 	<RFC.BoostSettlementCount>Boost Settlement Count</RFC.BoostSettlementCount>
 	<RFC.BoostSettlementCountToolTip>For those wanting a more populated RimWorld</RFC.BoostSettlementCountToolTip>
@@ -26,6 +26,7 @@
 	<RFC.EnableFactionRandomGoodwillToolTip>Gentle settlements will usually be neutral and rough settlements will usually by hostile still but adds some randomness.</RFC.EnableFactionRandomGoodwillToolTip>
 	
 	<RFC.RelationChangesOverTime>Relations Change Over Time</RFC.RelationChangesOverTime>
+	<RFC.RelationChangesOverTimeToolTip>Disable to prevent proximity goodwill decreases.</RFC.RelationChangesOverTimeToolTip>
 	
 	<RFC.AllowMechanoids>Allow the hidden "Mechanoid hive" faction?</RFC.AllowMechanoids>
 	<RFC.AllowMechanoidsTip>If you uncheck this option, mechanoids will (mostly) be removed from the game. You won't be ground-raided by them, unless there's literally no other faction group left that's Rough to you. However, you may still find mechanoids in ancient shrines and you might still find sleeping mechanoids guarding quest objectives.</RFC.AllowMechanoidsTip>

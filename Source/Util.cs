@@ -49,14 +49,14 @@ namespace FactionControl
             }
 
             float scaled = (float)Find.WorldGrid.TilesCount * 0.00001f * Find.World.info.overallPopulation.GetScaleFactor();
-            if (FactionMapCenter.Count > 5)
+            /*if (FactionMapCenter.Count > 5)
             {
                 scaled /= (FactionMapCenter.Count / 5);
             }
             else
             {
                 scaled /= FactionMapCenter.Count;
-            }
+            }*/
 
             foreach (var g in gf)
             {

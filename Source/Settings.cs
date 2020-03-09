@@ -74,6 +74,9 @@ namespace FactionControl
             Widgets.CheckboxLabeled(new Rect(0, innerY, 300, Text.LineHeight), "RFC.RelationChangesOverTime".Translate(), ref Settings.relationsChangeOverTime);
             innerY += yBuffer;
 
+            //Widgets.CheckboxLabeled(new Rect(0, innerY, 300, Text.LineHeight), "RFC.ScaleSettlementCount".Translate(), ref Settings.scaleSettlementCount, "RFC.ScaleSettlementCountToolTip".Translate()) ;
+            //innerY += yBuffer;
+
             float x = 0;
             Widgets.Label(new Rect(0, innerY, 250, Text.LineHeight), "RFC.FactionCountMinMax".Translate());
             x += 210;
@@ -89,56 +92,66 @@ namespace FactionControl
 
             foreach (var f in Settings.FactionSettings)
             {
-                Widgets.DrawLineHorizontal(0, innerY, canvas.xMax - 36);
-                innerY += yBuffer;
-
-                Text.Font = GameFont.Medium;
-                Widgets.Label(new Rect(0, innerY - 2, 250, Text.LineHeight), $"RFC.{f.FactionDef.defName}".Translate());
-                Text.Font = GameFont.Small;
-                if (Widgets.ButtonText(new Rect(canvas.xMax - 135, innerY, 100, 28), "Reset".Translate()))
+                try
                 {
-                    f.DefaultValues();
+                    Widgets.DrawLineHorizontal(0, innerY, canvas.xMax - 36);
+                    innerY += yBuffer;
+
+                    Text.Font = GameFont.Medium;
+                    Widgets.Label(new Rect(0, innerY - 2, 250, Text.LineHeight), $"RFC.{f.FactionDef.defName}".Translate());
+                    Text.Font = GameFont.Small;
+                    if (Widgets.ButtonText(new Rect(canvas.xMax - 135, innerY, 100, 28), "Reset".Translate()))
+                    {
+                        f.DefaultValues();
+                    }
+                    innerY += Text.LineHeight + 10;
+
+                    x = 10;
+                    Widgets.Label(new Rect(x, innerY, 150, Text.LineHeight), "RFC.CountMinMax".Translate());
+                    x += 160;
+                    f.MinCountBuffer = Widgets.TextArea(new Rect(x, innerY, 70, Text.LineHeight), f.MinCountBuffer, false);
+                    x += 80;
+                    f.MaxCountBuffer = Widgets.TextArea(new Rect(x, innerY, 70, Text.LineHeight), f.MaxCountBuffer, false);
+                    innerY += yBuffer + 8;
+
+                    CheckboxLabeled(new Rect(10, innerY, 300, Text.LineHeight), "RFC.EnableFactionRandomGoodwill".Translate(), ref f.RandomGoodwill, "RFC.EnableFactionRandomGoodwillToolTip".Translate());
+                    innerY += yBuffer + 8;
+
+                    bool b = f.BoostSettlementCount;
+                    CheckboxLabeled(new Rect(10, innerY, 300, Text.LineHeight), "RFC.BoostSettlementCount".Translate(), ref b, "RFC.BoostSettlementCountToolTip".Translate());
+                    f.BoostSettlementCount = b;
+                    innerY += yBuffer + 8;
+
+                    if (int.TryParse(f.MinCountBuffer, out i))
+                        f.MinCount = i;
+                    if (int.TryParse(f.MaxCountBuffer, out i))
+                        f.MaxCount = i;
+
+                    Widgets.Label(new Rect(10, innerY, 100, Text.LineHeight), "RFC.Density".Translate());
+                    Text.Font = GameFont.Tiny;
+                    Widgets.Label(new Rect(105, innerY, canvas.xMax - 101, Text.LineHeight), GetFactionDensityLabel(f.Density));
+                    innerY += yBuffer + 12;
+                    f.Density = Widgets.HorizontalSlider(
+                        new Rect(10, innerY, canvas.xMax - 36, Text.LineHeight), f.Density, MIN_DENSITY, MAX_DENSITY, true, null, "RFC.loose".Translate(), "RFC.tight".Translate());
+                    innerY += doubleYBuffer;
+                    Text.Font = GameFont.Small;
+
+                    Widgets.Label(new Rect(10, innerY, 100, Text.LineHeight), "RFC.Settlements".Translate());
+                    Text.Font = GameFont.Tiny;
+                    Widgets.Label(new Rect(105, innerY, canvas.xMax - 101, Text.LineHeight), GetSettlementCountFactorLabel(f.SettlementCountFactor));
+                    innerY += yBuffer + 12;
+                    f.SettlementCountFactor = Widgets.HorizontalSlider(
+                        new Rect(10, innerY, canvas.xMax - 36, Text.LineHeight), f.SettlementCountFactor, f.MinSettlementsValue, f.MaxSettlementsValue, true, null, "PlanetPopulation_Low".Translate(), "PlanetPopulation_High".Translate());
+                    innerY += doubleYBuffer;
+                    Text.Font = GameFont.Small;
                 }
-                innerY += Text.LineHeight + 10;
-
-                x = 10;
-                Widgets.Label(new Rect(x, innerY, 150, Text.LineHeight), "RFC.CountMinMax".Translate());
-                x += 160;
-                f.MinCountBuffer = Widgets.TextArea(new Rect(x, innerY, 70, Text.LineHeight), f.MinCountBuffer, false);
-                x += 80;
-                f.MaxCountBuffer = Widgets.TextArea(new Rect(x, innerY, 70, Text.LineHeight), f.MaxCountBuffer, false);
-                innerY += yBuffer + 8;
-
-                CheckboxLabeled(new Rect(10, innerY, 300, Text.LineHeight), "RFC.EnableFactionRandomGoodwill".Translate(), ref f.RandomGoodwill, "RFC.EnableFactionRandomGoodwillToolTip".Translate());
-                innerY += yBuffer + 8;
-
-                bool b = f.BoostSettlementCount;
-                CheckboxLabeled(new Rect(10, innerY, 300, Text.LineHeight), "RFC.BoostSettlementCount".Translate(), ref b, "RFC.BoostSettlementCountToolTip".Translate());
-                f.BoostSettlementCount = b;
-                innerY += yBuffer + 8;
-
-                if (int.TryParse(f.MinCountBuffer, out i))
-                    f.MinCount = i;
-                if (int.TryParse(f.MaxCountBuffer, out i))
-                    f.MaxCount = i;
-
-                Widgets.Label(new Rect(10, innerY, 100, Text.LineHeight), "RFC.Density".Translate());
-                Text.Font = GameFont.Tiny;
-                Widgets.Label(new Rect(105, innerY, canvas.xMax - 101, Text.LineHeight), GetFactionDensityLabel(f.Density));
-                innerY += yBuffer + 12;
-                f.Density = Widgets.HorizontalSlider(
-                    new Rect(10, innerY, canvas.xMax - 36, Text.LineHeight), f.Density, MIN_DENSITY, MAX_DENSITY, true, null, "loose".Translate(), "tight".Translate());
-                innerY += doubleYBuffer;
-                Text.Font = GameFont.Small;
-
-                Widgets.Label(new Rect(10, innerY, 100, Text.LineHeight), "RFC.Settlements".Translate());
-                Text.Font = GameFont.Tiny;
-                Widgets.Label(new Rect(105, innerY, canvas.xMax - 101, Text.LineHeight), GetSettlementCountFactorLabel(f.SettlementCountFactor));
-                innerY += yBuffer + 12;
-                f.SettlementCountFactor = Widgets.HorizontalSlider(
-                    new Rect(10, innerY, canvas.xMax - 36, Text.LineHeight), f.SettlementCountFactor, f.MinSettlementsValue, f.MaxSettlementsValue, true, null, "PlanetPopulation_Low".Translate(), "PlanetPopulation_High".Translate());
-                innerY += doubleYBuffer;
-                Text.Font = GameFont.Small;
+                catch(Exception e)
+                {
+                    Log.ErrorOnce(
+                        $"unable to display settings for faction {f?.FactionDef?.defName}\n{e.Message}", $"unable faciton def {f?.FactionDef?.defName}".GetHashCode());
+                    Settings.FactionSettings.Remove(f);
+                    break;
+                }
             }
 
             Widgets.EndScrollView();
@@ -165,9 +178,9 @@ namespace FactionControl
             Widgets.CheckboxLabeled(rect, label, ref b);
         }
 
-        private static string GetFactionDensityLabel(float factionGrouping)
+        private static string GetFactionDensityLabel(float density)
         {
-            if (factionGrouping < 0.5f)
+            if (density > 4.75f && density < 5.75f)
             {
                 return "PlanetPopulation_Normal".Translate();
             }
@@ -320,7 +333,7 @@ namespace FactionControl
     public class FactionSettings : IExposable
     {
         public const float DEFAULT_DENSITY = 0.01f;
-        public const float DEFAULT_SETTLEMENTS = 1.8f;
+        public const float DEFAULT_SETTLEMENTS = 5.5f;
         public const float SETTLEMENT_BOOST_AMOUNT = 10;
 
         public FactionDef FactionDef;
