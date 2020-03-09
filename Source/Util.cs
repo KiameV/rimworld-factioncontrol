@@ -60,7 +60,7 @@ namespace FactionControl
 
             foreach (var g in gf)
             {
-                FloatRange settlementsPer100kTiles = new FloatRange(75f * g.Settings.SettlementCountFactor, 85f * g.Settings.SettlementCountFactor);
+                FloatRange settlementsPer100kTiles = new FloatRange(75f * g.Settings.SettlementCountFactor * 0.01f, 85f * g.Settings.SettlementCountFactor * 0.01f);
                 foreach (var f in g.Factions)
                 {
                     int toPlace = GenMath.RoundRandom(scaled * settlementsPer100kTiles.RandomInRange);
@@ -84,6 +84,8 @@ namespace FactionControl
                 double sqrtTiles = Math.Sqrt(Find.WorldGrid.TilesCount);
                 //double sqrtFactionCount = Math.Sqrt(FactionSettingsLookup.Count);
                 sprawl = sqrtTiles / (5 * s.Density);
+                if (sprawl < 1)
+                    sprawl = 1.001f;
                 FactionSprawl[f] = sprawl;
             }
             return sprawl;
