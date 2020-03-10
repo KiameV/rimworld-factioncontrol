@@ -618,7 +618,7 @@ namespace FactionControl
     }
 
     [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
-    static class Patch_Page_CreateWorldParams_DoWindowContents
+    public static class Patch_Page_CreateWorldParams_DoWindowContents
     {
         static void Postfix(Rect rect)
         {
@@ -627,11 +627,16 @@ namespace FactionControl
             string label = "RFC.FactionControlName".Translate();
             if (Widgets.ButtonText(new Rect(0, y, 150, 32), label))
             {
-                Find.WindowStack.TryRemove(typeof(EditWindow_Log));
-                if (!Find.WindowStack.TryRemove(typeof(SettingsDialogWindow)))
-                {
-                    Find.WindowStack.Add(new SettingsDialogWindow());
-                }
+                OpenSettingsWindow();
+            }
+        }
+
+        public static void OpenSettingsWindow()
+        {
+            Find.WindowStack.TryRemove(typeof(EditWindow_Log));
+            if (!Find.WindowStack.TryRemove(typeof(SettingsDialogWindow)))
+            {
+                Find.WindowStack.Add(new SettingsDialogWindow());
             }
         }
     }
