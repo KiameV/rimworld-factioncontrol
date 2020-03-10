@@ -34,7 +34,7 @@ namespace FactionControl
         public bool spreadPirates = true;
         public bool relationsChangeOverTime = true;
 
-        private string strFacDen = "";
+        public string strFacDen = "";
 
         public void DoWindowContents(Rect canvas)
         {
@@ -89,7 +89,7 @@ namespace FactionControl
             SetIncidents.SetIncidentLevels();
         }
 
-        private static string GetFactionDensityLabel(float factionDensity)
+        internal static string GetFactionDensityLabel(float factionDensity)
         {
             if (factionDensity < .45)
             {
@@ -114,7 +114,7 @@ namespace FactionControl
             return "RFC.factionDensityInsane".Translate();
         }
 
-        private static string GetFactionGroupingLabel(float factionGrouping)
+        internal static string GetFactionGroupingLabel(float factionGrouping)
         {
             if (factionGrouping < 1f)
             {

@@ -22,19 +22,6 @@ namespace FactionControl
             var harmony = new Harmony("com.rimworld.mod.factioncontrol");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
             LongEventHandler.QueueLongEvent(new Action(Init), "LibraryStartup", false, null);
-
-            Log.Message(
-                "Faction Control Harmony Patches:" + Environment.NewLine +
-                "  Prefix:" + Environment.NewLine +
-                "    Page_SelectScenario.BeginScenarioConfiguration" + Environment.NewLine +
-                "    SavedGameLoaderNow.LoadGameFromSaveFileNow" + Environment.NewLine +
-                "    LoadedModManager.GetSettingsFilename" + Environment.NewLine +
-                "    IncidentWorker_RaidEnemy.FactionCanBeGroupSource" + Environment.NewLine +
-                "    FactionGenerator.GenerateFactionsIntoWorld" + Environment.NewLine +
-                "    TileFinder.RandomSettlementTileFor" + Environment.NewLine +
-                "    FactionGenerator.EnsureRequiredEnemies" + Environment.NewLine +
-                "    Faction.Color {get}" + Environment.NewLine +
-                "    Faction.CheckNaturalTendencyToReachGoodwillThreshold");
         }
 
         private static void Init()
@@ -627,6 +614,25 @@ namespace FactionControl
         private static bool Includes(IntRange i, int val)
         {
             return val >= i.min && val <= i.max;
+        }
+    }
+
+    [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
+    static class Patch_Page_CreateWorldParams_DoWindowContents
+    {
+        static void Postfix(Rect rect)
+        {
+            float y = rect.y + rect.height - 78f;
+            Text.Font = GameFont.Small;
+            string label = "RFC.FactionControlName".Translate();
+            if (Widgets.ButtonText(new Rect(0, y, 150, 32), label))
+            {
+                Find.WindowStack.TryRemove(typeof(EditWindow_Log));
+                if (!Find.WindowStack.TryRemove(typeof(SettingsDialogWindow)))
+                {
+                    Find.WindowStack.Add(new SettingsDialogWindow());
+                }
+            }
         }
     }
 }

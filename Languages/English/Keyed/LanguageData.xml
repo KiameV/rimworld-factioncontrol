@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 
+	<RFC.FactionControlName>Faction Control</RFC.FactionControlName>
 	<RFC.FactionControl>Faction Control - Main Options</RFC.FactionControl>
 	<RFC.FactionControlFactionOptions>Faction Control - Faction Options</RFC.FactionControlFactionOptions>
 	<RFC.CustomFactionControl>Faction Control - Modded Factions</RFC.CustomFactionControl>
