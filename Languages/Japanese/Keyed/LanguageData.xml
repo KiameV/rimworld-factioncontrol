@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
+  <RFC.FactionControlName>Faction Control</RFC.FactionControlName>
   <RFC.FactionControl>FactionControl－メイン設定</RFC.FactionControl>
   <RFC.FactionControlFactionOptions>FactionControl－派閥設定</RFC.FactionControlFactionOptions>
   <RFC.CustomFactionControl>FactionControl－Mod派閥</RFC.CustomFactionControl>
@@ -12,7 +13,9 @@
   <RFC.outlanderRoughMin>世界地図上の「異邦人の軍事連合」派閥の最小拠点数（0に設定すると「異邦人の軍事連合」派閥は消滅）:</RFC.outlanderRoughMin>
   <RFC.tribalCivilMin>世界地図上の「温和な部族」派閥の最小拠点数（0に設定すると「温和な部族」派閥は消滅）:</RFC.tribalCivilMin>
   <RFC.tribalRoughMin>世界地図上の「野蛮な部族」派閥の最小拠点数（0に設定すると「野蛮な部族」派閥は消滅）:</RFC.tribalRoughMin>
+  <RFC.tribalSavageMin>世界地図上の「狂暴な部族」派閥の最小拠点数（0に設定すると「狂暴な部族」派閥は消滅）:</RFC.tribalSavageMin>
   <RFC.pirateMin>世界地図上の「宙賊」の最小拠点数（0に設定すると「宙賊」派閥は消滅）:</RFC.pirateMin>
+  <RFC.empireMin>世界地図上の「帝国」の最小拠点数（0に設定すると「帝国」派閥は消滅）:</RFC.empireMin>
 
   <RFC.SelectAFaction>派閥を選択</RFC.SelectAFaction>
 
