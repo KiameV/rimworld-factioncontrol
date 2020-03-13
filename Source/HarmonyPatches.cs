@@ -436,8 +436,7 @@ namespace FactionControl
         public static bool Prefix(Faction __instance, ref Color __result)
         {
             if (!Controller.Settings.dynamicColors ||
-                __instance.def == FactionDefOf.PlayerColony || 
-                __instance.def == FactionDefOf.PlayerTribe)
+                __instance.def == Faction.OfPlayer.def)
             {
                 return true;
             }
