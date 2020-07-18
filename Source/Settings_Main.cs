@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -21,6 +22,17 @@ namespace FactionControl
         public Controller(ModContentPack content) : base(content)
         {
             Settings = GetSettings<Settings>();
+        }
+
+        public static void UpdateSettingsForMapSize(int actualFactionCount)
+        {
+            double sqrtTiles = Math.Sqrt(Find.WorldGrid.TilesCount);
+            double sqrtFactionCount = Math.Sqrt(actualFactionCount);
+            minFactionSeparation = sqrtTiles / (sqrtFactionCount * 2);
+            maxFactionSprawl = sqrtTiles / (sqrtFactionCount * Settings.factionGrouping);
+            pirateSprawl = maxFactionSprawl;
+            if (Settings.spreadPirates)
+                pirateSprawl = sqrtTiles / (sqrtFactionCount * 0.5f);
         }
     }
 

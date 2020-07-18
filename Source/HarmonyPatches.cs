@@ -108,6 +108,11 @@ namespace FactionControl
         {
             SetIncidents.SetIncidentLevels();
         }
+        static void Postfix()
+        {
+            if (Current.Game?.World != null)
+                Controller.UpdateSettingsForMapSize(Current.Game.World.factionManager.AllFactions.Count());
+        }
     }
 
     [HarmonyPatch(typeof(LoadedModManager), "GetSettingsFilename", null)]
@@ -254,15 +259,8 @@ namespace FactionControl
                 actualFactionCount = 1;*/
                 return false;
             }
-            
-            double sqrtTiles = Math.Sqrt(Find.WorldGrid.TilesCount);
-            double sqrtFactionCount = Math.Sqrt(actualFactionCount);
 
-            Controller.minFactionSeparation = sqrtTiles / (sqrtFactionCount * 2);
-            Controller.maxFactionSprawl = sqrtTiles / (sqrtFactionCount * Controller.Settings.factionGrouping);
-            Controller.pirateSprawl = Controller.maxFactionSprawl;
-            if (Controller.Settings.spreadPirates)
-                Controller.pirateSprawl = sqrtTiles / (sqrtFactionCount * 0.5f);
+            Controller.UpdateSettingsForMapSize(actualFactionCount);
 
             while (num < (int)Controller_FactionOptions.Settings.factionCount)
             {
@@ -327,7 +325,7 @@ namespace FactionControl
     }
 
     [HarmonyPatch(typeof(TileFinder), "RandomSettlementTileFor", null)]
-    public static class TileFinder_RandomFactionBaseTileFor
+    public static class TileFinder_RandomSettlementTileFor
     {
         public static bool Prefix(Faction faction, ref int __result, bool mustBeAutoChoosable = false, Predicate<int> extraValidator = null)
         {
