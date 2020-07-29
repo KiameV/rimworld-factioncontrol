@@ -429,53 +429,43 @@ namespace FactionControl
 
     [HarmonyPatch(typeof(Faction))]
     [HarmonyPatch("Color", MethodType.Getter)]
+    [HarmonyPriority(Priority.Last)]
     public static class Patch_Faction_get_Color
     {
-        public static bool Prefix(Faction __instance, ref Color __result)
+        public static void Postfix(Faction __instance, ref Color __result)
         {
             if (!Controller.Settings.dynamicColors ||
                 __instance.def.isPlayer)
             {
-                return true;
+                return;
             }
 
-            float red = -1, green = -1, blue = -1,
-                  goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
+            float goodwill = GoodWillToColor(__instance.GoodwillWith(Faction.OfPlayer));
 
             if (__instance.HostileTo(Faction.OfPlayer))
             {
-                red = 0.75f;
-                green = blue = goodwill;
+                __result = new Color(0.75f, goodwill, goodwill);
             }
             else
             {
                 switch (__instance.def.defName)
                 {
                     case "TribeCivil":
-                        red = green = 1f;
-                        blue = goodwill;
+                        __result = new Color(1f, 1f, goodwill);
                         break;
                     case "TribeRough":
-                        green = 1f;
-                        red = blue = goodwill;
+                        __result = new Color(goodwill, 1f, goodwill);
                         break;
                     case "OutlanderCivil":
-                        blue = 1f;
-                        red = green = goodwill;
+                        __result = new Color(goodwill, goodwill, 1f);
                         break;
                     case "OutlanderRough":
-                        blue = 1f;
-                        red = 0.5f;
-                        green = goodwill;
+                        __result = new Color(0.5f, goodwill, 1f);
                         break;
+                    default:
+                        return;
                 }
             }
-
-            if (red == -1 || green == -1 || blue == -1)
-                return true;
-
-            __result = new Color(red, green, blue);
-            return false;
         }
 
         private static float GoodWillToColor(int goodwill)
