@@ -572,35 +572,18 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(Faction), "CheckNaturalTendencyToReachGoodwillThreshold", null)]
-    public static class Patch_Faction_CheckNaturalTendencyToReachGoodwillThreshold
+    [HarmonyPatch(typeof(Faction), "TryAffectGoodwillWith", null)]
+    public static class Patch_Faction_TryAffectGoodwillWith
     {
-        private static readonly FieldInfo fi = typeof(Faction).GetField("naturalGoodwillTimer", BindingFlags.NonPublic | BindingFlags.Instance);
-        private const int DT = 200000;
-        public static bool Prefix(Faction __instance)
+        public static bool Prefix(Faction __instance, string reason)
         {
-            if (Controller.Settings.relationsChangeOverTime)
-                return true;
-
-            if (__instance.IsPlayer)
-                return true;
-
-            int playerGoodwill = __instance.PlayerGoodwill;
-            if (!Includes(__instance.def.naturalColonyGoodwill, playerGoodwill))
+            if (!Controller.Settings.relationsChangeOverTime && 
+                "GoodwillChangedReason_NaturallyOverTime".Translate(__instance.def.naturalColonyGoodwill.max.ToString()) == reason)
             {
-                int ticks = (int)fi.GetValue(__instance);
-                if (ticks >= DT)
-                {
-                    fi.SetValue(__instance, 0);
-                    return false;
-                }
+                return false;
             }
-            return true;
-        }
 
-        private static bool Includes(IntRange i, int val)
-        {
-            return val >= i.min && val <= i.max;
+            return true;
         }
     }
 
