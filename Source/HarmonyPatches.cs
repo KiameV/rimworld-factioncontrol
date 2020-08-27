@@ -319,7 +319,7 @@ namespace FactionControl
             def.requiredCountAtGameStart = required;
             if (def.requiredCountAtGameStart == 0)
                 def.maxCountAtGameStart = 0;
-            else 
+            else
                 def.maxCountAtGameStart = 100;
         }
     }
@@ -482,7 +482,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies", null)]
+    [HarmonyPatch(typeof(FactionGenerator), "EnsureRequiredEnemies")]
     public static class FactionGenerator_EnsureRequiredEnemies
     {
         public static void Prefix(Faction player)
@@ -507,12 +507,12 @@ namespace FactionControl
                         FactionRelationKind orig = f.RelationKindWith(Faction.OfPlayer);
                         f.TryAffectGoodwillWith(Faction.OfPlayer, change);
 
-                        if (orig != FactionRelationKind.Hostile && 
+                        if (orig != FactionRelationKind.Hostile &&
                             f.GoodwillWith(Faction.OfPlayer) < -10)
                         {
                             f.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Hostile);
                         }
-                        else if (orig == FactionRelationKind.Hostile && 
+                        else if (orig == FactionRelationKind.Hostile &&
                                  f.GoodwillWith(Faction.OfPlayer) >= 0)
                         {
                             f.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Neutral);
@@ -572,20 +572,38 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(Faction), "TryAffectGoodwillWith", null)]
+    [HarmonyPatch(typeof(Faction), "TryAffectGoodwillWith")]
     public static class Patch_Faction_TryAffectGoodwillWith
     {
-        public static bool Prefix(Faction __instance, string reason)
+        static bool Prefix(Faction __instance, ref bool __result, Faction other, int goodwillChange, bool canSendMessage, bool canSendHostilityLetter, string reason, GlobalTargetInfo? lookTarget)
         {
-            if (!Controller.Settings.relationsChangeOverTime && 
-                "GoodwillChangedReason_NaturallyOverTime".Translate(__instance.def.naturalColonyGoodwill.max.ToString()) == reason)
+            if (!Controller.Settings.relationsChangeOverTime &&
+                other == Faction.OfPlayer &&
+                goodwillChange < 0 &&
+                !canSendMessage && !canSendHostilityLetter && reason == null && lookTarget == null)
             {
+                __result = false;
                 return false;
             }
-
             return true;
         }
     }
+
+    [HarmonyPatch(typeof(LetterStack), "ReceiveLetter", typeof(string), typeof(string), typeof(LetterDef), typeof(string))]
+    public static class Patch_LetterStack_ReceiveLetter
+    {
+        static bool Prefix(string label, string text, LetterDef textLetterDef, string debugInfo)
+        {
+            if (!Controller.Settings.relationsChangeOverTime && 
+                textLetterDef == LetterDefOf.NegativeEvent && 
+                label == "LetterLabelFactionBaseProximity".Translate())
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
 
     [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
     public static class Patch_Page_CreateWorldParams_DoWindowContents
