@@ -79,7 +79,7 @@ namespace FactionControl
                 if (fd.Enabled)
                 {
                     lastY += 40;
-                    fd.Density = Widgets.HorizontalSlider(new Rect(0, lastY, inner, 28), fd.Density, 10f, 400f, true, ((int)fd.Density).ToString(), dense, sparce);
+                    fd.Density = Widgets.HorizontalSlider(new Rect(0, lastY, inner, 28), fd.Density, 15f, 400f, true, ((int)fd.Density).ToString(), dense, sparce);
                 }
                 lastY += 30;
                 ++i;
