@@ -5,7 +5,7 @@
 	<RFC.FactionControlFactionOptions>Faction Control - Options de faction</RFC.FactionControlFactionOptions>
 	<RFC.CustomFactionControl>Faction Control - Factions modifiées</RFC.CustomFactionControl>
 	
-	<RFC.factionCount>Nombre total de groupes de factions à apparaître sur la carte du monde :</RFC.factionCount>
+	<RFC.factionCount>Nombre total de groupes de factions à apparaître sur la carte du monde </RFC.FactionCount>
 	<RFC.factionNotes>Notez que ce nombre est un minimum, car le total des comptes définis ci-dessous peut dépasser le nombre défini ci-dessus. (Par exemple, si vous définissez le nombre total de groupes de factions à 3, mais que vous définissez 2 groupes chacun comme le nombre minimum de groupes de factions "communauté d'étrangers", "Tribu" et "bande de pirates", vous aurez toujours au moins 6 groupes sur votre carte.)</RFC.factionNotes>
 	<RFC.outlanderCivilMin>Nombre minimum de groupes de factions communauté d'étrangers pacifiques à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.outlanderCivilMin>
 	<RFC.outlanderRoughMin>Nombre minimum de groupes de factions communauté d'étrangers belliqueux à apparaître sur la carte (la valeur "0" désactive la faction) :</RFC.outlanderRoughMin>
@@ -15,7 +15,7 @@
 
 	<RFC.SelectAFaction>Sélectionnez une faction</RFC.SelectAFaction>
 	
-	<RFC.factionGrouping>"Bâtir une nation" :</RFC.factionGrouping>
+	<RFC.factionGrouping>"Bâtir une nation" </RFC.FactionGrouping>
 	<RFC.factionGroupingNone>Aucune (Comportement vanille.). Les bases des groupes de factions seront dispersées dans le monde entier au hasard.</RFC.factionGroupingNone>
 	<RFC.factionGroupingLoose>Desserré. Les bases d'un groupe de factions auront tendance à se trouver dans la même région générale de la carte du monde, mais il y aura toujours un chevauchement important entre les territoires occupés par divers groupes.</RFC.factionGroupingLoose>
 	<RFC.factionGroupingTight>Serré. Les bases appartenant à un groupe de factions particulier seront relativement proches les unes des autres, et à l'exception des groupes de factions de pirates, il n'y aura pas beaucoup de chevauchement. Il y aura un sentiment distinct de nations réelles existant sur la carte du monde, bien qu'avec des frontières très approximatives.</RFC.factionGroupingTight>
@@ -32,7 +32,7 @@
 	<RFC.EnableFactionDynamicColors>Couleurs dynamiques des factions</RFC.EnableFactionDynamicColors>
 	<RFC.EnableFactionDynamicColorsTip>Hostile = Rouge. Tribus amicales = Vert. Communauté d'étrangers amical = Bleu.</RFC.EnableFactionDynamicColorsTip>
 
-	<RFC.factionDensity>Densité en base de faction :</RFC.factionDensity>
+	<RFC.FactionDensity>Densité en base de faction </RFC.FactionDensity>
 	<RFC.factionDensityVeryLow>Très faible. Très peu de bases par groupe de factions.</RFC.factionDensityVeryLow>
 	<RFC.factionDensityLow>Basse.</RFC.factionDensityLow>
 	<RFC.factionDensityNormal>Normale. (Densité vanille de base des groupes de factions).</RFC.factionDensityNormal>
@@ -41,7 +41,7 @@
 	<RFC.factionDensityInsane>Follement élevée. Rimworlds n'est pas censé être surpeuplé comme ça......</RFC.factionDensityInsane>
 	
 	<RFC.factionBasic1>Nombre minimum de groupes de factions "</RFC.factionBasic1>
-	<RFC.factionBasic2>" à apparaître sur la carte (le réglage sur "0" désactive la faction) :</RFC.factionBasic2>
+	<RFC.factionBasic2>" à apparaître sur la carte (le réglage sur "0" désactive la faction) </RFC.FactionBasic2>
 	
 	<RFC.factionHidden1>Autoriser la faction cachée "</RFC.factionHidden1>
 	<RFC.factionHidden2>" ?</RFC.factionHidden2>

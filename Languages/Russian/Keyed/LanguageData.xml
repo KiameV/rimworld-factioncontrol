@@ -4,7 +4,7 @@
   <RFC.FactionControl>Контроль фракции - Основные опции</RFC.FactionControl>
   <RFC.FactionControlFactionOptions>Контроль фракции - Опции Фракции</RFC.FactionControlFactionOptions>
   <RFC.CustomFactionControl>Контроль фракции - Фракции модов</RFC.CustomFactionControl>
-  <RFC.factionCount>Общее количество фракций на карте мира:</RFC.factionCount>
+  <RFC.factionCount>Общее количество фракций на карте мира</RFC.FactionCount>
   <RFC.factionNotes>Ванильное значение равно 5. Обратите внимание, что это число является минимальным, поскольку количество фракций, определяемые ниже, может превышать указанное выше число. (Например, если вы определяете общее количество фракций как 3, но определяете 2 для минимального количества фракций чуземцев, племен и пиратов, вы всегда будете иметь по крайней мере 6 фракций на своей карте.) Обратите также внимание, что если вы отключите все фракции ниже, но не установили число выше 0, вы получите мир, в котором есть только пиратские фракции. Вы были предупреждены!</RFC.factionNotes>
   <RFC.outlanderCivilMin>Минимальное количество невраждебных фракций «чуземцы» (если установлено на 0, фракции чуземцы будут отключены), количество на карте:</RFC.outlanderCivilMin>
 
@@ -15,7 +15,7 @@
 <RFC.tribalRoughMin>Минимальное количество враждебных фракций «племя» (если установлено на 0, фракции племя будут отключены), количество на карте:</RFC.tribalRoughMin>
   <RFC.pirateMin>Минимальное количество пиратских фракций (если установлено 0, пиратские фракции будут отключены), количество на карте:</RFC.pirateMin>
   <RFC.SelectAFaction>Выбор фракции</RFC.SelectAFaction>
-  <RFC.factionGrouping>"Строительство нации":</RFC.factionGrouping>
+  <RFC.factionGrouping>"Строительство нации"</RFC.FactionGrouping>
   <RFC.factionGroupingNone>Никто. (Режим ванили.) Базы фракционной группы будут разбросаны по всему миру в случайном порядке.</RFC.factionGroupingNone>
   <RFC.factionGroupingLoose>Разбросаны. Базы фракционной группы, как правило, будут находиться в одном и том же общем районе карты мира, но между территориями, занятыми различными группами, все еще будет значительное расстояние.</RFC.factionGroupingLoose>
   <RFC.factionGroupingTight>Плотно. Базы, принадлежащие к какой-либо конкретной фракционной группе, будут находиться в достаточно близкой близости друг к другу, и кроме групп фракции пиратов не будет большого расстояния. На карте мира будет четко выражено существование реальных наций, хотя и с очень грубыми границами.</RFC.factionGroupingTight>
@@ -32,7 +32,7 @@
 
 <RFC.EnableFactionDynamicColorsTip>Враг = Красный. Дружественное племя =Зеленый. Дружественные чужеземецы = Синий.</RFC.EnableFactionDynamicColorsTip>
 
-  <RFC.factionDensity>Плотность баз фракции:</RFC.factionDensity>
+  <RFC.FactionDensity>Плотность баз фракции</RFC.FactionDensity>
   <RFC.factionDensityVeryLow>Очень низкая. Очень мало баз для каждой фракции.</RFC.factionDensityVeryLow>
   <RFC.factionDensityLow>Низкая.</RFC.factionDensityLow>
   <RFC.factionDensityNormal>Нормальная. (Ванильная плотность.)</RFC.factionDensityNormal>
@@ -41,7 +41,7 @@
   <RFC.factionDensityInsane>Безумно высокая. Окраинные миры не должны быть так перенаселены....</RFC.factionDensityInsane>
 
   <RFC.factionBasic1>Минимальное количество "</RFC.factionBasic1>
-  <RFC.factionBasic2>" фракционных групп, которое появиться на карте (установка на «0» отключает фракцию):</RFC.factionBasic2>
+  <RFC.factionBasic2>" фракционных групп, которое появиться на карте (установка на «0» отключает фракцию)</RFC.FactionBasic2>
 
   <RFC.factionHidden1>Разрешить скрытые "</RFC.factionHidden1>
   <RFC.factionHidden2>" фракции?</RFC.factionHidden2>

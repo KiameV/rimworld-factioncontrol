@@ -16,7 +16,7 @@
 
 	<RFC.SelectAFaction>选择一个派系</RFC.SelectAFaction>
 	
-	<RFC.factionGrouping>“国家构成”:</RFC.factionGrouping>
+	<RFC.factionGrouping>“国家构成”</RFC.FactionGrouping>
 	<RFC.factionGroupingNone>无：（默认选项）派系群基地将随机散布在世界各地。</RFC.factionGroupingNone>
 	<RFC.factionGroupingLoose>疏松：派系群的基地往往位于世界地图的同一区域，但各派系群所占领土之间仍然存在广泛的重叠区域。</RFC.factionGroupingLoose>
 	<RFC.factionGroupingTight>集中：属于任何特定派系群的基地将彼此合理地靠近，并且除了海盗派系群之外，不会有大量重叠。 世界地图上将存在明显的实际国家感，尽管边界非常粗糙。</RFC.factionGroupingTight>
@@ -33,7 +33,7 @@
 	<RFC.EnableFactionDynamicColors>动态派系颜色</RFC.EnableFactionDynamicColors>
 	<RFC.EnableFactionDynamicColorsTip>敌对=红色；友好的部落=绿色； 友好的外来者=蓝色。\n\n友谊越高，颜色越深。</RFC.EnableFactionDynamicColorsTip>
 
-	<RFC.factionDensity>派系密度：</RFC.factionDensity>
+	<RFC.FactionDensity>派系密度：</RFC.FactionDensity>
 	<RFC.factionDensityVeryLow>非常低：派系的基地很少。</RFC.factionDensityVeryLow>
 	<RFC.factionDensityLow>低</RFC.factionDensityLow>
 	<RFC.factionDensityNormal>正常。（默认派系基地密度。）</RFC.factionDensityNormal>

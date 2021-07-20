@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-
+	<!-- These fields are for 1.3 -->
 	<RFC.FactionControlName>Faction Control</RFC.FactionControlName>
+	<RFC.FactionDensity>Faction Base Density</RFC.FactionDensity>
+	<RFC.PopulationOverride>Population Override</RFC.PopulationOverride>
+	<RFC.DisableFactionLimits>Disable Faction Limits</RFC.DisableFactionLimits>
+	<RFC.Default>Default</RFC.Default>
+	
+	<!-- All following fields are for versions older than 1.2 -->
 	<RFC.FactionControl>Faction Control - Main Options</RFC.FactionControl>
 	<RFC.FactionControlFactionOptions>Faction Control - Faction Options</RFC.FactionControlFactionOptions>
 	<RFC.CustomFactionControl>Faction Control - Modded Factions</RFC.CustomFactionControl>
@@ -36,7 +42,6 @@
 	<RFC.EnableFactionDynamicColors>Dynamic Faction Colors</RFC.EnableFactionDynamicColors>
 	<RFC.EnableFactionDynamicColorsTip>Hostile = Red. Friendly Tribal = Green. Friendly Outlander = Blue.</RFC.EnableFactionDynamicColorsTip>
 
-	<RFC.factionDensity>Faction Base Density:</RFC.factionDensity>
 	<RFC.factionDensityVeryLow>Very low. Very few bases per faction group.</RFC.factionDensityVeryLow>
 	<RFC.factionDensityLow>Low.</RFC.factionDensityLow>
 	<RFC.factionDensityNormal>Normal. (Vanilla faction group base density.)</RFC.factionDensityNormal>

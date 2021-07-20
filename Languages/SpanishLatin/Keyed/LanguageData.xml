@@ -5,7 +5,7 @@
 	<RFC.FactionControlFactionOptions>Faction Control - Ajustes de facción</RFC.FactionControlFactionOptions>
 	<RFC.CustomFactionControl>Faction Control - Facciones de mods</RFC.CustomFactionControl>
 	
-	<RFC.factionCount>Número total de grupos que aparecerán en el mapa mundial:</RFC.factionCount>
+	<RFC.factionCount>Número total de grupos que aparecerán en el mapa mundial</RFC.FactionCount>
 	<RFC.factionNotes>Por defecto en 5. Es importante tener en cuenta que este es el número mínimo general, ya que el número total podría exceder el definido aquí según los "Ajustes de facción". (Por ejemplo, si defines el mínimo general de grupos en 3, pero en "Ajustes de facción" defines 3 facciones en uso un mínimo de 2 grupos cada una, siempre tendrás al menos 6 grupos en tu mapa).</RFC.factionNotes>
 	
 	<RFC.outlanderCivilMin>Número mínimo de grupos de la facción "Unión civil de forasteros" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.outlanderCivilMin>
@@ -16,7 +16,7 @@
 
 	<RFC.SelectAFaction>Seleccionar una Facción</RFC.SelectAFaction>
 	
-	<RFC.factionGrouping>"Constructor de naciones":</RFC.factionGrouping>
+	<RFC.factionGrouping>"Constructor de naciones"</RFC.FactionGrouping>
 	<RFC.factionGroupingNone>Nada. (Comportamiento por defecto.) Las bases de los grupos se dispersarán por todo el mundo al azar.</RFC.factionGroupingNone>
 	<RFC.factionGroupingLoose>Sueltos. Las bases de los grupos tenderán a estar en la misma región del mundo, pero seguirá habiendo una amplia superposición entre los territorios ocupados por varios grupos.</RFC.factionGroupingLoose>
 	<RFC.factionGroupingTight>Apretujados. Las bases que pertenecen a cualquier grupo en particular estarán razonablemente cerca unas de otras, y a excepción de los grupos de bandas piratas, no habrá una gran cantidad de superposición. Habrá una clara sensación de que existen naciones reales en el mapa mundial, aunque con fronteras muy borrosas.</RFC.factionGroupingTight>
@@ -31,7 +31,7 @@
 	<RFC.EnableFactionDynamicColors>Colores de facción dinámicos</RFC.EnableFactionDynamicColors>
 	<RFC.EnableFactionDynamicColorsTip>Hostil = Rojo. Tribal Gentil = Verde. Forasteros Amistosos = Azul.</RFC.EnableFactionDynamicColorsTip>
 
-	<RFC.factionDensity>Densidad de las bases:</RFC.factionDensity>
+	<RFC.FactionDensity>Densidad de las bases</RFC.FactionDensity>
 	<RFC.factionDensityVeryLow>Muy baja. Muy pocas bases por grupo,</RFC.factionDensityVeryLow>
 	<RFC.factionDensityLow>Baja.</RFC.factionDensityLow>
 	<RFC.factionDensityNormal>Normal. (Densidad por defecto.)</RFC.factionDensityNormal>
@@ -40,7 +40,7 @@
 	<RFC.factionDensityInsane>Demencialmente alta. Se supone que los Rimworlds no deben estar superpoblados de esta manera....</RFC.factionDensityInsane>
 	
 	<RFC.factionBasic1>Número mínimo de grupos de la facción "</RFC.factionBasic1>
-	<RFC.factionBasic2>" que aparecerán en el mapa (ajustar en "0" desactiva la facción):</RFC.factionBasic2>
+	<RFC.factionBasic2>" que aparecerán en el mapa (ajustar en "0" desactiva la facción)</RFC.FactionBasic2>
 	
 	<RFC.factionHidden1>Permitir la ocultación "</RFC.factionHidden1>
 	<RFC.factionHidden2>" facción?</RFC.factionHidden2>
