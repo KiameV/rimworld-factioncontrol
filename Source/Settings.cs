@@ -56,13 +56,24 @@ namespace FactionControl
             float inner = width - 16f;
 
             Widgets.Label(new Rect(rect.x, y, 200, 28), "RFC.DisableFactionLimits".Translate());
-            DisableFactionLimit = false; // TODO REMOVE
-            Widgets.Checkbox(new Vector2(rect.x + 210, y - 2), ref DisableFactionLimit, 24, true);
+            Widgets.Checkbox(new Vector2(rect.x + 210, y - 2), ref DisableFactionLimit);
             y += 32;
             Widgets.Label(new Rect(rect.x, y, width, 28), "RFC.PopulationOverride".Translate());
             y += 30;
+            float f = DensityMin;
             DrawValueInput(rect.x + 10, ref y, "min".Translate().CapitalizeFirst(), ref DensityMin, ref minBuffer, 0.01f, 250f, DEFAULT_MIN_POP);
+            if (f != DensityMin && DensityMin > DensityMax)
+            {
+                DensityMax = DensityMin;
+                maxBuffer = DensityMax.ToString("0.00");
+            }
+            f = DensityMax;
             DrawValueInput(rect.x + 10, ref y, "max".Translate().CapitalizeFirst(), ref DensityMax, ref maxBuffer, 0.01f, 250f, DEFAULT_MAX_POP);
+            if (f != DensityMax && DensityMax < DensityMin)
+            {
+                DensityMin = DensityMax;
+                minBuffer = DensityMin.ToString("0.00");
+            }
 
             y = rect.y + 10f;
             Widgets.Label(new Rect(half, y, width, 28), "RFC.FactionDensity".Translate());

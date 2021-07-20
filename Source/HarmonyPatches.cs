@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using UnityEngine;
 using Verse;
 
@@ -54,11 +55,13 @@ namespace FactionControl
     {
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
         internal static Dictionary<FactionDef, int> FirstSettlementLocation = new Dictionary<FactionDef, int>();
+        private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
         {
             FDs.Clear();
             FirstSettlementLocation.Clear();
+            MaxAtWorldCreate.Clear();
             foreach (var fd in Settings.FactionDensities)
             {
                 if (fd.Enabled)
@@ -68,12 +71,23 @@ namespace FactionControl
                         FDs[def] = fd;
                     }
             }
+            if (Settings.DisableFactionLimit)
+            {
+                DefDatabase<FactionDef>.AllDefs.Do(d =>
+                {
+                    MaxAtWorldCreate[d] = d.maxConfigurableAtWorldCreation;
+                    d.maxConfigurableAtWorldCreation = 1000;
+                });
+            }
         }
         [HarmonyPriority(Priority.First)]
         public static void Postfix()
         {
             FDs.Clear();
             FirstSettlementLocation.Clear();
+            foreach (var kv in MaxAtWorldCreate)
+                kv.Key.maxConfigurableAtWorldCreation = kv.Value;
+            MaxAtWorldCreate.Clear();
         }
     }
 
@@ -113,6 +127,40 @@ namespace FactionControl
                     __result = dist < fd.Density;
                 }
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(WorldFactionsUIUtility), "DoRow")]
+    public class WorldFactionsUIUtility_DoRow
+    {
+        [HarmonyPriority(Priority.High)]
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> il = instructions.ToList();
+            bool found = false;
+            for (int i = 0; i < il.Count; ++i)
+            {
+                if (il[i].opcode == OpCodes.Ldc_I4_S && !found)
+                {
+                    found = true;
+                    il[i].opcode = OpCodes.Call;
+                    il[i].operand =
+                                typeof(WorldFactionsUIUtility_DoRow).GetMethod(
+                                nameof(WorldFactionsUIUtility_DoRow.GetMaxSettlements), BindingFlags.Static | BindingFlags.Public);
+                }
+                yield return il[i];
+            }
+            if (!found)
+            {
+                Log.Error("Show Hair or Hide All Hats could not inject itself properly. This is due to other mods modifying the same code this mod needs to modify.");
+            }
+        }
+
+        public static int GetMaxSettlements()
+        {
+            if (Settings.DisableFactionLimit)
+                return 1000;
+            return 12;
         }
     }
 }
