@@ -57,7 +57,6 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
         {
-            Log.Warning("Start Create");
             FDs.Clear();
             FirstSettlementLocation.Clear();
             foreach (var fd in Settings.FactionDensities)
@@ -73,7 +72,6 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         public static void Postfix()
         {
-            Log.Warning("End Create");
             FDs.Clear();
             FirstSettlementLocation.Clear();
         }
@@ -105,14 +103,12 @@ namespace FactionControl
         {
             static void Postfix(ref bool __result, int tile)
             {
-                Log.Warning("Validate Start");
                 Faction f = TileFinder_RandomSettlementTileFor.Faction;
                 if (f != null &&
                     !f.IsPlayer && !f.Hidden &&
                     WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled && 
                     WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.def, out int center))
                 {
-                    Log.Warning("Inside");
                     var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
                     __result = dist < fd.Density;
                 }
