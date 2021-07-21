@@ -54,7 +54,7 @@ namespace FactionControl
     public class WorldGenerator_Generate
     {
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
-        internal static Dictionary<FactionDef, int> FirstSettlementLocation = new Dictionary<FactionDef, int>();
+        internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
         private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
@@ -106,9 +106,9 @@ namespace FactionControl
         static void Postfix(ref int __result, Faction faction, bool mustBeAutoChoosable, Predicate<int> extraValidator)
         {
             if (__result != 0 && faction != null &&
-                WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.def) == false)
+                WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
             {
-                WorldGenerator_Generate.FirstSettlementLocation[faction.def] = __result;
+                WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
             }
         }
 
@@ -117,11 +117,17 @@ namespace FactionControl
         {
             static void Postfix(ref bool __result, int tile)
             {
+                if (tile == 0)
+                {
+                    __result = false;
+                    return;
+                }
+
                 Faction f = TileFinder_RandomSettlementTileFor.Faction;
                 if (f != null &&
                     !f.IsPlayer && !f.Hidden &&
                     WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled && 
-                    WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.def, out int center))
+                    WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
                 {
                     var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
                     __result = dist < fd.Density;
