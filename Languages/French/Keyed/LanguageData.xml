@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 
+	<!-- These fields are for 1.3 -->
+	<RFC.FactionControlName>Faction Control</RFC.FactionControlName>
+	<RFC.FactionDensity>Densité de base de faction</RFC.FactionDensity>
+	<RFC.PopulationOverride>Remplacement de population</RFC.PopulationOverride>
+	<RFC.DisableFactionLimits>Désactiver les limites de faction</RFC.DisableFactionLimits>
+	<RFC.Default>Défaut</RFC.Default>
+	
+	<!-- All following fields are for versions older than 1.2 -->
 	<RFC.FactionControl>Faction Control - Options principales</RFC.FactionControl>
 	<RFC.FactionControlFactionOptions>Faction Control - Options de faction</RFC.FactionControlFactionOptions>
 	<RFC.CustomFactionControl>Faction Control - Factions modifiées</RFC.CustomFactionControl>
