@@ -60,16 +60,12 @@ namespace FactionControl
             y += 32;
             Widgets.Label(new Rect(rect.x, y, width, 28), "RFC.PopulationOverride".Translate());
             y += 30;
-            float f = DensityMin;
-            DrawValueInput(rect.x + 10, ref y, "min".Translate().CapitalizeFirst(), ref DensityMin, ref minBuffer, 0.01f, 250f, DEFAULT_MIN_POP);
-            if (f != DensityMin && DensityMin > DensityMax)
+            if (DrawValueInput(rect.x + 10, ref y, "min".Translate().CapitalizeFirst(), ref DensityMin, ref minBuffer, 0.01f, 250f, DEFAULT_MIN_POP) && DensityMin > DensityMax)
             {
                 DensityMax = DensityMin;
                 maxBuffer = DensityMax.ToString("0.00");
             }
-            f = DensityMax;
-            DrawValueInput(rect.x + 10, ref y, "max".Translate().CapitalizeFirst(), ref DensityMax, ref maxBuffer, 0.01f, 250f, DEFAULT_MAX_POP);
-            if (f != DensityMax && DensityMax < DensityMin)
+            if (DrawValueInput(rect.x + 10, ref y, "max".Translate().CapitalizeFirst(), ref DensityMax, ref maxBuffer, 0.01f, 250f, DEFAULT_MAX_POP)  && DensityMax < DensityMin)
             {
                 DensityMin = DensityMax;
                 minBuffer = DensityMin.ToString("0.00");
@@ -90,7 +86,7 @@ namespace FactionControl
                 if (fd.Enabled)
                 {
                     lastY += 40;
-                    fd.Density = Widgets.HorizontalSlider(new Rect(0, lastY, inner, 28), fd.Density, 15f, 400f, true, ((int)fd.Density).ToString(), dense, sparce);
+                    fd.Density = Widgets.HorizontalSlider(new Rect(0, lastY, inner, 28), fd.Density, 15f, 600f, true, ((int)fd.Density).ToString(), dense, sparce);
                 }
                 lastY += 30;
                 ++i;
@@ -103,10 +99,11 @@ namespace FactionControl
             Widgets.EndScrollView();
         }
 
-        private void DrawValueInput(float x, ref float y, string label, ref float pop, ref string buffer, float min, float max, float d)
+        private bool DrawValueInput(float x, ref float y, string label, ref float pop, ref string buffer, float min, float max, float d)
         {
+            bool sliderChanged = false;
             Widgets.Label(new Rect(x, y, 50, 28), label);
-            Widgets.TextFieldNumeric(new Rect(x + 60, y, 100, 28), ref pop, ref buffer, min, max);
+            Widgets.TextFieldNumeric(new Rect(x + 60, y, 100, 28), ref pop, ref buffer, min);
             if (Widgets.ButtonText(new Rect(x + 170, y, 100, 28), "RFC.Default".Translate()))
             {
                 pop = d;
@@ -118,8 +115,10 @@ namespace FactionControl
             {
                 pop = f;
                 buffer = pop.ToString("0.00");
+                sliderChanged = true;
             }
             y += 40;
+            return sliderChanged;
         }
 
         private void Initialize()
@@ -171,7 +170,19 @@ namespace FactionControl
 
         public void UpdateSettlementsPer100k()
         {
-            typeof(FactionGenerator).GetField("SettlementsPer100kTiles", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, new FloatRange(DensityMin, DensityMax));
+            var fr = new FloatRange();
+            if (DensityMin < DensityMax)
+            {
+                fr.min = DensityMin;
+                fr.max = DensityMax;
+            }
+            else
+            {
+                Log.Warning("Density Min is greater than Max. Flipping them.");
+                fr.min = DensityMax;
+                fr.max = DensityMin;
+            }
+            typeof(FactionGenerator).GetField("SettlementsPer100kTiles", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, fr);
         }
 
         public void UpdateBuffers()
