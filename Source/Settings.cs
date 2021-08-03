@@ -27,6 +27,8 @@ namespace FactionControl
 
     public class Settings : ModSettings
     {
+        public const float DEFAULT_MIN_DISTANCE = 20f;
+        public const float DEFAULT_MAX_DISTANCE = 300f;
         const float DEFAULT_MIN_POP = 75f;
         const float DEFAULT_MAX_POP = 85f;
 
@@ -34,8 +36,9 @@ namespace FactionControl
         public float DensityMax = DEFAULT_MAX_POP;
         public static bool DisableFactionLimit = true;
         public static List<FactionDensity> FactionDensities = new List<FactionDensity>();
+        public static GroupDistance GroupDistance;
 
-        private string minBuffer, maxBuffer;
+        private string minBuffer, maxBuffer, minDistanceBuffer, maxDistanceBuffer;
         private bool initialized = false;
         private Vector2 scroll = Vector2.zero;
         private float lastY = 0;
@@ -55,6 +58,7 @@ namespace FactionControl
             float width = half - 10f;
             float inner = width - 16f;
 
+            // Left Side
             Widgets.Label(new Rect(rect.x, y, 200, 28), "RFC.DisableFactionLimits".Translate());
             Widgets.Checkbox(new Vector2(rect.x + 210, y - 2), ref DisableFactionLimit);
             y += 32;
@@ -71,6 +75,37 @@ namespace FactionControl
                 minBuffer = DensityMin.ToString("0.00");
             }
 
+            y += 20;
+
+            Widgets.Label(new Rect(rect.x, y, 400, 28), "RFC.DistanceBetweenFactionGroups".Translate());
+            y += 30;
+            Widgets.Label(new Rect(rect.x + 5, y, 400, 28), "RFC.DistanceBetweenFactionGroupsLine2".Translate());
+            y += 30;
+            float x = rect.x + 10;
+            Widgets.Label(new Rect(x, y, 100, 28), "min".Translate());
+            Widgets.Checkbox(new Vector2(x + 110, y), ref GroupDistance.MinEnabled);
+            y += 30;
+            if (GroupDistance.MinEnabled)
+            {
+                if (DrawValueInput(rect.x + 10, ref y, "", ref GroupDistance.MinDistance, ref minDistanceBuffer, 40f, 60f, DEFAULT_MIN_DISTANCE, false) && GroupDistance.MinDistance > GroupDistance.MaxDistance)
+                {
+                    GroupDistance.MaxDistance = GroupDistance.MinDistance;
+                    maxDistanceBuffer = GroupDistance.MaxDistance.ToString("0.00");
+                }
+            }
+            Widgets.Label(new Rect(x, y, 100, 28), "max".Translate());
+            Widgets.Checkbox(new Vector2(x + 110, y), ref GroupDistance.MaxEnabled);
+            y += 30;
+            if (GroupDistance.MaxEnabled)
+            {
+                if (DrawValueInput(rect.x + 10, ref y, "", ref GroupDistance.MaxDistance, ref maxDistanceBuffer, 60f, 500f, DEFAULT_MAX_DISTANCE, false) && GroupDistance.MinDistance > GroupDistance.MaxDistance)
+                {
+                    GroupDistance.MinDistance = GroupDistance.MaxDistance;
+                    minDistanceBuffer = GroupDistance.MinDistance.ToString("0.00");
+                }
+            }
+
+            // Right Side
             y = rect.y + 10f;
             Widgets.Label(new Rect(half, y, width, 28), "RFC.FactionDensity".Translate());
             y += 30;
@@ -99,7 +134,7 @@ namespace FactionControl
             Widgets.EndScrollView();
         }
 
-        private bool DrawValueInput(float x, ref float y, string label, ref float pop, ref string buffer, float min, float max, float d)
+        private bool DrawValueInput(float x, ref float y, string label, ref float pop, ref string buffer, float min, float max, float d, bool displayText = true)
         {
             bool sliderChanged = false;
             Widgets.Label(new Rect(x, y, 50, 28), label);
@@ -110,7 +145,13 @@ namespace FactionControl
                 buffer = pop.ToString("0.00");
             }
             y += 45;
-            var f = Widgets.HorizontalSlider(new Rect(x, y, 270, 28), pop, min, max, false, null, "PlanetPopulation_Low".Translate(), "PlanetPopulation_High".Translate());
+            string left = "", right = "";
+            if (displayText)
+            {
+                left = "PlanetPopulation_Low".Translate();
+                right = "PlanetPopulation_High".Translate();
+            }
+            var f = Widgets.HorizontalSlider(new Rect(x, y, 270, 28), pop, min, max, false, null, left, right);
             if (Math.Abs(pop - f) > 0.1)
             {
                 pop = f;
@@ -164,6 +205,9 @@ namespace FactionControl
             Scribe_Values.Look(ref DensityMax, "densityMax", DEFAULT_MAX_POP);
             Scribe_Values.Look(ref DisableFactionLimit, "disableFactionLimit", true);
             Scribe_Collections.Look(ref FactionDensities, "factionDensities", LookMode.Deep, new object[0]);
+            Scribe_Deep.Look(ref GroupDistance, "groupDistance", null);
+            if (GroupDistance == null)
+                GroupDistance = new GroupDistance();
             UpdateSettlementsPer100k();
             UpdateBuffers();
         }
@@ -187,8 +231,10 @@ namespace FactionControl
 
         public void UpdateBuffers()
         {
-            minBuffer = DensityMin.ToString("0.0");
-            maxBuffer = DensityMax.ToString("0.0");
+            minBuffer = DensityMin.ToString("0.00");
+            maxBuffer = DensityMax.ToString("0.00");
+            minDistanceBuffer = GroupDistance.MinDistance.ToString("0.00");
+            maxDistanceBuffer = GroupDistance.MaxDistance.ToString("0.00");
         }
     }
 
@@ -216,6 +262,21 @@ namespace FactionControl
             Scribe_Values.Look(ref FactionDefName, "faction");
             Scribe_Values.Look(ref Density, "density", 400);
             Scribe_Values.Look(ref Enabled, "enabled", false);
+        }
+    }
+
+    public class GroupDistance : IExposable
+    {
+        public bool MinEnabled = false, MaxEnabled = false;
+        public float MinDistance = Settings.DEFAULT_MIN_DISTANCE, MaxDistance = Settings.DEFAULT_MAX_DISTANCE;
+
+        public GroupDistance() { }
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref MinEnabled, "minEnabled", false);
+            Scribe_Values.Look(ref MaxEnabled, "maxEnabled", false);
+            Scribe_Values.Look(ref MinDistance, "minDistance", Settings.DEFAULT_MIN_DISTANCE);
+            Scribe_Values.Look(ref MaxDistance, "maxDistance", Settings.DEFAULT_MAX_DISTANCE);
         }
     }
 }

@@ -4,6 +4,8 @@
 	<RFC.FactionControlName>Faction Control</RFC.FactionControlName>
 	<RFC.FactionDensity>Faction Base Density</RFC.FactionDensity>
 	<RFC.PopulationOverride>Population Override</RFC.PopulationOverride>
+	<RFC.DistanceBetweenFactionGroups>(Advanced) Tile Distance Between Faction Groups</RFC.DistanceBetweenFactionGroups>
+	<RFC.DistanceBetweenFactionGroupsLine2>Only works for factions that have Density set to On to the right</RFC.DistanceBetweenFactionGroupsLine2>
 	<RFC.DisableFactionLimits>Disable Faction Limits</RFC.DisableFactionLimits>
 	<RFC.Default>Default</RFC.Default>
 	

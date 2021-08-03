@@ -56,6 +56,7 @@ namespace FactionControl
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
         internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
         private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
+
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
         {
@@ -131,6 +132,33 @@ namespace FactionControl
                 {
                     var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
                     __result = dist < fd.Density;
+                }
+                else // First settlement
+                {
+                    if (Settings.GroupDistance.MinEnabled)
+                    {
+                        bool ok = true;
+                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        {
+                            var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
+                            ok = dist > Settings.GroupDistance.MinDistance;
+                            if (!ok)
+                                break;
+                        }
+                        __result = ok;
+                    }
+                    if (Settings.GroupDistance.MaxEnabled)
+                    {
+                        bool ok = true;
+                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        {
+                            var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
+                            ok = dist < Settings.GroupDistance.MaxDistance;
+                            if (!ok)
+                                break;
+                        }
+                        __result = ok;
+                    }
                 }
             }
         }
