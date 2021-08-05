@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using UnityEngine;
 using Verse;
 
@@ -56,10 +57,14 @@ namespace FactionControl
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
         internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
         private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
+        internal static HashSet<int> SettlementLocaitons = new HashSet<int>();
+        internal static StringBuilder sb = new StringBuilder();
 
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
         {
+            sb.Clear();
+            SettlementLocaitons.Clear();
             FDs.Clear();
             FirstSettlementLocation.Clear();
             MaxAtWorldCreate.Clear();
@@ -84,8 +89,14 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         public static void Postfix()
         {
+            SettlementLocaitons.Clear();
             FDs.Clear();
             FirstSettlementLocation.Clear();
+            if (sb.Length > 0)
+            {
+                Log.Message("[Faction Control] The following messages were made durring world generation:\n"+sb.ToString());
+                sb.Clear();
+            }
             foreach (var kv in MaxAtWorldCreate)
                 kv.Key.maxConfigurableAtWorldCreation = kv.Value;
             MaxAtWorldCreate.Clear();
@@ -106,11 +117,15 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         static void Postfix(ref int __result, Faction faction, bool mustBeAutoChoosable, Predicate<int> extraValidator)
         {
-            if (__result != 0 && faction != null &&
-                WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
+            try
             {
-                WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
+                if (__result != 0 && faction != null && faction.Name != null &&
+                    WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
+                {
+                    WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
+                }
             }
+            catch { }
         }
 
         [HarmonyPatch(typeof(TileFinder), "IsValidTileForNewSettlement")]
@@ -118,8 +133,13 @@ namespace FactionControl
         {
             static void Postfix(ref bool __result, int tile)
             {
-                if (tile == 0)
+                if (!__result)
+                    return;
+                
+                if (tile == 0 ||
+                    WorldGenerator_Generate.SettlementLocaitons.Contains(tile))
                 {
+                    Log.Message($"- could not place settlement on tile {tile}");
                     __result = false;
                     return;
                 }
@@ -186,7 +206,7 @@ namespace FactionControl
             }
             if (!found)
             {
-                Log.Error("Show Hair or Hide All Hats could not inject itself properly. This is due to other mods modifying the same code this mod needs to modify.");
+                Log.Error("Faction Control could not inject itself properly. This is due to other mods modifying the same code this mod needs to modify.");
             }
         }
 
