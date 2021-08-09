@@ -233,6 +233,8 @@ namespace FactionControl
         {
             minBuffer = DensityMin.ToString("0.00");
             maxBuffer = DensityMax.ToString("0.00");
+            if (GroupDistance == null)
+                GroupDistance = new GroupDistance();
             minDistanceBuffer = GroupDistance.MinDistance.ToString("0.00");
             maxDistanceBuffer = GroupDistance.MaxDistance.ToString("0.00");
         }
