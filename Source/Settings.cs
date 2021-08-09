@@ -35,6 +35,7 @@ namespace FactionControl
         public float DensityMin = DEFAULT_MIN_POP;
         public float DensityMax = DEFAULT_MAX_POP;
         public static bool DisableFactionLimit = true;
+        public static bool OverrideFactionMaxCount = true;
         public static List<FactionDensity> FactionDensities = new List<FactionDensity>();
         public static GroupDistance GroupDistance;
 
@@ -61,6 +62,9 @@ namespace FactionControl
             // Left Side
             Widgets.Label(new Rect(rect.x, y, 200, 28), "RFC.DisableFactionLimits".Translate());
             Widgets.Checkbox(new Vector2(rect.x + 210, y - 2), ref DisableFactionLimit);
+            y += 32;
+            Widgets.Label(new Rect(rect.x, y, 200, 28), "RFC.OverrideFactionMaxCount".Translate());
+            Widgets.Checkbox(new Vector2(rect.x + 210, y - 2), ref OverrideFactionMaxCount);
             y += 32;
             Widgets.Label(new Rect(rect.x, y, width, 28), "RFC.PopulationOverride".Translate());
             y += 30;
@@ -204,6 +208,7 @@ namespace FactionControl
             Scribe_Values.Look(ref DensityMin, "densityMin", DEFAULT_MIN_POP);
             Scribe_Values.Look(ref DensityMax, "densityMax", DEFAULT_MAX_POP);
             Scribe_Values.Look(ref DisableFactionLimit, "disableFactionLimit", true);
+            Scribe_Values.Look(ref OverrideFactionMaxCount, "overrideFactionMaxCount", true);
             Scribe_Collections.Look(ref FactionDensities, "factionDensities", LookMode.Deep, new object[0]);
             Scribe_Deep.Look(ref GroupDistance, "groupDistance", null);
             if (GroupDistance == null)

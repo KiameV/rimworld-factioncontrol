@@ -28,6 +28,31 @@ namespace FactionControl
         }
     }
 
+    [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
+    static class Patch_Page_SelectScenario_BeginScenarioConfiguration
+    {
+        [HarmonyPriority(Priority.First)]
+        static void Prefix()
+        {
+            if (Settings.OverrideFactionMaxCount)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (var d in DefDatabase<FactionDef>.AllDefs)
+                {
+                    if (d.maxConfigurableAtWorldCreation == 0)
+                    {
+                        sb.Append($"-{d.defName}\n");
+                        d.maxConfigurableAtWorldCreation = 100;
+                    }
+                }
+                if (sb.Length > 0)
+                {
+                    Log.Message("[Faction Control] Overriding 'maxConfigurableAtWorldCreation' for factions:\n" + sb.ToString());
+                }
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
     public static class Patch_Page_CreateWorldParams_DoWindowContents
     {
@@ -119,7 +144,7 @@ namespace FactionControl
         {
             try
             {
-                if (__result != 0 && faction != null && faction.Name != null &&
+                if (__result != 0 && faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
                     WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
                 {
                     WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;

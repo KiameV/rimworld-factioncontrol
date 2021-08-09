@@ -8,6 +8,7 @@
 	<RFC.DistanceBetweenFactionGroupsLine2>Only works for factions that have Density set to On to the right</RFC.DistanceBetweenFactionGroupsLine2>
 	<RFC.DisableFactionLimits>Disable Faction Limits</RFC.DisableFactionLimits>
 	<RFC.Default>Default</RFC.Default>
+	<RFC.OverrideFactionMaxCount>Override Faction Max Count</RFC.OverrideFactionMaxCount>
 	
 	<!-- All following fields are for versions older than 1.2 -->
 	<RFC.FactionControl>Faction Control - Main Options</RFC.FactionControl>
