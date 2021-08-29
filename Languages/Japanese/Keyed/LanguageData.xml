@@ -9,6 +9,7 @@
   <RFC.DisableFactionLimits>派閥制限を無効化</RFC.DisableFactionLimits>
   <RFC.Default>デフォルト</RFC.Default>
   <RFC.OverrideFactionMaxCount>派閥最大数を上書き</RFC.OverrideFactionMaxCount>
+  <RFC.CenterPoint>中央タイル</RFC.CenterPoint>
 
   <!-- All following fields are for versions older than 1.2 -->
   <RFC.FactionControl>FactionControl－メイン設定</RFC.FactionControl>
@@ -63,7 +64,5 @@
   <RFC.factionPirate2>」の派閥グループを宙賊団の派閥のように拠点を設置しますか？</RFC.factionPirate2>
 
   <RFC.factionPirateTip>このオプションをオフにすると、拠点がグループ化されて「国家」が形成されます。オンの場合、宙賊団の派閥拠点と同じように他の派閥グループの領土内に散在するようになります（もちろん、このオプションは派閥グループを国家として形成しない限り効果がありません）。</RFC.factionPirateTip>
-
-  <!--<RFC.ExtremeMode>最大値を有効にする</RFC.ExtremeMode>-->
 
 </LanguageData>
