@@ -79,6 +79,7 @@ namespace FactionControl
     [HarmonyPatch(typeof(WorldGenerator), "GenerateWorld")]
     public class WorldGenerator_Generate
     {
+        internal static bool IsGeneratingWorld = false;
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
         internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
         private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
@@ -88,6 +89,8 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
         {
+            IsGeneratingWorld = true;
+
             sb.Clear();
             SettlementLocaitons.Clear();
             FDs.Clear();
@@ -126,6 +129,11 @@ namespace FactionControl
                 kv.Key.maxConfigurableAtWorldCreation = kv.Value;
             MaxAtWorldCreate.Clear();
         }
+
+        public static void Finalizer()
+        {
+            IsGeneratingWorld = false;
+        }
     }
 
     [HarmonyPatch(typeof(TileFinder), "RandomSettlementTileFor")]
@@ -163,7 +171,7 @@ namespace FactionControl
         {
             static void Postfix(ref bool __result, ref int tile)
             {
-                if (!__result)
+                if (!WorldGenerator_Generate.IsGeneratingWorld || !__result)
                     return;
                 
                 if (tile == 0 ||
