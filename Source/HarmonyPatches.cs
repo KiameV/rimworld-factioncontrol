@@ -39,7 +39,7 @@ namespace FactionControl
                 StringBuilder sb = new StringBuilder();
                 foreach (var d in DefDatabase<FactionDef>.AllDefs)
                 {
-                    if (d.maxConfigurableAtWorldCreation == 0)
+                    if (d.maxConfigurableAtWorldCreation <= 0)
                     {
                         sb.Append($"-{d.defName}\n");
                         d.maxConfigurableAtWorldCreation = 100;
@@ -144,9 +144,14 @@ namespace FactionControl
         {
             try
             {
-                if (__result != 0 && faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
+                if (faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
                     WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
                 {
+                    if (Settings.CenterPointEnabled && WorldGenerator_Generate.FirstSettlementLocation.Count == 0 && 
+                        (Settings.GroupDistance.MinEnabled || Settings.GroupDistance.MaxEnabled))
+                    {
+                            __result = Settings.CenterPoint;
+                    }
                     WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
                 }
             }
@@ -156,7 +161,7 @@ namespace FactionControl
         [HarmonyPatch(typeof(TileFinder), "IsValidTileForNewSettlement")]
         public static class TileFinder_IsValidTileForNewSettlement
         {
-            static void Postfix(ref bool __result, int tile)
+            static void Postfix(ref bool __result, ref int tile)
             {
                 if (!__result)
                     return;
@@ -172,45 +177,73 @@ namespace FactionControl
                 Faction f = TileFinder_RandomSettlementTileFor.Faction;
                 if (f != null &&
                     !f.IsPlayer && !f.Hidden &&
-                    WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled && 
-                    WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
+                    WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
                 {
-                    var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
-                    __result = dist < fd.Density;
-                }
-                else // First settlement
-                {
-                    if (Settings.GroupDistance.MinEnabled)
+                    if (WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
                     {
-                        bool ok = true;
-                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
-                        {
-                            var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
-                            ok = dist > Settings.GroupDistance.MinDistance;
-                            if (!ok)
-                                break;
-                        }
-                        __result = ok;
+                        var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
+                        __result = dist < fd.Density;
                     }
-                    if (Settings.GroupDistance.MaxEnabled)
+                    else // First settlement
                     {
-                        bool ok = true;
-                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        if (Settings.GroupDistance.MinEnabled)
                         {
-                            var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
-                            ok = dist < Settings.GroupDistance.MaxDistance;
-                            if (!ok)
-                                break;
+                            bool ok = true;
+                            foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                            {
+                                var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
+                                ok = dist > Settings.GroupDistance.MinDistance;
+                                if (!ok)
+                                    break;
+                            }
+                            __result = ok;
                         }
-                        __result = ok;
+                        if (Settings.GroupDistance.MaxEnabled)
+                        {
+                            bool ok = true;
+                            foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                            {
+                                var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
+                                ok = dist < Settings.GroupDistance.MaxDistance;
+                                if (!ok)
+                                    break;
+                            }
+                            __result = ok;
+                        }
                     }
                 }
+                if (__result)
+                    WorldGenerator_Generate.SettlementLocaitons.Add(tile);
             }
         }
     }
 
+    [HarmonyPatch(typeof(FactionGenerator), "GenerateFactionsIntoWorld")]
+    public class Patch_FactionGenerator_GenerateFactionsIntoWorld
+    {
+        [HarmonyPriority(Priority.First)]
+        static void Postfix()
+        {
+            HashSet<Settlement> settlements = new HashSet<Settlement>();
+            bool first = true;
+            foreach (var s in Find.WorldObjects.Settlements)
+            {
+                if (first)
+                {
+                    first = false;
+                    continue;
+                }
+                if (s.Tile == 0)
+                    settlements.Add(s);
+            }
+            foreach (var s in settlements)
+                Find.WorldObjects.Remove(s);
+        }
+    }
+
+
     [HarmonyPatch(typeof(WorldFactionsUIUtility), "DoRow")]
-    public class WorldFactionsUIUtility_DoRow
+    public class Patch_WorldFactionsUIUtility_DoRow
     {
         [HarmonyPriority(Priority.High)]
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -224,8 +257,8 @@ namespace FactionControl
                     found = true;
                     il[i].opcode = OpCodes.Call;
                     il[i].operand =
-                                typeof(WorldFactionsUIUtility_DoRow).GetMethod(
-                                nameof(WorldFactionsUIUtility_DoRow.GetMaxSettlements), BindingFlags.Static | BindingFlags.Public);
+                                typeof(Patch_WorldFactionsUIUtility_DoRow).GetMethod(
+                                nameof(Patch_WorldFactionsUIUtility_DoRow.GetMaxSettlements), BindingFlags.Static | BindingFlags.Public);
                 }
                 yield return il[i];
             }

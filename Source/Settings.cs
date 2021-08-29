@@ -38,8 +38,10 @@ namespace FactionControl
         public static bool OverrideFactionMaxCount = true;
         public static List<FactionDensity> FactionDensities = new List<FactionDensity>();
         public static GroupDistance GroupDistance;
+        public static bool CenterPointEnabled;
+        public static int CenterPoint = 0;
 
-        private string minBuffer, maxBuffer, minDistanceBuffer, maxDistanceBuffer;
+        private string minBuffer, maxBuffer, minDistanceBuffer, maxDistanceBuffer, centerPointBuffer;
         private bool initialized = false;
         private Vector2 scroll = Vector2.zero;
         private float lastY = 0;
@@ -86,26 +88,37 @@ namespace FactionControl
             Widgets.Label(new Rect(rect.x + 5, y, 400, 28), "RFC.DistanceBetweenFactionGroupsLine2".Translate());
             y += 30;
             float x = rect.x + 10;
-            Widgets.Label(new Rect(x, y, 100, 28), "min".Translate());
+            Widgets.Label(new Rect(x, y, 100, 28), "- " + "min".Translate().CapitalizeFirst());
             Widgets.Checkbox(new Vector2(x + 110, y), ref GroupDistance.MinEnabled);
             y += 30;
             if (GroupDistance.MinEnabled)
             {
-                if (DrawValueInput(rect.x + 10, ref y, "", ref GroupDistance.MinDistance, ref minDistanceBuffer, 40f, 60f, DEFAULT_MIN_DISTANCE, false) && GroupDistance.MinDistance > GroupDistance.MaxDistance)
+                if (DrawValueInput(rect.x + 10, ref y, "", ref GroupDistance.MinDistance, ref minDistanceBuffer, 5f, 60f, DEFAULT_MIN_DISTANCE, false) && GroupDistance.MinDistance > GroupDistance.MaxDistance)
                 {
                     GroupDistance.MaxDistance = GroupDistance.MinDistance;
                     maxDistanceBuffer = GroupDistance.MaxDistance.ToString("0.00");
                 }
             }
-            Widgets.Label(new Rect(x, y, 100, 28), "max".Translate());
+            Widgets.Label(new Rect(x, y, 100, 28), "- " + "max".Translate().CapitalizeFirst());
             Widgets.Checkbox(new Vector2(x + 110, y), ref GroupDistance.MaxEnabled);
             y += 30;
             if (GroupDistance.MaxEnabled)
             {
-                if (DrawValueInput(rect.x + 10, ref y, "", ref GroupDistance.MaxDistance, ref maxDistanceBuffer, 60f, 500f, DEFAULT_MAX_DISTANCE, false) && GroupDistance.MinDistance > GroupDistance.MaxDistance)
+                if (DrawValueInput(rect.x + 10, ref y, "", ref GroupDistance.MaxDistance, ref maxDistanceBuffer, 10f, 500f, DEFAULT_MAX_DISTANCE, false) && GroupDistance.MinDistance > GroupDistance.MaxDistance)
                 {
                     GroupDistance.MinDistance = GroupDistance.MaxDistance;
                     minDistanceBuffer = GroupDistance.MinDistance.ToString("0.00");
+                }
+            }
+            if (GroupDistance.MinEnabled || GroupDistance.MaxEnabled)
+            {
+                Widgets.Label(new Rect(x, y, 100, 28), "- " + "RFC.CenterPoint".Translate());
+                Widgets.Checkbox(new Vector2(x + 110, y), ref CenterPointEnabled);
+                y += 30;
+                if (CenterPointEnabled)
+                {
+                    Widgets.TextFieldNumeric(new Rect(x + 10, y, 50, 28), ref CenterPoint, ref centerPointBuffer, -1000000, 1000000);
+                    y += 30;
                 }
             }
 
@@ -211,6 +224,8 @@ namespace FactionControl
             Scribe_Values.Look(ref OverrideFactionMaxCount, "overrideFactionMaxCount", true);
             Scribe_Collections.Look(ref FactionDensities, "factionDensities", LookMode.Deep, new object[0]);
             Scribe_Deep.Look(ref GroupDistance, "groupDistance", null);
+            Scribe_Values.Look(ref CenterPointEnabled, "centerPointEnabled", false);
+            Scribe_Values.Look(ref CenterPoint, "centerPoint", 0);
             if (GroupDistance == null)
                 GroupDistance = new GroupDistance();
             UpdateSettlementsPer100k();
@@ -242,6 +257,7 @@ namespace FactionControl
                 GroupDistance = new GroupDistance();
             minDistanceBuffer = GroupDistance.MinDistance.ToString("0.00");
             maxDistanceBuffer = GroupDistance.MaxDistance.ToString("0.00");
+            centerPointBuffer = CenterPoint.ToString();
         }
     }
 

@@ -9,6 +9,7 @@
 	<RFC.DisableFactionLimits>Disable Faction Limits</RFC.DisableFactionLimits>
 	<RFC.Default>Default</RFC.Default>
 	<RFC.OverrideFactionMaxCount>Override Faction Max Count</RFC.OverrideFactionMaxCount>
+	<RFC.CenterPoint>Center Tile</RFC.CenterPoint>
 	
 	<!-- All following fields are for versions older than 1.2 -->
 	<RFC.FactionControl>Faction Control - Main Options</RFC.FactionControl>
