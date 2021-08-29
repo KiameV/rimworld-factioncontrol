@@ -39,7 +39,7 @@ namespace FactionControl
                 StringBuilder sb = new StringBuilder();
                 foreach (var d in DefDatabase<FactionDef>.AllDefs)
                 {
-                    if (d.maxConfigurableAtWorldCreation <= 0)
+                    if (d.maxConfigurableAtWorldCreation <= 0 && !d.hidden && !d.isPlayer)
                     {
                         sb.Append($"-{d.defName}\n");
                         d.maxConfigurableAtWorldCreation = 100;
@@ -169,7 +169,7 @@ namespace FactionControl
                 if (tile == 0 ||
                     WorldGenerator_Generate.SettlementLocaitons.Contains(tile))
                 {
-                    Log.Message($"- could not place settlement on tile {tile}");
+                    //Log.Message($"- could not place settlement on tile {tile}");
                     __result = false;
                     return;
                 }
