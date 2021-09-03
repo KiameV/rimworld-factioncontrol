@@ -150,79 +150,81 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         static void Postfix(ref int __result, Faction faction, bool mustBeAutoChoosable, Predicate<int> extraValidator)
         {
+            if (!WorldGenerator_Generate.IsGeneratingWorld)
+                return;
             try
             {
                 if (faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
                     WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
                 {
-                    if (Settings.CenterPointEnabled && WorldGenerator_Generate.FirstSettlementLocation.Count == 0 && 
+                    if (Settings.CenterPointEnabled && WorldGenerator_Generate.FirstSettlementLocation.Count == 0 &&
                         (Settings.GroupDistance.MinEnabled || Settings.GroupDistance.MaxEnabled))
                     {
-                            __result = Settings.CenterPoint;
+                        __result = Settings.CenterPoint;
                     }
                     WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
                 }
             }
             catch { }
         }
+    }
 
-        [HarmonyPatch(typeof(TileFinder), "IsValidTileForNewSettlement")]
-        public static class TileFinder_IsValidTileForNewSettlement
+    [HarmonyPatch(typeof(TileFinder), "IsValidTileForNewSettlement")]
+    public static class TileFinder_IsValidTileForNewSettlement
+    {
+        static void Postfix(ref bool __result, ref int tile)
         {
-            static void Postfix(ref bool __result, ref int tile)
-            {
-                if (!WorldGenerator_Generate.IsGeneratingWorld || !__result)
-                    return;
-                
-                if (tile == 0 ||
-                    WorldGenerator_Generate.SettlementLocaitons.Contains(tile))
-                {
-                    //Log.Message($"- could not place settlement on tile {tile}");
-                    __result = false;
-                    return;
-                }
+            if (!WorldGenerator_Generate.IsGeneratingWorld || !__result)
+                return;
 
-                Faction f = TileFinder_RandomSettlementTileFor.Faction;
-                if (f != null &&
-                    !f.IsPlayer && !f.Hidden &&
-                    WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
+            if (tile == 0 ||
+                WorldGenerator_Generate.SettlementLocaitons.Contains(tile))
+            {
+                //Log.Message($"- could not place settlement on tile {tile}");
+                __result = false;
+                return;
+            }
+
+            Faction f = TileFinder_RandomSettlementTileFor.Faction;
+            if (f != null &&
+                !f.IsPlayer && !f.Hidden &&
+                WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
+            {
+                if (WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
                 {
-                    if (WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
+                    var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
+                    __result = dist < fd.Density;
+                }
+                else // First settlement
+                {
+                    if (Settings.GroupDistance.MinEnabled)
                     {
-                        var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
-                        __result = dist < fd.Density;
+                        bool ok = true;
+                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        {
+                            var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
+                            ok = dist > Settings.GroupDistance.MinDistance;
+                            if (!ok)
+                                break;
+                        }
+                        __result = ok;
                     }
-                    else // First settlement
+                    if (Settings.GroupDistance.MaxEnabled)
                     {
-                        if (Settings.GroupDistance.MinEnabled)
+                        bool ok = true;
+                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
                         {
-                            bool ok = true;
-                            foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
-                            {
-                                var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
-                                ok = dist > Settings.GroupDistance.MinDistance;
-                                if (!ok)
-                                    break;
-                            }
-                            __result = ok;
+                            var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
+                            ok = dist < Settings.GroupDistance.MaxDistance;
+                            if (!ok)
+                                break;
                         }
-                        if (Settings.GroupDistance.MaxEnabled)
-                        {
-                            bool ok = true;
-                            foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
-                            {
-                                var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
-                                ok = dist < Settings.GroupDistance.MaxDistance;
-                                if (!ok)
-                                    break;
-                            }
-                            __result = ok;
-                        }
+                        __result = ok;
                     }
                 }
-                if (__result)
-                    WorldGenerator_Generate.SettlementLocaitons.Add(tile);
             }
+            if (__result)
+                WorldGenerator_Generate.SettlementLocaitons.Add(tile);
         }
     }
 
@@ -232,17 +234,21 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         static void Postfix()
         {
+            if (!WorldGenerator_Generate.IsGeneratingWorld)
+                return;
             HashSet<Settlement> settlements = new HashSet<Settlement>();
             bool first = true;
             foreach (var s in Find.WorldObjects.Settlements)
             {
-                if (first)
-                {
-                    first = false;
-                    continue;
-                }
                 if (s.Tile == 0)
+                {
+                    if (first)
+                    {
+                        first = false;
+                        continue;
+                    }
                     settlements.Add(s);
+                }
             }
             foreach (var s in settlements)
                 Find.WorldObjects.Remove(s);
