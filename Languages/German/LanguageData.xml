@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- These fields are for 1.3 -->
+	<RFC.FactionControlName>Fraktion Kontrolle</RFC.FactionControlName>
+	<RFC.FactionDensity>Fraktion Basis Dichte</RFC.FactionDensity>
+	<RFC.PopulationOverride>Populations Überschreibung</RFC.PopulationOverride>
+	<RFC.DistanceBetweenFactionGroups>(Fortgeschritten) Abstand in Tiles zwischen Fraktionen</RFC.DistanceBetweenFactionGroups>
+	<RFC.DistanceBetweenFactionGroupsLine2>Diese Einstellung greift nur auf Fraktionen die rechts angeschaltet sind</RFC.DistanceBetweenFactionGroupsLine2>
+	<RFC.DisableFactionLimits>Schalte Fraktionen Limits aus</RFC.DisableFactionLimits>
+	<RFC.Default>Standard</RFC.Default>
+	<RFC.OverrideFactionMaxCount>Überschreibe die Max Fraktionen Anzahl</RFC.OverrideFactionMaxCount>
+	<RFC.CenterPoint>Mittelpunkt</RFC.CenterPoint>
+	
+	<!-- All following fields are for versions older than 1.2 -->
+	<RFC.FactionControl>Fraktion Kontrolle - Haupt-Optionen</RFC.FactionControl>
+	<RFC.FactionControlFactionOptions>Fraktion Kontrolle - Fraktion-Optionen</RFC.FactionControlFactionOptions>
+	<RFC.CustomFactionControl>Fraktion Kontrolle - Gemoddete Fraktion</RFC.CustomFactionControl>
+	
+	<RFC.factionCount>Menge an Fraktionen die auf der Weltkarte auftauchen sollen:</RFC.factionCount>
+	<RFC.factionNotes>Der Wert in Vanilla ist 5. Beachte, dass es sich bei dieser Zahl um ein Minimum handelt, da die Summe der unten definierten Anzahlen die oben definierte Anzahl übersteigen kann. (Wenn du z.B. die Gesamtzahl der Fraktionen auf 3 festlegst, aber jeweils 2 als Mindestanzahl der Fraktionen "Outlander Union", "Tribe" und "Piratenbande" definierst, wirst du immer mindestens 6 Fraktionen auf deiner Karte haben).</RFC.factionNotes>
+	
+	<RFC.outlanderCivilMin>Mindestanzahl von zivilen Außenweltler Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.outlanderCivilMin>
+	<RFC.outlanderRoughMin>Mindestanzahl von wilden Außenweltler Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.outlanderRoughMin>
+	<RFC.tribalCivilMin>Mindestanzahl von friedlichen Stamm Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.tribalCivilMin>
+	<RFC.tribalRoughMin>Mindestanzahl von grimmigen Stamm Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.tribalRoughMin>
+	<RFC.tribalSavageMin>Mindestanzahl von wilden Stamm Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.tribalSavageMin>
+	<RFC.pirateMin>Mindestanzahl von Piraten Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.pirateMin>
+	<RFC.empireMin>Mindestanzahl von Zerschlagenden Imperium Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.empireMin>
+
+	<RFC.SelectAFaction>Wähle eine Fraktion</RFC.SelectAFaction>
+	
+	<RFC.factionGrouping>"Nationenbildung":</RFC.factionGrouping>
+	<RFC.factionGroupingNone>Keine. (Vanilla Verhalten.) Fraktionen Basen werden zufällig in der Welt verteilt.</RFC.factionGroupingNone>
+	<RFC.factionGroupingLoose>Lose. Die Basen einer Fraktion befinden sich in der Regel in der gleichen Region der Weltkarte, aber es gibt dennoch zahlreiche Überschneidungen zwischen den von den verschiedenen Fraktionen besetzten Gebieten.</RFC.factionGroupingLoose>
+	<RFC.factionGroupingTight>Eng. Die Basen einer Fraktion, werden relativ nahe beieinander liegen, und außer bei den Piraten Fraktionen wird es keine großen Überschneidungen geben. Es wird ein deutliches Gefühl dafür geben, dass es tatsächlich Nationen auf der Weltkarte gibt, wenn auch mit sehr groben Grenzen.</RFC.factionGroupingTight>
+	<RFC.factionGroupingVeryTight>Sehr Eng. Mit Ausnahme der Piraten Fraktionen werden die Basen der einzelnen Fraktionen sehr eng beieinander liegen. Es wird kaum Überschneidungen geben, aber es kann große "offene" Bereiche mit unbesetztem Gebiet zwischen ihnen geben.</RFC.factionGroupingVeryTight>
+
+	<RFC.AllowMechanoids>Erlaube die versteckte "Mechanoidennest" Fraktion?</RFC.AllowMechanoids>
+	<RFC.AllowMechanoidsTip>Wenn du diese Option deaktivierst, werden Mechanoiden (größtenteils) aus dem Spiel entfernt. Du wirst nicht mehr von ihnen überfallen, es sei denn, es gibt buchstäblich keine andere Fraktion mehr, die rau zu dir ist. Zusätzlich wirst du dich nicht mehr mit giftigen oder psychischen Schiffsteilabstürzen herumschlagen müssen. Allerdings kannst du immer noch Mechanoiden in alten Gefahrenkammern finden, und schlafende Mechanoiden, die Questziele bewachen, existieren weiterhin.</RFC.AllowMechanoidsTip>
+
+	<RFC.EnableFactionRandomGoodwill>Fraktionen Ruf zufällig bestimmen</RFC.EnableFactionRandomGoodwill>
+	<RFC.EnableFactionRandomGoodwillToolTip>Civile Fraktionen werden oft neutral und grimmige feindlich, aber es fügt eine gewisse Zufälligkeit hinzu.</RFC.EnableFactionRandomGoodwillToolTip>
+	<RFC.SpreadPirates>Verteile Piraten</RFC.SpreadPirates>
+	<RFC.RelationChangesOverTime>Ruf ändert sich mit Zeit</RFC.RelationChangesOverTime>
+
+	<RFC.EnableFactionDynamicColors>Dynamische Fraktion Farben</RFC.EnableFactionDynamicColors>
+	<RFC.EnableFactionDynamicColorsTip>Feindlich = Rot. Freundlicher Stamm = Grün. Freundliche Außenweltler = Blau.</RFC.EnableFactionDynamicColorsTip>
+
+	<RFC.factionDensityVeryLow>Sehr niedrig. Geringe Anzahl an Bases pro Fraktion.</RFC.factionDensityVeryLow>
+	<RFC.factionDensityLow>Niedrig.</RFC.factionDensityLow>
+	<RFC.factionDensityNormal>Normal. (Vanilla Verteilung.)</RFC.factionDensityNormal>
+	<RFC.factionDensityHigh>Hoch.</RFC.factionDensityHigh>
+	<RFC.factionDensityVeryHigh>Sehr hoch. Die Welt wird sehr dicht besiedelt sein.</RFC.factionDensityVeryHigh>
+	<RFC.factionDensityInsane>Übertrieben hoch. Randwelten solten nicht so überbesidelt sein....</RFC.factionDensityInsane>
+	
+	<RFC.factionBasic1>Mindestanzahl von "</RFC.factionBasic1>
+	<RFC.factionBasic2>" Fraktionen, die auf der Karte erscheinen sollen (bei "0" wird die Fraktion deaktiviert):</RFC.factionBasic2>
+	
+	<RFC.factionHidden1>Erlaube die versteckte "</RFC.factionHidden1>
+	<RFC.factionHidden2>"  Fraktion?</RFC.factionHidden2>
+	<RFC.factionHidden3>Erlaube die "</RFC.factionHidden3>
+
+	<RFC.factionPirate1>     Verteile "</RFC.factionPirate1>
+	<RFC.factionPirate2>" Fraktions Basen wie Piraten?</RFC.factionPirate2>
+	
+	<RFC.factionPirateTip>Wenn diese Option nicht aktiviert ist, werden die Basen zu einer "Nation" zusammengefasst. Wenn sie jedoch aktiviert ist, werden die Basen über die Territorien anderer Fraktionen verstreut, genau wie die Basen der Piraten. (Diese Option hat natürlich nur dann eine Auswirkung, wenn ihr die Basen der Fraktionen geografisch organisiert habt).</RFC.factionPirateTip>
+	
+	<!--<RFC.ExtremeMode>Enable Higher Maximum</RFC.ExtremeMode>-->
+
+</LanguageData>

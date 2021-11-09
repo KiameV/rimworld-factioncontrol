@@ -188,7 +188,7 @@ namespace FactionControl
 
                 foreach (var f in DefDatabase<FactionDef>.AllDefsListForReading)
                 {
-                    if (!f.isPlayer && !f.hidden)
+                    if (!f.isPlayer && !f.hidden && f.defName != "PColony")
                     {
                         if (FactionDensities.Find(fd => fd.FactionDefName == f.defName) == null)
                         {
