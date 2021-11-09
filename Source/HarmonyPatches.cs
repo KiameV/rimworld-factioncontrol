@@ -39,7 +39,7 @@ namespace FactionControl
                 StringBuilder sb = new StringBuilder();
                 foreach (var d in DefDatabase<FactionDef>.AllDefs)
                 {
-                    if (d.maxConfigurableAtWorldCreation <= 0 && !d.hidden && !d.isPlayer)
+                    if (d.maxConfigurableAtWorldCreation <= 0 && !d.hidden && !d.isPlayer && d.defName != "PColony")
                     {
                         sb.Append($"-{d.defName}\n");
                         d.maxConfigurableAtWorldCreation = 100;
