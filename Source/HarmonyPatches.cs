@@ -28,7 +28,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
+    [HarmonyPatch(typeof(Page_SelectScenario), nameof(Page_SelectScenario.BeginScenarioConfiguration))]
     static class Patch_Page_SelectScenario_BeginScenarioConfiguration
     {
         [HarmonyPriority(Priority.First)]
@@ -53,7 +53,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
+    [HarmonyPatch(typeof(Page_CreateWorldParams), nameof(Page_CreateWorldParams.DoWindowContents))]
     public static class Patch_Page_CreateWorldParams_DoWindowContents
     {
         static void Postfix(Rect rect)
@@ -76,14 +76,13 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(WorldGenerator), "GenerateWorld")]
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GenerateWorld))]
     public class WorldGenerator_Generate
     {
         internal static bool IsGeneratingWorld = false;
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
         internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
         private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
-        internal static HashSet<int> SettlementLocaitons = new HashSet<int>();
         internal static StringBuilder sb = new StringBuilder();
 
         [HarmonyPriority(Priority.First)]
@@ -92,7 +91,6 @@ namespace FactionControl
             IsGeneratingWorld = true;
 
             sb.Clear();
-            SettlementLocaitons.Clear();
             FDs.Clear();
             FirstSettlementLocation.Clear();
             MaxAtWorldCreate.Clear();
@@ -117,7 +115,6 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         public static void Postfix()
         {
-            SettlementLocaitons.Clear();
             FDs.Clear();
             FirstSettlementLocation.Clear();
             if (sb.Length > 0)
@@ -136,7 +133,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(TileFinder), "RandomSettlementTileFor")]
+    [HarmonyPatch(typeof(TileFinder), nameof(TileFinder.RandomSettlementTileFor))]
     public static class TileFinder_RandomSettlementTileFor
     {
         internal static Faction Faction;
@@ -150,8 +147,8 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         static void Postfix(ref int __result, Faction faction, bool mustBeAutoChoosable, Predicate<int> extraValidator)
         {
-            if (!WorldGenerator_Generate.IsGeneratingWorld)
-                return;
+            if (!WorldGenerator_Generate.IsGeneratingWorld) return;
+
             try
             {
                 if (faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
@@ -169,16 +166,14 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(TileFinder), "IsValidTileForNewSettlement")]
+    [HarmonyPatch(typeof(TileFinder), nameof(TileFinder.IsValidTileForNewSettlement))]
     public static class TileFinder_IsValidTileForNewSettlement
     {
         static void Postfix(ref bool __result, ref int tile)
         {
-            if (!WorldGenerator_Generate.IsGeneratingWorld || !__result)
-                return;
+            if (!__result) return;
 
-            if (tile == 0 ||
-                WorldGenerator_Generate.SettlementLocaitons.Contains(tile))
+            if (tile == 0)
             {
                 //Log.Message($"- could not place settlement on tile {tile}");
                 __result = false;
@@ -223,12 +218,10 @@ namespace FactionControl
                     }
                 }
             }
-            if (__result)
-                WorldGenerator_Generate.SettlementLocaitons.Add(tile);
         }
     }
 
-    [HarmonyPatch(typeof(FactionGenerator), "GenerateFactionsIntoWorld")]
+    [HarmonyPatch(typeof(FactionGenerator), nameof(FactionGenerator.GenerateFactionsIntoWorld))]
     public class Patch_FactionGenerator_GenerateFactionsIntoWorld
     {
         [HarmonyPriority(Priority.First)]
@@ -256,7 +249,7 @@ namespace FactionControl
     }
 
 
-    [HarmonyPatch(typeof(WorldFactionsUIUtility), "DoRow")]
+    [HarmonyPatch(typeof(WorldFactionsUIUtility), nameof(WorldFactionsUIUtility.DoRow))]
     public class Patch_WorldFactionsUIUtility_DoRow
     {
         [HarmonyPriority(Priority.High)]
