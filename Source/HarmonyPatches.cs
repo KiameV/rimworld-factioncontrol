@@ -133,6 +133,110 @@ namespace FactionControl
         }
     }
 
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GenerateFromScribe))]
+    public static class WorldGenerator_GenerateFromScribe
+    {
+        internal static bool IsGeneratingWorld = false;
+        internal static bool IsResolvingCrossReferences = false;
+        internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
+        internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
+        private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
+        internal static HashSet<Settlement> AddedSettlements = new HashSet<Settlement>();
+
+        [HarmonyPriority(Priority.First)]
+        public static void Prefix()
+        {
+            IsGeneratingWorld = true;
+
+            FDs.Clear();
+            FirstSettlementLocation.Clear();
+            MaxAtWorldCreate.Clear();
+            AddedSettlements.Clear();
+            foreach (var fd in Settings.FactionDensities)
+            {
+                if (fd.Enabled)
+                {
+                    var def = DefDatabase<FactionDef>.GetNamed(fd.FactionDefName, false);
+                    if (def != null)
+                        FDs[def] = fd;
+                }
+            }
+            if (Settings.DisableFactionLimit)
+            {
+                DefDatabase<FactionDef>.AllDefs.Do(d =>
+                {
+                    MaxAtWorldCreate[d] = d.maxConfigurableAtWorldCreation;
+                    d.maxConfigurableAtWorldCreation = 1000;
+                });
+            }
+        }
+
+        [HarmonyPriority(Priority.First)]
+        public static void Postfix()
+        {
+            foreach (var kv in MaxAtWorldCreate)
+                kv.Key.maxConfigurableAtWorldCreation = kv.Value;
+            MaxAtWorldCreate.Clear();
+        }
+    }
+
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GenerateWithoutWorldData))]
+    public static class WorldGenerator_GenerateWithoutWorldData
+    {
+        [HarmonyPriority(Priority.First)]
+        public static void Prefix() => WorldGenerator_GenerateFromScribe.Prefix();
+
+        [HarmonyPriority(Priority.First)]
+        public static void Postfix() => WorldGenerator_GenerateFromScribe.Postfix();
+    }
+
+    [HarmonyPatch(typeof(CrossRefHandler), nameof(CrossRefHandler.ResolveAllCrossReferences))]
+    public static class CrossRefHandler_ResolveAllCrossReferences
+    {
+        public static void Postfix()
+        {
+            if (!WorldGenerator_GenerateFromScribe.IsGeneratingWorld) return;
+            WorldGenerator_GenerateFromScribe.IsResolvingCrossReferences = true;
+
+            foreach (var s in Find.WorldObjects.Settlements)
+            {
+                if (!WorldGenerator_GenerateFromScribe.AddedSettlements.Contains(s) && s.Faction != null && s.Faction.Name != null
+                    && !WorldGenerator_GenerateFromScribe.FirstSettlementLocation.ContainsKey(s.Faction.Name))
+                    WorldGenerator_GenerateFromScribe.FirstSettlementLocation[s.Faction.Name] = s.Tile;
+            }
+            foreach (var s in WorldGenerator_GenerateFromScribe.AddedSettlements)
+            {
+                s.Tile = s.Faction != null ? TileFinder.RandomSettlementTileFor(s.Faction) : TileFinder.RandomStartingTile();
+            }
+
+            WorldGenerator_GenerateFromScribe.FDs.Clear();
+            WorldGenerator_GenerateFromScribe.AddedSettlements.Clear();
+            WorldGenerator_GenerateFromScribe.FirstSettlementLocation.Clear();
+            WorldGenerator_GenerateFromScribe.IsResolvingCrossReferences = false;
+            WorldGenerator_GenerateFromScribe.IsGeneratingWorld = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(WorldObjectsHolder), nameof(WorldObjectsHolder.Add))]
+    public static class WorldObjectsHolder_Add
+    {
+        public static void Postfix(WorldObject o)
+        {
+            if (WorldGenerator_GenerateFromScribe.IsGeneratingWorld && o is Settlement s)
+                WorldGenerator_GenerateFromScribe.AddedSettlements.Add(s);
+        }
+    }
+
+    [HarmonyPatch(typeof(WorldObjectsHolder), nameof(WorldObjectsHolder.Remove))]
+    public static class WorldObjectHolder_Remove
+    {
+        public static void Postfix(WorldObject o)
+        {
+            if (WorldGenerator_GenerateFromScribe.IsGeneratingWorld && o is Settlement s)
+                WorldGenerator_GenerateFromScribe.AddedSettlements.Remove(s);
+        }
+    }
+
     [HarmonyPatch(typeof(TileFinder), nameof(TileFinder.RandomSettlementTileFor))]
     public static class TileFinder_RandomSettlementTileFor
     {
@@ -147,22 +251,30 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         static void Postfix(ref int __result, Faction faction, bool mustBeAutoChoosable, Predicate<int> extraValidator)
         {
-            if (!WorldGenerator_Generate.IsGeneratingWorld) return;
+            Dictionary<string, int> firstSettlementLocations;
+            if (WorldGenerator_Generate.IsGeneratingWorld)
+                firstSettlementLocations = WorldGenerator_Generate.FirstSettlementLocation;
+            else if (WorldGenerator_GenerateFromScribe.IsResolvingCrossReferences)
+                firstSettlementLocations = WorldGenerator_GenerateFromScribe.FirstSettlementLocation;
+            else return;
 
             try
             {
-                if (faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
-                    WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
+                if (faction != null && faction.Name != null && firstSettlementLocations != null &&
+                    firstSettlementLocations.ContainsKey(faction.Name) == false)
                 {
-                    if (Settings.CenterPointEnabled && WorldGenerator_Generate.FirstSettlementLocation.Count == 0 &&
+                    if (Settings.CenterPointEnabled && firstSettlementLocations.Count == 0 &&
                         (Settings.GroupDistance.MinEnabled || Settings.GroupDistance.MaxEnabled))
                     {
                         __result = Settings.CenterPoint;
                     }
-                    WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
+                    firstSettlementLocations[faction.Name] = __result;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
         }
     }
 
@@ -171,7 +283,23 @@ namespace FactionControl
     {
         static void Postfix(ref bool __result, ref int tile)
         {
-            if (!__result) return;
+            Dictionary<string, int> firstSettlementLocations;
+            Dictionary<FactionDef, FactionDensity> FDs;
+            if (__result)
+            {
+                if (WorldGenerator_Generate.IsGeneratingWorld)
+                {
+                    firstSettlementLocations = WorldGenerator_Generate.FirstSettlementLocation;
+                    FDs = WorldGenerator_Generate.FDs;
+                }
+                else if (WorldGenerator_GenerateFromScribe.IsResolvingCrossReferences)
+                {
+                    firstSettlementLocations = WorldGenerator_GenerateFromScribe.FirstSettlementLocation;
+                    FDs = WorldGenerator_GenerateFromScribe.FDs;
+                }
+                else return;
+            }
+            else return;
 
             if (tile == 0)
             {
@@ -183,9 +311,9 @@ namespace FactionControl
             Faction f = TileFinder_RandomSettlementTileFor.Faction;
             if (f != null &&
                 !f.IsPlayer && !f.Hidden &&
-                WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
+                FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
             {
-                if (WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
+                if (firstSettlementLocations.TryGetValue(f.Name, out int center))
                 {
                     var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
                     __result = dist < fd.Density;
@@ -195,7 +323,7 @@ namespace FactionControl
                     if (Settings.GroupDistance.MinEnabled)
                     {
                         bool ok = true;
-                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        foreach (var kv in firstSettlementLocations)
                         {
                             var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
                             ok = dist > Settings.GroupDistance.MinDistance;
@@ -207,7 +335,7 @@ namespace FactionControl
                     if (Settings.GroupDistance.MaxEnabled)
                     {
                         bool ok = true;
-                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        foreach (var kv in firstSettlementLocations)
                         {
                             var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
                             ok = dist < Settings.GroupDistance.MaxDistance;
