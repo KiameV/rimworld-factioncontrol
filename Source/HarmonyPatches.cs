@@ -28,7 +28,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
+    [HarmonyPatch(typeof(Page_SelectScenario), nameof(Page_SelectScenario.BeginScenarioConfiguration))]
     static class Patch_Page_SelectScenario_BeginScenarioConfiguration
     {
         [HarmonyPriority(Priority.First)]
@@ -53,7 +53,7 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(Page_CreateWorldParams), "DoWindowContents")]
+    [HarmonyPatch(typeof(Page_CreateWorldParams), nameof(Page_CreateWorldParams.DoWindowContents))]
     public static class Patch_Page_CreateWorldParams_DoWindowContents
     {
         static void Postfix(Rect rect)
@@ -76,23 +76,24 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(WorldGenerator), "GenerateWorld")]
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GenerateWorld))]
     public class WorldGenerator_Generate
     {
         internal static bool IsGeneratingWorld = false;
         internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
         internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
         private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
-        internal static HashSet<int> SettlementLocaitons = new HashSet<int>();
-        internal static StringBuilder sb = new StringBuilder();
 
         [HarmonyPriority(Priority.First)]
         public static void Prefix()
         {
+            // make sure the tile finder doesn't use outdated data until we tell it to
+            TileFinder_RandomSettlementTileFor.FirstSettlementLocations = null;
+            TileFinder_IsValidTileForNewSettlement.FirstSettlementLocations = null;
+            TileFinder_IsValidTileForNewSettlement.FDs = null;
+            // actual prep stuff
             IsGeneratingWorld = true;
 
-            sb.Clear();
-            SettlementLocaitons.Clear();
             FDs.Clear();
             FirstSettlementLocation.Clear();
             MaxAtWorldCreate.Clear();
@@ -113,18 +114,16 @@ namespace FactionControl
                     d.maxConfigurableAtWorldCreation = 1000;
                 });
             }
+            // tell tile finder to use our data - this is done before any of the tile finder function is called
+            TileFinder_RandomSettlementTileFor.FirstSettlementLocations = FirstSettlementLocation;
+            TileFinder_IsValidTileForNewSettlement.FirstSettlementLocations = FirstSettlementLocation;
+            TileFinder_IsValidTileForNewSettlement.FDs = FDs;
         }
+
         [HarmonyPriority(Priority.First)]
         public static void Postfix()
         {
-            SettlementLocaitons.Clear();
-            FDs.Clear();
-            FirstSettlementLocation.Clear();
-            if (sb.Length > 0)
-            {
-                Log.Message("[Faction Control] The following messages were made durring world generation:\n"+sb.ToString());
-                sb.Clear();
-            }
+            // reset max at world creation
             foreach (var kv in MaxAtWorldCreate)
                 kv.Key.maxConfigurableAtWorldCreation = kv.Value;
             MaxAtWorldCreate.Clear();
@@ -136,10 +135,125 @@ namespace FactionControl
         }
     }
 
-    [HarmonyPatch(typeof(TileFinder), "RandomSettlementTileFor")]
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GenerateFromScribe))]
+    public static class WorldGenerator_GenerateFromScribe
+    {
+        internal static bool IsGeneratingWorld = false;
+        internal static Dictionary<FactionDef, FactionDensity> FDs = new Dictionary<FactionDef, FactionDensity>();
+        internal static Dictionary<string, int> FirstSettlementLocation = new Dictionary<string, int>();
+        private static Dictionary<FactionDef, int> MaxAtWorldCreate = new Dictionary<FactionDef, int>();
+        internal static HashSet<Settlement> AddedSettlements = new HashSet<Settlement>();
+
+        [HarmonyPriority(Priority.First)]
+        public static void Prefix()
+        {
+            // make sure the tile finder doesn't use outdated data until we tell it to
+            TileFinder_RandomSettlementTileFor.FirstSettlementLocations = null;
+            TileFinder_IsValidTileForNewSettlement.FirstSettlementLocations = null;
+            TileFinder_IsValidTileForNewSettlement.FDs = null;
+            // actual prep stuff
+            IsGeneratingWorld = true;
+
+            FDs.Clear();
+            FirstSettlementLocation.Clear();
+            MaxAtWorldCreate.Clear();
+            AddedSettlements.Clear();
+            foreach (var fd in Settings.FactionDensities)
+            {
+                if (fd.Enabled)
+                {
+                    var def = DefDatabase<FactionDef>.GetNamed(fd.FactionDefName, false);
+                    if (def != null)
+                        FDs[def] = fd;
+                }
+            }
+            if (Settings.DisableFactionLimit)
+            {
+                DefDatabase<FactionDef>.AllDefs.Do(d =>
+                {
+                    MaxAtWorldCreate[d] = d.maxConfigurableAtWorldCreation;
+                    d.maxConfigurableAtWorldCreation = 1000;
+                });
+            }
+            // tile finder won't get new data until cross references are resolved near the end of save load, so we are not telling it to use our data, yet
+        }
+
+        [HarmonyPriority(Priority.First)]
+        public static void Postfix()
+        {
+            // reset max at world creation
+            foreach (var kv in MaxAtWorldCreate)
+                kv.Key.maxConfigurableAtWorldCreation = kv.Value;
+            MaxAtWorldCreate.Clear();
+        }
+    }
+
+    // generating without world data is probably similar, haven't seen it happen though
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GenerateWithoutWorldData))]
+    public static class WorldGenerator_GenerateWithoutWorldData
+    {
+        [HarmonyPriority(Priority.First)]
+        public static void Prefix() => WorldGenerator_GenerateFromScribe.Prefix();
+
+        [HarmonyPriority(Priority.First)]
+        public static void Postfix() => WorldGenerator_GenerateFromScribe.Postfix();
+    }
+
+    [HarmonyPatch(typeof(CrossRefHandler), nameof(CrossRefHandler.ResolveAllCrossReferences))]
+    public static class CrossRefHandler_ResolveAllCrossReferences
+    {
+        public static void Postfix()
+        {
+            if (!WorldGenerator_GenerateFromScribe.IsGeneratingWorld) return;
+            // tell tile finder to use our data - this is done before we can re-obtain settlement tiles
+            TileFinder_RandomSettlementTileFor.FirstSettlementLocations = WorldGenerator_GenerateFromScribe.FirstSettlementLocation;
+            TileFinder_IsValidTileForNewSettlement.FirstSettlementLocations = WorldGenerator_GenerateFromScribe.FirstSettlementLocation;
+            TileFinder_IsValidTileForNewSettlement.FDs = WorldGenerator_GenerateFromScribe.FDs;
+
+            // set 'first' settlements
+            foreach (var s in Find.WorldObjects.Settlements)
+            {
+                if (!WorldGenerator_GenerateFromScribe.AddedSettlements.Contains(s) && s.Faction != null && s.Faction.Name != null
+                    && !WorldGenerator_GenerateFromScribe.FirstSettlementLocation.ContainsKey(s.Faction.Name))
+                    WorldGenerator_GenerateFromScribe.FirstSettlementLocation[s.Faction.Name] = s.Tile;
+            }
+            // now randomize settlement positions based on mod logic
+            foreach (var s in WorldGenerator_GenerateFromScribe.AddedSettlements)
+            {
+                s.Tile = s.Faction != null ? TileFinder.RandomSettlementTileFor(s.Faction) : TileFinder.RandomStartingTile();
+            }
+
+            // now we can clear stuff we won't use until a save is loaded the next time
+            WorldGenerator_GenerateFromScribe.AddedSettlements.Clear();
+            WorldGenerator_GenerateFromScribe.IsGeneratingWorld = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(WorldObjectsHolder), nameof(WorldObjectsHolder.Add))]
+    public static class WorldObjectsHolder_Add
+    {
+        public static void Postfix(WorldObject o)
+        {
+            if (WorldGenerator_GenerateFromScribe.IsGeneratingWorld && o is Settlement s)
+                WorldGenerator_GenerateFromScribe.AddedSettlements.Add(s);
+        }
+    }
+
+    [HarmonyPatch(typeof(WorldObjectsHolder), nameof(WorldObjectsHolder.Remove))]
+    public static class WorldObjectHolder_Remove
+    {
+        public static void Postfix(WorldObject o)
+        {
+            if (WorldGenerator_GenerateFromScribe.IsGeneratingWorld && o is Settlement s)
+                WorldGenerator_GenerateFromScribe.AddedSettlements.Remove(s);
+        }
+    }
+
+    [HarmonyPatch(typeof(TileFinder), nameof(TileFinder.RandomSettlementTileFor))]
     public static class TileFinder_RandomSettlementTileFor
     {
         internal static Faction Faction;
+        internal static Dictionary<string, int> FirstSettlementLocations;
 
         [HarmonyPriority(Priority.First)]
         static void Prefix(Faction faction)
@@ -150,35 +264,39 @@ namespace FactionControl
         [HarmonyPriority(Priority.First)]
         static void Postfix(ref int __result, Faction faction, bool mustBeAutoChoosable, Predicate<int> extraValidator)
         {
-            if (!WorldGenerator_Generate.IsGeneratingWorld)
-                return;
+            if (FirstSettlementLocations == null) return;
+
             try
             {
-                if (faction != null && faction.Name != null && WorldGenerator_Generate.FirstSettlementLocation != null &&
-                    WorldGenerator_Generate.FirstSettlementLocation.ContainsKey(faction.Name) == false)
+                if (faction != null && faction.Name != null && FirstSettlementLocations != null &&
+                    FirstSettlementLocations.ContainsKey(faction.Name) == false)
                 {
-                    if (Settings.CenterPointEnabled && WorldGenerator_Generate.FirstSettlementLocation.Count == 0 &&
+                    if (Settings.CenterPointEnabled && FirstSettlementLocations.Count == 0 &&
                         (Settings.GroupDistance.MinEnabled || Settings.GroupDistance.MaxEnabled))
                     {
                         __result = Settings.CenterPoint;
                     }
-                    WorldGenerator_Generate.FirstSettlementLocation[faction.Name] = __result;
+                    FirstSettlementLocations[faction.Name] = __result;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
         }
     }
 
-    [HarmonyPatch(typeof(TileFinder), "IsValidTileForNewSettlement")]
+    [HarmonyPatch(typeof(TileFinder), nameof(TileFinder.IsValidTileForNewSettlement))]
     public static class TileFinder_IsValidTileForNewSettlement
     {
+        internal static Dictionary<string, int> FirstSettlementLocations;
+        internal static Dictionary<FactionDef, FactionDensity> FDs;
+
         static void Postfix(ref bool __result, ref int tile)
         {
-            if (!WorldGenerator_Generate.IsGeneratingWorld || !__result)
-                return;
+            if (!__result || FirstSettlementLocations == null || FDs == null) return;
 
-            if (tile == 0 ||
-                WorldGenerator_Generate.SettlementLocaitons.Contains(tile))
+            if (tile == 0)
             {
                 //Log.Message($"- could not place settlement on tile {tile}");
                 __result = false;
@@ -188,9 +306,9 @@ namespace FactionControl
             Faction f = TileFinder_RandomSettlementTileFor.Faction;
             if (f != null &&
                 !f.IsPlayer && !f.Hidden &&
-                WorldGenerator_Generate.FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
+                FDs.TryGetValue(f.def, out FactionDensity fd) && fd.Enabled)
             {
-                if (WorldGenerator_Generate.FirstSettlementLocation.TryGetValue(f.Name, out int center))
+                if (FirstSettlementLocations.TryGetValue(f.Name, out int center))
                 {
                     var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, center);
                     __result = dist < fd.Density;
@@ -200,7 +318,7 @@ namespace FactionControl
                     if (Settings.GroupDistance.MinEnabled)
                     {
                         bool ok = true;
-                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        foreach (var kv in FirstSettlementLocations)
                         {
                             var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
                             ok = dist > Settings.GroupDistance.MinDistance;
@@ -212,7 +330,7 @@ namespace FactionControl
                     if (Settings.GroupDistance.MaxEnabled)
                     {
                         bool ok = true;
-                        foreach (var kv in WorldGenerator_Generate.FirstSettlementLocation)
+                        foreach (var kv in FirstSettlementLocations)
                         {
                             var dist = Find.WorldGrid.ApproxDistanceInTiles(tile, kv.Value);
                             ok = dist < Settings.GroupDistance.MaxDistance;
@@ -223,12 +341,10 @@ namespace FactionControl
                     }
                 }
             }
-            if (__result)
-                WorldGenerator_Generate.SettlementLocaitons.Add(tile);
         }
     }
 
-    [HarmonyPatch(typeof(FactionGenerator), "GenerateFactionsIntoWorld")]
+    [HarmonyPatch(typeof(FactionGenerator), nameof(FactionGenerator.GenerateFactionsIntoWorld))]
     public class Patch_FactionGenerator_GenerateFactionsIntoWorld
     {
         [HarmonyPriority(Priority.First)]
@@ -256,7 +372,7 @@ namespace FactionControl
     }
 
 
-    [HarmonyPatch(typeof(WorldFactionsUIUtility), "DoRow")]
+    [HarmonyPatch(typeof(WorldFactionsUIUtility), nameof(WorldFactionsUIUtility.DoRow))]
     public class Patch_WorldFactionsUIUtility_DoRow
     {
         [HarmonyPriority(Priority.High)]
